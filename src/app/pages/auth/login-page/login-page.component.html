@@ -1,0 +1,14 @@
+<div class="login-content">
+  <header>
+    <h1>The Numbers <br />Behind <br />The Game</h1>
+  </header>
+
+  <f5pi-login-form [isLoading]="isLoading()" (onSubmit)="onSubmit($event)"></f5pi-login-form>
+
+  <footer>
+    <p>
+      Don't have an account? <br />
+      <a routerLink="/auth/register">Sign up here</a>
+    </p>
+  </footer>
+</div>

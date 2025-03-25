@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100%;
+}
+
+.auth-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.auth-layout__hero {
+  flex: 1;
+  background: var(--mat-sys-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-layout__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  gap: 1.3rem;
+}
+
+@media (width < 1024px) {
+  .auth-layout__hero {
+    display: none;
+  }
+}
+
+@media (width > 1024px) {
+  ::ng-deep .auth-snackbar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 50%;
+  }
+}

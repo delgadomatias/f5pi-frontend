@@ -1,0 +1,27 @@
+.login-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  header h1 {
+    text-align: center;
+    color: var(--mat-sys-on-background);
+  }
+}
+
+footer {
+  color: var(--mat-sys-outline);
+  text-align: center;
+
+  a {
+    color: var(--mat-sys-secondary);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--mat-sys-secondary-container);
+    }
+  }
+}

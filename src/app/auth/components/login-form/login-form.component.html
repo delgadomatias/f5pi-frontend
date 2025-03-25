@@ -1,0 +1,38 @@
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
+  <div class="login-form__fields">
+    <mat-form-field>
+      <input matInput placeholder="Username" formControlName="username" />
+
+      @if (loginForm.controls.username.getError('required')) {
+      <mat-error>Username is required </mat-error>
+      }
+
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Password" formControlName="password" [type]="hidePassword() ? 'password' : 'text'" />
+
+      @if (loginForm.controls.password.errors?.['required']) {
+      <mat-error> Password is required </mat-error>
+      }
+
+      <button
+        (click)="handleTogglePasswordVisibility()"
+        [attr.aria-pressed]="hidePassword()"
+        aria-label="Hide password"
+        mat-icon-button
+        matSuffix
+        type="button"
+      >
+        <mat-icon>{{ hidePassword() ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <button mat-flat-button [disabled]="isLoading()">
+    @if (isLoading()) {
+    <mat-spinner [diameter]="24"></mat-spinner>
+    } @else { Sign In }
+  </button>
+</form>

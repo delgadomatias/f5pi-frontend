@@ -1,0 +1,17 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.login-form__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.login-form__fields mat-form-field {
+  flex: 1 1 200px;
+  min-width: 0;
+}
