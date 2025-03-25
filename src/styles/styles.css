@@ -1,0 +1,41 @@
+:is(html, body) {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color-scheme: light;
+  background: var(--mat-sys-background);
+}
+
+body.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :is(h1, h2, h3, p) {
+    margin: 0;
+  }
+
+  h1 {
+    font: var(--mat-sys-display-large);
+  }
+
+  h2 {
+    font: var(--mat-sys-display-medium);
+  }
+
+  h3 {
+    font: var(--mat-sys-display-small);
+  }
+
+  p {
+    font: var(--mat-sys-body-large);
+  }
+}

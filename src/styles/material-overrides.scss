@@ -1,0 +1,87 @@
+@use "@angular/material" as mat;
+
+@mixin material-component-overrides() {
+  mat-error {
+    padding-top: 2px;
+  }
+
+  .mat-mdc-form-field-error-wrapper {
+    padding: 0;
+  }
+
+  mat-form-field:not(.mat-form-field-invalid) {
+    height: 44px;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    padding: 0 12px;
+  }
+
+  .mat-mdc-form-field-icon-suffix > mat-icon {
+    padding: 0;
+  }
+}
+
+@mixin material-theme-overrides() {
+  @include mat.theme-overrides(
+    (
+      primary: light-dark(#121212, #ffffff),
+      on-primary: light-dark(#ffffff, #000000),
+      primary-container: light-dark(#1b1b1b, #e4e4e4),
+      on-primary-container: light-dark(#d0d0d0, #303030),
+      inverse-primary: light-dark(#c6c6c6, #404040),
+      primary-fixed: light-dark(#494949, #b6b6b6),
+      primary-fixed-dim: light-dark(#333333, #cccccc),
+      on-primary-fixed: light-dark(#ffffff, #000000),
+      on-primary-fixed-variant: light-dark(#ffffff, #000000),
+      secondary: light-dark(#2c2c2c, #d3d3d3),
+      on-secondary: light-dark(#ffffff, #000000),
+      secondary-container: light-dark(#494949, #b6b6b6),
+      on-secondary-container: light-dark(#ffffff, #000000),
+      secondary-fixed: light-dark(#494949, #b6b6b6),
+      secondary-fixed-dim: light-dark(#333333, #cccccc),
+      on-secondary-fixed: light-dark(#ffffff, #000000),
+      on-secondary-fixed-variant: light-dark(#ffffff, #000000),
+      tertiary: light-dark(#000000, #ffffff),
+      on-tertiary: light-dark(#ffffff, #000000),
+      tertiary-container: light-dark(#1b1b1b, #e4e4e4),
+      on-tertiary-container: light-dark(#d0d0d0, #303030),
+      tertiary-fixed: light-dark(#494949, #b6b6b6),
+      tertiary-fixed-dim: light-dark(#333333, #cccccc),
+      on-tertiary-fixed: light-dark(#ffffff, #000000),
+      on-tertiary-fixed-variant: light-dark(#ffffff, #000000),
+      error: light-dark(#b00020, #cf6679),
+      on-error: light-dark(#ffffff, #000000),
+      error-container: light-dark(#ffb4b4, #8b0000),
+      on-error-container: light-dark(#601010, #ffdada),
+      surface: light-dark(#ffffff, #121212),
+      on-surface: light-dark(#000000, #ffffff),
+      surface-variant: light-dark(#f5f5f5, #2c2c2c),
+      on-surface-variant: light-dark(#717171, #bebebe),
+      surface-container: light-dark(#f0f0f0, #1e1e1e),
+      on-surface-container: light-dark(#000000, #ffffff),
+      background: light-dark(#ffffff, #000000),
+      on-background: light-dark(#121212, #ffffff),
+      outline: light-dark(#79747e, #938f99),
+      outline-variant: light-dark(#c8c5ca, #48464c),
+      shadow: light-dark(#000000, #000000),
+      inverse-surface: light-dark(#121212, #ffffff),
+      inverse-on-surface: light-dark(#ffffff, #000000),
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      filled-horizontal-padding: calc(var(--spacing) * 4),
+      filled-container-shape: calc(var(--spacing) * 0.8),
+      filled-container-height: calc(var(--spacing) * 6),
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      outlined-label-text-size: var(--mat-sys-body-medium-size),
+      container-text-size: var(--mat-sys-body-medium-size),
+    )
+  );
+}

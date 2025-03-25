@@ -1,0 +1,27 @@
+@use "@angular/material" as mat;
+@use "./_theme-colors" as theme;
+@use "./material-overrides.scss" as overrides;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
+      ),
+      typography: Poppins,
+      density: -3,
+    )
+  );
+}
+
+:root {
+  --spacing: 8px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1920px;
+  @include overrides.material-theme-overrides();
+  @include overrides.material-component-overrides();
+}
