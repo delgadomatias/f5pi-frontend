@@ -1,0 +1,17 @@
+@let isActive = rla.isActive;
+
+<li>
+  <a
+    [routerLink]="item().path"
+    [routerLinkActiveOptions]="{ exact: true }"
+    #rla="routerLinkActive"
+    class="sidebar__menu__item"
+    routerLinkActive="active"
+  >
+    <mat-icon
+      [class]="isActive ? 'material-symbols-outlined material-symbols-outlined--filled' : 'material-symbols-outlined'"
+      >{{ item().icon }}</mat-icon
+    >
+    <span>{{ item().label }}</span>
+  </a>
+</li>

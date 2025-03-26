@@ -5,7 +5,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideRouter } from '@angular/router';
 
 import { ClientStorageService } from '@common/client-storage.service.abstract';
-import { ClientStorageServiceImpl } from '@common/storage.service';
+import { LocalStorageService } from '@common/local-storage.service';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -15,6 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', subscriptSizing: 'dynamic' } },
-    { provide: ClientStorageService, useClass: ClientStorageServiceImpl },
+    { provide: ClientStorageService, useClass: LocalStorageService },
   ],
 };

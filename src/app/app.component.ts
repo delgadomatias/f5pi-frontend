@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,4 +8,10 @@ import { RouterOutlet } from '@angular/router';
   selector: 'f5pi-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  matIconRegistry = inject(MatIconRegistry);
+
+  constructor() {
+    this.matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
+  }
+}

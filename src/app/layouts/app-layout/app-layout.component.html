@@ -1,0 +1,14 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+    <aside class="sidebar">
+      <ul class="sidebar__menu">
+        @for (item of sidebarItems(); track item.label) {
+        <f5pi-sidenav-item [item]="item"></f5pi-sidenav-item>
+        }
+      </ul>
+    </aside>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

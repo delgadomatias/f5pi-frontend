@@ -1,0 +1,33 @@
+.sidebar__menu__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 6px;
+  padding: 1rem;
+  color: var(--mat-sys-on-primary);
+  font: var(--mat-sys-body-large);
+
+  span {
+    flex: 1;
+    text-align: center;
+  }
+
+  &:hover {
+    background: var(--mat-sys-secondary);
+  }
+}
+
+mat-icon {
+  transform: scale(1.3);
+  color: var(--mat-sys-on-primary-container);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.active {
+  background: var(--mat-sys-secondary);
+  font-weight: 500;
+}
