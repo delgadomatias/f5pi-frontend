@@ -39,3 +39,11 @@ body.dark {
     font: var(--mat-sys-body-large);
   }
 }
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0;
+}
+
+.material-symbols-outlined.material-symbols-outlined--filled {
+  font-variation-settings: "FILL" 1;
+}
