@@ -5,7 +5,7 @@ import { map, skipWhile } from 'rxjs';
 
 import { AuthService, AuthStatus } from '@auth/auth.service';
 
-export const redirectIfNotAuthenticatedGuard: CanActivateFn = (route, state) => {
+export const redirectIfAuthenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   return toObservable(authService.status).pipe(
     skipWhile((status) => status === AuthStatus.PENDING),
