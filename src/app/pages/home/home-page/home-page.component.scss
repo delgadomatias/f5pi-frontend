@@ -1,0 +1,46 @@
+@use "variables" as *;
+
+:host {
+  --gutter: 1.2rem;
+}
+
+.home-page {
+  display: grid;
+  grid-gap: var(--gutter);
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 50%);
+  height: calc(100vh - 4rem - var(--gutter));
+  padding: 2rem;
+
+  @media (width > $breakpoint-2xl) {
+    grid-template-rows: 60% 40%;
+  }
+}
+
+.games {
+  grid-column: span 12 / span 12;
+}
+
+.seasons {
+  grid-column: span 8 / span 8;
+
+  @media (width < $breakpoint-2xl) {
+    grid-column: span 7 / span 7;
+  }
+
+  @media (width < $breakpoint-xl) {
+    grid-column: span 12 / span 12;
+  }
+}
+
+.fields {
+  grid-column: span 4 / span 4;
+
+  @media (width < $breakpoint-2xl) {
+    grid-column: span 5 / span 5;
+  }
+
+  @media (width < $breakpoint-xl) {
+    grid-column: span 12 / span 12;
+  }
+}

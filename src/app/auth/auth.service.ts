@@ -2,35 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of, tap, timeout } from 'rxjs';
 
-import { ClientStorageService } from '@common/client-storage.service.abstract';
+import { AuthState } from '@auth/interfaces/auth-state.interface';
+import { AuthStatus } from '@auth/interfaces/auth-status.enum';
+import { LoginResponse } from '@auth/interfaces/login-response.interface';
+import { User } from '@auth/interfaces/user.interface';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { environment } from '@environments/environment';
-
-interface User {
-  email: string;
-  fullName: string;
-  id: string;
-  role: 'USER' | 'ADMIN';
-  username: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-}
-
-interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  user: User | null;
-  status: AuthStatus;
-}
-
-export enum AuthStatus {
-  AUTHENTICATED,
-  PENDING,
-  UNAUTHENTICATED,
-}
 
 @Injectable({
   providedIn: 'root',
@@ -77,6 +54,12 @@ export class AuthService {
   logout(): void {
     this.state.set({ accessToken: null, refreshToken: null, user: null, status: AuthStatus.UNAUTHENTICATED });
     this.clearTokens();
+  }
+
+  getUserId(): string {
+    const userId = this.user()?.id;
+    if (!userId) throw new Error('User is not authenticated');
+    return userId;
   }
 
   private clearTokens(): void {

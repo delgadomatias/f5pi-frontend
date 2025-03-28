@@ -3,7 +3,8 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 import { map, skipWhile } from 'rxjs';
 
-import { AuthService, AuthStatus } from '@auth/auth.service';
+import { AuthService } from '@auth/auth.service';
+import { AuthStatus } from '@auth/interfaces/auth-status.enum';
 
 export const redirectIfNotAuthenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);

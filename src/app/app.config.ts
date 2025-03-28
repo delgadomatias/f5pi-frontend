@@ -4,8 +4,8 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideRouter } from '@angular/router';
 
-import { ClientStorageService } from '@common/client-storage.service.abstract';
-import { LocalStorageService } from '@common/local-storage.service';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
+import { LocalStorageService } from '@common/services/local-storage.service';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {

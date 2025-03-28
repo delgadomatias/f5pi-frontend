@@ -1,0 +1,23 @@
+mat-paginator {
+  width: 100%;
+}
+
+.loading {
+  animation: pulse 1.5s infinite linear;
+  background: gray;
+  border-radius: 4px;
+  height: 40px;
+  margin-top: 12px;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}

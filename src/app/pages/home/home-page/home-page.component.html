@@ -1,3 +1,25 @@
 <section class="home-page">
-  <h1>Home page</h1>
+  <article class="games">
+    <f5pi-generic-widget widgetTitle="Games">
+      <ng-template #headerActions>
+        <button mat-flat-button>Create new game</button>
+      </ng-template>
+      <ng-template #content>Contenido</ng-template>
+      <ng-template #footer>Footer</ng-template>
+    </f5pi-generic-widget>
+  </article>
+
+  <article class="seasons">
+    <f5pi-generic-widget widgetTitle="Seasons">
+      <ng-template #headerActions>
+        <button mat-flat-button>Create new season</button>
+      </ng-template>
+      <ng-template #content>Contenido</ng-template>
+      <ng-template #footer>Footer</ng-template>
+    </f5pi-generic-widget>
+  </article>
+
+  <article class="fields">
+    <f5pi-fields-widget></f5pi-fields-widget>
+  </article>
 </section>

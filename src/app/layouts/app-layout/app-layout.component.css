@@ -4,12 +4,12 @@ mat-sidenav-container {
 
 mat-sidenav {
   position: fixed;
-  width: 280px;
-  background: var(--mat-sys-primary-container);
+  width: var(--sidenav-width);
+  background: var(--mat-sys-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 0;
 }
 
