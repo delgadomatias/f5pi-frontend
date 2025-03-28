@@ -20,9 +20,37 @@
   .mat-mdc-form-field-icon-suffix > mat-icon {
     padding: 0;
   }
+
+  .cdk-overlay-pane.mat-mdc-dialog-panel {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    justify-content: space-between;
+  }
+
+  .mat-mdc-paginator-range-actions {
+    width: 100%;
+  }
+
+  .mat-mdc-paginator-range-label {
+    font: var(--mat-sys-body-large);
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .mat-mdc-paginator-container {
+    padding: 2px !important;
+  }
 }
 
 @mixin material-theme-overrides() {
+  --mat-dialog-container-max-width: 100%;
+  --mat-dialog-headline-padding: 0 0 16px 0;
+  --mdc-dialog-container-shape: 12px;
+  --mdc-dialog-subhead-size: var(--mat-sys-headline-medium-size);
+
   @include mat.theme-overrides(
     (
       primary: light-dark(#121212, #ffffff),
@@ -50,10 +78,10 @@
       tertiary-fixed-dim: light-dark(#333333, #cccccc),
       on-tertiary-fixed: light-dark(#ffffff, #000000),
       on-tertiary-fixed-variant: light-dark(#ffffff, #000000),
-      error: light-dark(#b00020, #cf6679),
+      error: light-dark(#c03040, #cf6679),
       on-error: light-dark(#ffffff, #000000),
-      error-container: light-dark(#ffb4b4, #8b0000),
-      on-error-container: light-dark(#601010, #ffdada),
+      error-container: light-dark(#ffe5e5, #8b0000),
+      on-error-container: light-dark(#8c3030, #ffdada),
       surface: light-dark(#ffffff, #121212),
       on-surface: light-dark(#000000, #ffffff),
       surface-variant: light-dark(#f5f5f5, #2c2c2c),
@@ -72,9 +100,12 @@
 
   @include mat.button-overrides(
     (
-      filled-horizontal-padding: calc(var(--spacing) * 4),
-      filled-container-shape: calc(var(--spacing) * 0.8),
       filled-container-height: calc(var(--spacing) * 6),
+      filled-container-shape: calc(var(--spacing) * 0.8),
+      filled-horizontal-padding: calc(var(--spacing) * 4),
+      text-container-height: calc(var(--spacing) * 6),
+      text-container-shape: calc(var(--spacing) * 0.8),
+      text-horizontal-padding: calc(var(--spacing) * 4),
     )
   );
 

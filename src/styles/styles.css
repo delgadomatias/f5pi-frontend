@@ -21,10 +21,12 @@ body.dark {
 
   :is(h1, h2, h3, p) {
     margin: 0;
+    margin-block: 0;
   }
 
   h1 {
     font: var(--mat-sys-display-large);
+    line-height: 1;
   }
 
   h2 {
@@ -38,6 +40,12 @@ body.dark {
   p {
     font: var(--mat-sys-body-large);
   }
+
+  .full-screen-dialog {
+    padding: 20px;
+    margin-left: var(--sidenav-width);
+    animation: fadeInUp 0.2s ease-in-out;
+  }
 }
 
 .material-symbols-outlined {
@@ -46,4 +54,20 @@ body.dark {
 
 .material-symbols-outlined.material-symbols-outlined--filled {
   font-variation-settings: "FILL" 1;
+}
+
+.backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
