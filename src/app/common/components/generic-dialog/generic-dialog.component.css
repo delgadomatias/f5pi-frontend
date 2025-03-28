@@ -1,0 +1,14 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  justify-content: space-between;
+  max-height: 100%;
+}
+
+footer {
+  align-self: flex-end;
+  display: flex;
+  gap: 8px;
+}

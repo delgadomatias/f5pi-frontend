@@ -1,0 +1,7 @@
+<mat-dialog-content>
+  <div>
+    <h2 mat-dialog-title>{{ title() }}</h2>
+    <ng-container *ngTemplateOutlet="content()"></ng-container>
+  </div>
+  <footer><ng-container *ngTemplateOutlet="footer()"></ng-container></footer>
+</mat-dialog-content>
