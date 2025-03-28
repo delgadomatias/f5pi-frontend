@@ -22,6 +22,7 @@
       "@auth/*": ["src/app/auth/*"],
       "@common/*": ["src/app/common/*"],
       "@environments/*": ["src/environments/*"],
+      "@fields/*": ["src/app/fields/*"],
       "@layouts/*": ["src/app/layouts/*"],
       "@pages/*": ["src/app/pages/*"],
       "@styles/*": ["src/styles/*"]
