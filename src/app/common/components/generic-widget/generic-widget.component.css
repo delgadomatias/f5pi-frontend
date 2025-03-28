@@ -1,0 +1,28 @@
+mat-card {
+  width: 100%;
+  height: 100%;
+
+  mat-card-header {
+    padding: 16px;
+    align-items: center;
+
+    mat-card-title-group {
+      align-items: center;
+    }
+  }
+
+  mat-card-content {
+    height: 100%;
+    margin-right: 16px;
+    max-height: 100%;
+    overflow: auto;
+    scrollbar-color: var(--mat-sys-secondary) transparent;
+  }
+}
+
+footer {
+  align-items: center;
+  display: flex;
+  font: var(--mat-sys-body-medium);
+  padding: 16px 16px 12px 16px;
+}

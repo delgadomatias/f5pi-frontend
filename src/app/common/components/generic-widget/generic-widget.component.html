@@ -1,0 +1,21 @@
+<mat-card appearance="outlined">
+  <!-- Card header -->
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>{{ widgetTitle() }}</mat-card-title>
+      <ng-container *ngTemplateOutlet="headerActions()"></ng-container>
+    </mat-card-title-group>
+  </mat-card-header>
+
+  <!-- Card content -->
+  <mat-card-content f5piScrollShadow>
+    <ng-container *ngTemplateOutlet="content()"></ng-container>
+  </mat-card-content>
+
+  <!-- Card footer -->
+  <ng-container *ngIf="footer">
+    <footer>
+      <ng-container *ngTemplateOutlet="footer()"></ng-container>
+    </footer>
+  </ng-container>
+</mat-card>
