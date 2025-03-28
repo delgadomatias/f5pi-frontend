@@ -33,7 +33,10 @@
               }
             ],
             "styles": ["src/styles/custom-theme.scss", "src/styles/styles.css"],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            }
           },
           "configurations": {
             "production": {
