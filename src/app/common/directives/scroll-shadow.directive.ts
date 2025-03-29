@@ -51,7 +51,7 @@ export class ScrollShadowDirective implements AfterViewInit, OnDestroy {
     this.renderer.setStyle(this.shadowElement, 'bottom', '0');
     this.renderer.setStyle(this.shadowElement, 'left', '0');
     this.renderer.setStyle(this.shadowElement, 'width', '100%');
-    this.renderer.setStyle(this.shadowElement, 'height', '40px');
+    this.renderer.setStyle(this.shadowElement, 'height', '20px');
     this.renderer.setStyle(this.shadowElement, 'pointer-events', 'none');
     this.renderer.setStyle(this.shadowElement, 'z-index', '10');
     this.renderer.setStyle(
@@ -60,7 +60,7 @@ export class ScrollShadowDirective implements AfterViewInit, OnDestroy {
       'linear-gradient(to bottom,rgba(255,255,255,0)0,rgba(255,255,255,0.9) 100%)'
     );
 
-    this.renderer.setStyle(this.shadowElement, 'display', 'none');
+    this.renderer.setStyle(this.shadowElement, 'opacity', '0');
     this.renderer.appendChild(this.el.nativeElement, this.shadowElement);
   }
 
@@ -72,7 +72,7 @@ export class ScrollShadowDirective implements AfterViewInit, OnDestroy {
     if (!this.shadowElement) return;
 
     const element = this.el.nativeElement;
-    const isBottomScrollAvailable = element.scrollHeight > element.clientHeight + element.scrollTop + 50;
-    this.renderer.setStyle(this.shadowElement, 'display', isBottomScrollAvailable ? 'block' : 'none');
+    const isBottomScrollAvailable = element.scrollHeight > element.clientHeight + element.scrollTop;
+    this.renderer.setStyle(this.shadowElement, 'opacity', isBottomScrollAvailable ? '100' : '0');
   }
 }

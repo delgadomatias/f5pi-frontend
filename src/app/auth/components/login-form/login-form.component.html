@@ -1,7 +1,8 @@
 <form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
   <div class="login-form__fields">
     <mat-form-field>
-      <input matInput placeholder="Username" formControlName="username" />
+      <input matInput formControlName="username" />
+      <mat-label>Username</mat-label>
 
       @if (loginForm.controls.username.getError('required')) {
       <mat-error>Username is required </mat-error>
@@ -11,7 +12,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Password" formControlName="password" [type]="hidePassword() ? 'password' : 'text'" />
+      <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'" />
+      <mat-label>Password</mat-label>
 
       @if (loginForm.controls.password.errors?.['required']) {
       <mat-error> Password is required </mat-error>

@@ -1,0 +1,115 @@
+@let isLoading = seasonsResource.isLoading();
+
+<f5pi-generic-widget widgetTitle="Seasons">
+  <ng-template #headerActions>
+    <button mat-flat-button (click)="openNewSeasonDialog()">Create a new season</button>
+  </ng-template>
+
+  <ng-template #content>
+    <table
+      mat-table
+      [dataSource]="
+        seasonsResource.value()?.content || [
+          {
+            id: 'Loading...',
+            name: 'Loading...',
+            initialDate: 'Loading...',
+            finalDate: 'Loading...'
+          }
+        ]
+      "
+      [trackBy]="trackBySeasonId"
+    >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        @if (isLoading) {
+        <td mat-cell *matCellDef="let element">
+          <div class="loading"></div>
+        </td>
+        } @else {
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+        }
+      </ng-container>
+
+      <ng-container matColumnDef="initialDate">
+        <th mat-header-cell *matHeaderCellDef>Start</th>
+        @if (isLoading) {
+        <td mat-cell *matCellDef="let element">
+          <div class="loading"></div>
+        </td>
+        } @else {
+        <td mat-cell *matCellDef="let element">
+          {{ element.initialDate | date : "MMM d, yyyy" }}
+        </td>
+        }
+      </ng-container>
+
+      <ng-container matColumnDef="finalDate">
+        <th mat-header-cell *matHeaderCellDef>End</th>
+        @if (isLoading) {
+        <td mat-cell *matCellDef="let element">
+          <div class="loading"></div>
+        </td>
+        } @else {
+        <td mat-cell *matCellDef="let element">
+          <!-- {{ element.finalDate | date : "MMMM " }} -->
+          <!-- Short version -->
+          {{ element.finalDate | date : "MMM d, yyyy" }}
+        </td>
+        }
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        @if (isLoading) {
+        <td mat-cell *matCellDef="let element">
+          <div class="loading"></div>
+        </td>
+        } @else {
+        <td mat-cell *matCellDef="let element">
+          <button
+            (click)="openEditSeasonDialog(element)"
+            aria-label="Edit season"
+            mat-icon-button
+            matSuffix
+            matTooltip="Edit season"
+            matTooltipPosition="left"
+            type="button"
+          >
+            <mat-icon>edit_square</mat-icon>
+          </button>
+
+          <button
+            (click)="handleDeleteSeason(element)"
+            aria-label="Delete season "
+            mat-icon-button
+            matSuffix
+            matTooltip="Delete season"
+            matTooltipPosition="right"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+        }
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['name', 'initialDate', 'finalDate', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'initialDate', 'finalDate', 'actions']"></tr>
+    </table>
+  </ng-template>
+
+  <ng-template #footer>
+    <mat-paginator
+      [hidePageSize]="true"
+      [length]="seasonsResource.value()?.totalElements"
+      [pageIndex]="seasonsResource.value()?.pageable?.pageNumber"
+      [pageSize]="seasonsResource.value()?.pageable?.pageSize"
+      aria-label="Select page of fields"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </ng-template>
+</f5pi-generic-widget>
