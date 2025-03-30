@@ -10,7 +10,7 @@
   }
 
   mat-form-field:not(.mat-form-field-invalid) {
-    height: 44px;
+    height: 48px;
   }
 
   .mat-mdc-form-field-icon-suffix {
@@ -43,17 +43,38 @@
   .mat-mdc-paginator-container {
     padding: 2px !important;
   }
+
+  .mat-datepicker-content .mat-calendar {
+    height: auto;
+  }
+
+  .mat-calendar-arrow {
+    display: none;
+  }
+
+  .mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after {
+    content: "";
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  .mat-mdc-dialog-title::before {
+    content: "";
+    display: none;
+  }
 }
 
 @mixin material-theme-overrides() {
   --mat-dialog-container-max-width: 100%;
   --mat-dialog-headline-padding: 0 0 16px 0;
+  --mat-form-field-container-vertical-padding: 12px;
   --mdc-dialog-container-shape: 12px;
   --mdc-dialog-subhead-size: var(--mat-sys-headline-medium-size);
 
   @include mat.theme-overrides(
     (
-      primary: light-dark(#121212, #ffffff),
+      primary: light-dark(#1f1f1f, #ffffff),
       on-primary: light-dark(#ffffff, #000000),
       primary-container: light-dark(#1b1b1b, #e4e4e4),
       on-primary-container: light-dark(#d0d0d0, #303030),
@@ -113,6 +134,34 @@
     (
       outlined-label-text-size: var(--mat-sys-body-medium-size),
       container-text-size: var(--mat-sys-body-medium-size),
+    )
+  );
+
+  @include mat.datepicker-overrides(
+    (
+      calendar-body-label-text-color: var(--mat-sys-on-primary),
+      calendar-container-background-color: var(--mat-sys-primary),
+      calendar-container-shape: 4px,
+      calendar-date-focus-state-background-color: var(--mat-sys-primary-container),
+      calendar-date-hover-state-background-color: var(--mat-sys-primary-container),
+      calendar-date-selected-state-background-color: var(--mat-sys-outline),
+      calendar-date-text-color: var(--mat-sys-on-primary),
+      calendar-date-today-outline-color: var(--mat-sys-on-primary),
+      calendar-date-today-selected-state-outline-color: var(--mat-sys-on-primary),
+    )
+  );
+
+  @include mat.table-overrides(
+    (
+      row-item-outline-color: hsl(240 5.9% 90%),
+      header-headline-color: hsl(240 3.8% 46.1%),
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      headline-padding: 0 0 20px 0,
+      content-padding: 35px 30px,
     )
   );
 }

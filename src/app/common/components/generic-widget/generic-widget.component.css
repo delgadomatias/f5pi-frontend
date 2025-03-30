@@ -8,6 +8,7 @@ mat-card {
 
     mat-card-title-group {
       align-items: center;
+      gap: 16px;
     }
   }
 

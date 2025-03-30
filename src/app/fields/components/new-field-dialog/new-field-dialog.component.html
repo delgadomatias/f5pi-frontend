@@ -8,7 +8,8 @@
       </div>
       }
       <mat-form-field>
-        <input matInput placeholder="Name" [maxLength]="20" cdkFocusInitial formControlName="name" />
+        <input matInput [maxLength]="20" cdkFocusInitial formControlName="name" />
+        <mat-label>Name</mat-label>
 
         @if (form.controls.name.getError('required')) {
         <mat-error>Name is required</mat-error>

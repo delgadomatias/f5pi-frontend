@@ -8,7 +8,7 @@ import { SidenavItemComponent } from '@common/components/sidenav-item/sidenav-it
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatSidenavModule, RouterOutlet, SidenavItemComponent],
   selector: 'f5pi-app-layout',
-  styleUrl: './app-layout.component.css',
+  styleUrl: './app-layout.component.scss',
   templateUrl: './app-layout.component.html',
 })
 export class AppLayoutComponent {

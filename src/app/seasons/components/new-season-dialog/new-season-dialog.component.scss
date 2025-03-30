@@ -1,0 +1,12 @@
+@use "variables" as *;
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  & > * {
+    flex: 1;
+    flex: 1 1 min(200px, 100%);
+  }
+}

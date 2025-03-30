@@ -15,6 +15,10 @@
   @media (width > $breakpoint-2xl) {
     grid-template-rows: 60% 40%;
   }
+
+  @media (width < $breakpoint-lg) {
+    grid-template-rows: auto;
+  }
 }
 
 .games {

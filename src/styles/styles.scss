@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 :is(html, body) {
   height: 100%;
 }
@@ -45,6 +47,10 @@ body.dark {
     padding: 20px;
     margin-left: var(--sidenav-width);
     animation: fadeInUp 0.2s ease-in-out;
+
+    @media (width < $breakpoint-lg) {
+      margin-left: 0;
+    }
   }
 }
 
@@ -58,7 +64,7 @@ body.dark {
 
 .backdrop {
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
 }
 
 @keyframes fadeInUp {
