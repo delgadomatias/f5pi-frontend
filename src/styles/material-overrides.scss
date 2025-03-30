@@ -66,12 +66,6 @@
 }
 
 @mixin material-theme-overrides() {
-  --mat-dialog-container-max-width: 100%;
-  --mat-dialog-headline-padding: 0 0 16px 0;
-  --mat-form-field-container-vertical-padding: 12px;
-  --mdc-dialog-container-shape: 12px;
-  --mdc-dialog-subhead-size: var(--mat-sys-headline-medium-size);
-
   @include mat.theme-overrides(
     (
       primary: light-dark(#1f1f1f, #ffffff),
@@ -132,8 +126,9 @@
 
   @include mat.form-field-overrides(
     (
-      outlined-label-text-size: var(--mat-sys-body-medium-size),
       container-text-size: var(--mat-sys-body-medium-size),
+      container-vertical-padding: 12px,
+      outlined-label-text-size: var(--mat-sys-body-medium-size),
     )
   );
 
@@ -160,8 +155,11 @@
 
   @include mat.dialog-overrides(
     (
-      headline-padding: 0 0 20px 0,
+      container-max-width: 100%,
+      container-shape: 12px,
       content-padding: 35px 30px,
+      headline-padding: 0 0 16px 0,
+      subhead-size: var(--mat-sys-headline-medium-size),
     )
   );
 }
