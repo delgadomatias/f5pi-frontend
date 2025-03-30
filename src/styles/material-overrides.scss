@@ -58,6 +58,11 @@
     height: 0;
     width: 0;
   }
+
+  .mat-mdc-dialog-title::before {
+    content: "";
+    display: none;
+  }
 }
 
 @mixin material-theme-overrides() {
@@ -69,7 +74,7 @@
 
   @include mat.theme-overrides(
     (
-      primary: light-dark(#121212, #ffffff),
+      primary: light-dark(#1f1f1f, #ffffff),
       on-primary: light-dark(#ffffff, #000000),
       primary-container: light-dark(#1b1b1b, #e4e4e4),
       on-primary-container: light-dark(#d0d0d0, #303030),
@@ -143,6 +148,20 @@
       calendar-date-text-color: var(--mat-sys-on-primary),
       calendar-date-today-outline-color: var(--mat-sys-on-primary),
       calendar-date-today-selected-state-outline-color: var(--mat-sys-on-primary),
+    )
+  );
+
+  @include mat.table-overrides(
+    (
+      row-item-outline-color: hsl(240 5.9% 90%),
+      header-headline-color: hsl(240 3.8% 46.1%),
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      headline-padding: 0 0 20px 0,
+      content-padding: 35px 30px,
     )
   );
 }
