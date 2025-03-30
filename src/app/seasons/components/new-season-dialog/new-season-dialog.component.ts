@@ -25,7 +25,7 @@ import { SeasonsService } from '@seasons/seasons.service';
     ReactiveFormsModule,
   ],
   selector: 'f5pi-new-season-dialog',
-  styleUrl: './new-season-dialog.component.css',
+  styleUrl: './new-season-dialog.component.scss',
   templateUrl: './new-season-dialog.component.html',
   providers: [provideNativeDateAdapter()],
 })

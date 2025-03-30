@@ -1,9 +1,11 @@
 .form {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 16px;
 
   & > * {
     flex: 1;
+    min-width: fit-content;
   }
 }
 

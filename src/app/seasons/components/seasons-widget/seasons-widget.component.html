@@ -2,7 +2,9 @@
 
 <f5pi-generic-widget widgetTitle="Seasons">
   <ng-template #headerActions>
-    <button mat-flat-button (click)="openNewSeasonDialog()">Create a new season</button>
+    <button mat-mini-fab (click)="openNewSeasonDialog()" matTooltip="Add a new season">
+      <mat-icon>add</mat-icon>
+    </button>
   </ng-template>
 
   <ng-template #content>
@@ -54,8 +56,6 @@
         </td>
         } @else {
         <td mat-cell *matCellDef="let element">
-          <!-- {{ element.finalDate | date : "MMMM " }} -->
-          <!-- Short version -->
           {{ element.finalDate | date : "MMM d, yyyy" }}
         </td>
         }
@@ -69,29 +69,11 @@
         </td>
         } @else {
         <td mat-cell *matCellDef="let element">
-          <button
-            (click)="openEditSeasonDialog(element)"
-            aria-label="Edit season"
-            mat-icon-button
-            matSuffix
-            matTooltip="Edit season"
-            matTooltipPosition="left"
-            type="button"
-          >
-            <mat-icon>edit_square</mat-icon>
-          </button>
-
-          <button
-            (click)="handleDeleteSeason(element)"
-            aria-label="Delete season "
-            mat-icon-button
-            matSuffix
-            matTooltip="Delete season"
-            matTooltipPosition="right"
-            type="button"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
+          <f5pi-table-actions
+            (onDelete)="handleDeleteSeason(element)"
+            (onEdit)="openEditSeasonDialog(element)"
+            entityName="season"
+          ></f5pi-table-actions>
         </td>
         }
       </ng-container>

@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
+import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
 import { EditSeasonComponent } from '@seasons/components/edit-season/edit-season.component';
 import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
 import { Season } from '@seasons/interfaces/season.interface';
@@ -24,9 +25,10 @@ import { SeasonsService } from '@seasons/seasons.service';
     MatPaginatorModule,
     MatTableModule,
     MatTooltipModule,
+    TableActionsComponent,
   ],
   selector: 'f5pi-seasons-widget',
-  styleUrl: './seasons-widget.component.css',
+  styleUrl: './seasons-widget.component.scss',
   templateUrl: './seasons-widget.component.html',
 })
 export class SeasonsWidgetComponent {
@@ -46,8 +48,10 @@ export class SeasonsWidgetComponent {
       panelClass: 'full-screen-dialog',
     });
 
-    dialogRef.beforeClosed().subscribe((result) => {
-      if (result) this.seasonsResource.reload();
+    dialogRef.beforeClosed().subscribe({
+      next: (result) => {
+        if (result) this.seasonsResource.reload();
+      },
     });
   }
 

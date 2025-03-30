@@ -1,3 +1,11 @@
+@use "variables" as *;
+
+table {
+  @media (width < $breakpoint-sm) {
+    min-width: max-content;
+  }
+}
+
 mat-paginator {
   width: 100%;
 }

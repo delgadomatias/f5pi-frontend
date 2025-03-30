@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
+import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
 import { EditFieldComponent } from '@fields/components/edit-field/edit-field.component';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
 import { FieldsService } from '@fields/fields.service';
@@ -24,6 +25,7 @@ import { Field } from '@fields/interfaces/field.interface';
     MatProgressSpinnerModule,
     MatTableModule,
     MatTooltipModule,
+    TableActionsComponent,
   ],
   selector: 'f5pi-fields-widget',
   styleUrl: './fields-widget.component.css',

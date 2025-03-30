@@ -2,7 +2,9 @@
 
 <f5pi-generic-widget widgetTitle="Fields">
   <ng-template #headerActions>
-    <button mat-flat-button (click)="openNewFieldDialog()">Create a new field</button>
+    <button mat-mini-fab (click)="openNewFieldDialog()" matTooltip="Add a new field" aria-label="Add a new field">
+      <mat-icon>add</mat-icon>
+    </button>
   </ng-template>
 
   <ng-template #content>
@@ -33,29 +35,11 @@
         </td>
         } @else {
         <td mat-cell *matCellDef="let element">
-          <button
-            (click)="openEditFieldDialog(element)"
-            aria-label="Edit field"
-            mat-icon-button
-            matSuffix
-            matTooltip="Edit field"
-            matTooltipPosition="left"
-            type="button"
-          >
-            <mat-icon>edit_square</mat-icon>
-          </button>
-
-          <button
-            (click)="handleDeleteField(element)"
-            aria-label="Delete field "
-            mat-icon-button
-            matSuffix
-            matTooltip="Delete field"
-            matTooltipPosition="right"
-            type="button"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
+          <f5pi-table-actions
+            (onDelete)="handleDeleteField(element)"
+            (onEdit)="openEditFieldDialog(element)"
+            entityName="field"
+          ></f5pi-table-actions>
         </td>
         }
       </ng-container>
