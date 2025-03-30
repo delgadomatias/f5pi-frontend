@@ -42,11 +42,7 @@ export class FieldsWidgetComponent {
   });
 
   openNewFieldDialog() {
-    const dialogRef = this.dialog.open(NewFieldDialogComponent, {
-      backdropClass: 'backdrop',
-      enterAnimationDuration: '0ms',
-      panelClass: 'full-screen-dialog',
-    });
+    const dialogRef = this.dialog.open(NewFieldDialogComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.fieldsResource.reload();
@@ -55,14 +51,13 @@ export class FieldsWidgetComponent {
 
   openEditFieldDialog(field: Field) {
     const dialogRef = this.dialog.open(EditFieldComponent, {
-      backdropClass: 'backdrop',
       data: field,
-      enterAnimationDuration: '0ms',
-      panelClass: 'full-screen-dialog',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.fieldsResource.reload();
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) this.fieldsResource.reload();
+      },
     });
   }
 

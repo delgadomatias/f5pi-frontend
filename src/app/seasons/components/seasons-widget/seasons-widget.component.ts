@@ -42,11 +42,7 @@ export class SeasonsWidgetComponent {
   });
 
   openNewSeasonDialog() {
-    const dialogRef = this.dialog.open(NewSeasonDialogComponent, {
-      backdropClass: 'backdrop',
-      enterAnimationDuration: '0ms',
-      panelClass: 'full-screen-dialog',
-    });
+    const dialogRef = this.dialog.open(NewSeasonDialogComponent);
 
     dialogRef.beforeClosed().subscribe({
       next: (result) => {
@@ -57,14 +53,13 @@ export class SeasonsWidgetComponent {
 
   openEditSeasonDialog(season: Season) {
     const dialogRef = this.dialog.open(EditSeasonComponent, {
-      backdropClass: 'backdrop',
       data: season,
-      enterAnimationDuration: '0ms',
-      panelClass: 'full-screen-dialog',
     });
 
-    dialogRef.beforeClosed().subscribe((result) => {
-      if (result) this.seasonsResource.reload();
+    dialogRef.beforeClosed().subscribe({
+      next: (result) => {
+        if (result) this.seasonsResource.reload();
+      },
     });
   }
 
