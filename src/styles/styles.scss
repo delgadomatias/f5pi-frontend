@@ -1,29 +1,45 @@
 @use "variables" as *;
 
-:is(html, body) {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  color-scheme: light;
-  background: var(--mat-sys-background);
-}
-
-body.dark {
-  color-scheme: dark;
-}
-
 @layer base {
-  body {
-    display: flex;
-    flex-direction: column;
+  :root {
+    --sidenav-width: 280px;
+    --spacing: 8px;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  :is(html, body) {
+    height: 100%;
   }
 
   :is(h1, h2, h3, p) {
     margin: 0;
     margin-block: 0;
+  }
+
+  body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color-scheme: light;
+    background: var(--mat-sys-background);
+
+    &.dark {
+      color-scheme: dark;
+      --sidebar-accent-foreground: 240 4.8% 95.9%;
+      --sidebar-accent: 240 3.7% 15.9%;
+      --sidebar-background: 240 5.9% 10%;
+      --sidebar-border: 240 3.7% 15.9%;
+      --sidebar-foreground: 240 4.8% 95.9%;
+      --sidebar-primary-foreground: 240 5.9% 10%;
+      --sidebar-primary: 0 0% 98%;
+      --sidebar-ring: 217.2 91.2% 59.8%;
+    }
   }
 
   h1 {
@@ -43,6 +59,19 @@ body.dark {
     font: var(--mat-sys-body-large);
   }
 
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@layer components {
   .dialog {
     padding: 20px;
     margin-left: var(--sidenav-width);
@@ -52,19 +81,19 @@ body.dark {
       margin-left: 0;
     }
   }
-}
 
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0;
-}
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0;
+  }
 
-.material-symbols-outlined.material-symbols-outlined--filled {
-  font-variation-settings: "FILL" 1;
-}
+  .material-symbols-outlined.material-symbols-outlined--filled {
+    font-variation-settings: "FILL" 1;
+  }
 
-.backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  .backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
 }
 
 @keyframes fadeInUp {
