@@ -1,0 +1,4 @@
+::ng-deep mat-tooltip-component .tooltip-danger .mdc-tooltip__surface {
+  color: var(--mat-sys-on-error);
+  background: var(--mat-sys-error);
+}

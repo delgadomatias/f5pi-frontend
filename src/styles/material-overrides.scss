@@ -68,7 +68,7 @@
 @mixin material-theme-overrides() {
   @include mat.theme-overrides(
     (
-      primary: light-dark(#1f1f1f, #ffffff),
+      primary: light-dark(#000000, #ffffff),
       on-primary: light-dark(#ffffff, #000000),
       primary-container: light-dark(#1b1b1b, #e4e4e4),
       on-primary-container: light-dark(#d0d0d0, #303030),
@@ -106,7 +106,7 @@
       background: light-dark(#ffffff, #000000),
       on-background: light-dark(#121212, #ffffff),
       outline: light-dark(#79747e, #938f99),
-      outline-variant: light-dark(#c8c5ca, #48464c),
+      outline-variant: light-dark(#e4e4e7, #48464c),
       shadow: light-dark(#000000, #000000),
       inverse-surface: light-dark(#121212, #ffffff),
       inverse-on-surface: light-dark(#ffffff, #000000),
