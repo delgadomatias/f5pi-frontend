@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --sidenav-width: 280px;
+    --sidenav-width: 90px;
     --spacing: 8px;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-accent: 240 4.8% 95.9%;
@@ -73,12 +73,11 @@
 
 @layer components {
   .dialog {
-    padding: 20px;
-    margin-left: var(--sidenav-width);
+    padding: 2rem 2rem 2rem calc(var(--sidenav-width) + 2rem);
     animation: fadeInUp 0.2s ease-in-out;
 
     @media (width < $breakpoint-lg) {
-      margin-left: 0;
+      padding: 2rem;
     }
   }
 

@@ -7,22 +7,12 @@ mat-sidenav {
   border: 1px solid hsl(var(--sidebar-border));
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 0;
   position: fixed;
   width: var(--sidenav-width);
 
-  @media (width < $breakpoint-2xl) {
-    padding: 2rem 1rem;
-    --sidenav-width: 250px;
-  }
-
   @media (width < $breakpoint-lg) {
     display: none;
-  }
-
-  &.mat-sidenav--collapsed {
-    --sidenav-width: 90px;
-    padding: 2rem 0;
   }
 }
 
