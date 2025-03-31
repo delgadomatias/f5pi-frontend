@@ -1,0 +1,41 @@
+@use "variables" as *;
+
+mat-sidenav {
+  align-items: center;
+  background: hsl(var(--sidebar-background));
+  border-radius: 0;
+  border: 1px solid hsl(var(--sidebar-border));
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  position: fixed;
+  width: var(--sidenav-width);
+
+  @media (width < $breakpoint-2xl) {
+    padding: 2rem 1rem;
+    --sidenav-width: 250px;
+  }
+
+  @media (width < $breakpoint-lg) {
+    display: none;
+  }
+
+  &.mat-sidenav--collapsed {
+    --sidenav-width: 90px;
+    padding: 2rem 0;
+  }
+}
+
+.sidebar {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.sidebar__menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
