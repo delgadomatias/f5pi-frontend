@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
+import { QueryParamsService } from '@common/services/query-params.service';
 import { EditSeasonComponent } from '@seasons/components/edit-season/edit-season.component';
 import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
 import { Season } from '@seasons/interfaces/season.interface';
@@ -31,7 +32,8 @@ import { SeasonsService } from '@seasons/seasons.service';
   styleUrl: './seasons-widget.component.scss',
   templateUrl: './seasons-widget.component.html',
 })
-export class SeasonsWidgetComponent {
+export class SeasonsWidgetComponent implements OnInit {
+  queryParamsService = inject(QueryParamsService);
   seasonsService = inject(SeasonsService);
   dialog = inject(MatDialog);
 
@@ -41,12 +43,19 @@ export class SeasonsWidgetComponent {
     request: () => ({ pageNumber: this.pageNumber() }),
   });
 
-  openNewSeasonDialog() {
-    const dialogRef = this.dialog.open(NewSeasonDialogComponent);
+  ngOnInit(): void {
+    const params = this.queryParamsService.queryParams();
+    if (!params) return;
+    if (params['entity'] === 'season' && params['action'] === 'new') this.openNewSeasonDialog();
+  }
 
+  openNewSeasonDialog() {
+    this.queryParamsService.pushQueryParams({ entity: 'season', action: 'new' });
+    const dialogRef = this.dialog.open(NewSeasonDialogComponent);
     dialogRef.beforeClosed().subscribe({
       next: (result) => {
         if (result) this.seasonsResource.reload();
+        this.queryParamsService.clearQueryParams();
       },
     });
   }

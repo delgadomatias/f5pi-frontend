@@ -23,7 +23,7 @@ export class FieldsService {
     const pageNumber = params?.pageNumber || 0;
     const userId = this.authService.getUserId();
     return this.http.get<FieldResponse>(`http://localhost:8080/api/v1/users/${userId}/fields`, {
-      params: { pageNumber },
+      params: { pageNumber, pageSize: 1 },
     });
   }
 

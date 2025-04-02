@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
+import { QueryParamsService } from '@common/services/query-params.service';
 import { EditFieldComponent } from '@fields/components/edit-field/edit-field.component';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
 import { FieldsService } from '@fields/fields.service';
@@ -31,9 +32,10 @@ import { Field } from '@fields/interfaces/field.interface';
   styleUrl: './fields-widget.component.css',
   templateUrl: './fields-widget.component.html',
 })
-export class FieldsWidgetComponent {
+export class FieldsWidgetComponent implements OnInit {
   dialog = inject(MatDialog);
   fieldsService = inject(FieldsService);
+  queryParamsService = inject(QueryParamsService);
 
   pageNumber = signal<number>(0);
   fieldsResource = rxResource({
@@ -41,19 +43,23 @@ export class FieldsWidgetComponent {
     request: () => ({ pageNumber: this.pageNumber() }),
   });
 
-  openNewFieldDialog() {
-    const dialogRef = this.dialog.open(NewFieldDialogComponent);
+  ngOnInit(): void {
+    const params = this.queryParamsService.queryParams();
+    if (!params) return;
+    if (params['entity'] === 'field' && params['action'] === 'new') this.openNewFieldDialog();
+  }
 
+  openNewFieldDialog() {
+    this.queryParamsService.pushQueryParams({ entity: 'field', action: 'new' });
+    const dialogRef = this.dialog.open(NewFieldDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.fieldsResource.reload();
+      this.queryParamsService.clearQueryParams();
     });
   }
 
   openEditFieldDialog(field: Field) {
-    const dialogRef = this.dialog.open(EditFieldComponent, {
-      data: field,
-    });
-
+    const dialogRef = this.dialog.open(EditFieldComponent, { data: field });
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) this.fieldsResource.reload();
