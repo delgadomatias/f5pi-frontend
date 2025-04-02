@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './generic-dialog.component.html',
 })
 export class GenericDialogComponent {
-  title = input.required<string>();
+  dialogTitle = input.required<string>();
   content = contentChild.required('content', { read: TemplateRef });
   footer = contentChild.required('footer', { read: TemplateRef });
 }

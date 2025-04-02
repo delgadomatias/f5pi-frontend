@@ -1,0 +1,32 @@
+<form [formGroup]="form" (submit)="handleOnSubmit()">
+  <f5pi-generic-dialog dialogTitle="New player">
+    <ng-template #content>
+      <div class="form">
+        <mat-form-field>
+          <input matInput [maxLength]="20" cdkFocusInitial formControlName="name" />
+          <mat-label>Name</mat-label>
+
+          @if (form.controls.name.getError('required')) {
+          <mat-error>Name is required</mat-error>
+          } @else if (form.controls.name.getError('maxlength')) {
+          <mat-error>Name must be less than 20 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <f5pi-image-picker
+          [error]="form.controls.image.hasError('required') && form.controls.image.dirty"
+          (onImageSelected)="onImageSelected($event)"
+        ></f5pi-image-picker>
+      </div>
+    </ng-template>
+
+    <ng-template #footer>
+      <button mat-button [mat-dialog-close]="false" [disabled]="isCreating()">Close</button>
+      <button mat-flat-button type="submit" [disabled]="isCreating()">
+        @if (isCreating()) {
+        <mat-spinner diameter="24"></mat-spinner>
+        } @else {Save}
+      </button>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

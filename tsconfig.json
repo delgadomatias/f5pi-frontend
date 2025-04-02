@@ -25,6 +25,7 @@
       "@fields/*": ["src/app/fields/*"],
       "@layouts/*": ["src/app/layouts/*"],
       "@pages/*": ["src/app/pages/*"],
+      "@players/*": ["src/app/players/*"],
       "@seasons/*": ["src/app/seasons/*"],
       "@styles/*": ["src/styles/*"]
     }

@@ -1,0 +1,55 @@
+@let selectedImage = image();
+
+<div class="image-picker">
+  <div class="image-picker-controls">
+    <div class="image-picker-controls__preview">
+      @if (selectedImage) {
+      <img [src]="buildBlobUrl(selectedImage)" alt="Selected image" />
+      } @else {
+      <img src="https://www.svgrepo.com/show/452030/avatar-default.svg" alt="Default image" />
+      }
+    </div>
+
+    <div class="image-picker-actions">
+      <button
+        (click)="handleChooseImage()"
+        [ngClass]="{ invalid: error() }"
+        class="image-picker-actions__choose"
+        mat-flat-button
+        type="button"
+      >
+        @if (selectedImage) {
+        <span>Change image</span>
+        } @else {
+        <span>Choose image</span>
+        }
+      </button>
+      <button
+        (click)="handleDeleteImage()"
+        [disabled]="!selectedImage"
+        [disableRipple]="true"
+        class="image-picker-actions__clear"
+        mat-fab
+        type="button"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+
+    <input
+      (change)="handleFileInputChange($event)"
+      #fileInput
+      accept="image/*"
+      max="1"
+      maxlength="1"
+      style="display: none"
+      type="file"
+    />
+  </div>
+
+  @if (error()) {
+  <div class="image-picker__error" @fadeInDown>
+    <span>Image is required</span>
+  </div>
+  }
+</div>
