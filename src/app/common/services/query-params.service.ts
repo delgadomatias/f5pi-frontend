@@ -1,4 +1,4 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,8 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class QueryParamsService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly queryParams$ = toSignal(this.route.queryParams);
-  readonly queryParams = computed(() => this.queryParams$());
+  readonly queryParams = toSignal(this.route.queryParams);
 
   clearQueryParams(): void {
     this.router.navigate([], {
