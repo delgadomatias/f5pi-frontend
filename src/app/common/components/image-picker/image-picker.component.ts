@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 const MAX_IMAGE_SIZE_MB = 2;
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
 
 @Component({
   animations: [
@@ -34,6 +34,7 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 })
 export class ImagePickerComponent {
   private readonly snackBar = inject(MatSnackBar);
+  defaultValue = input<string | null>(null);
 
   readonly onImageSelected = output<File | null>();
   readonly error = input<boolean>(false);

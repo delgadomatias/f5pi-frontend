@@ -40,7 +40,11 @@
         </td>
         } @else {
         <td mat-cell *matCellDef="let element">
-          <f5pi-table-actions entityName="player"></f5pi-table-actions>
+          <f5pi-table-actions
+            (onDelete)="handleDeletePlayer(element)"
+            (onEdit)="openEditPlayerDialog(element)"
+            entityName="player"
+          ></f5pi-table-actions>
         </td>
         }
       </ng-container>

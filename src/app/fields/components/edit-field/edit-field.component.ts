@@ -35,7 +35,7 @@ export class EditFieldComponent {
     name: [this.field.fieldName, [Validators.required, Validators.maxLength(20)]],
   });
 
-  handleOnSubmit() {
+  handleSubmit() {
     if (this.form.invalid) return this.form.markAllAsTouched();
 
     const updatedName = this.form.getRawValue().name;

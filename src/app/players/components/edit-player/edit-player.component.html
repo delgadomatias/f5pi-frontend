@@ -1,0 +1,38 @@
+<form [formGroup]="form" class="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="Edit player">
+    <ng-template #content>
+      <div class="content">
+        <!-- @if (error()) {
+        <div class="alert" role="alert">
+          <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+        } -->
+        <mat-form-field>
+          <input [maxLength]="20" matInput placeholder="Name" formControlName="name" />
+          <mat-label>Name</mat-label>
+
+          @if (form.controls.name.getError('required')) {
+          <mat-error>Name is required</mat-error>
+          } @else if (form.controls.name.getError('maxlength')) {
+          <mat-error>Name must be less than 20 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <f5pi-image-picker
+          (onImageSelected)="onImageSelected($event)"
+          [defaultValue]="this.form.controls.imageURL.value"
+        ></f5pi-image-picker>
+      </div>
+    </ng-template>
+
+    <ng-template #footer>
+      <button mat-button [mat-dialog-close]="false" [disabled]="isLoading()">Close</button>
+      <button mat-flat-button type="submit" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="24" mode="indeterminate"></mat-spinner>
+        } @else { Save }
+      </button>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

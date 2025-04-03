@@ -38,7 +38,7 @@ export class NewPlayerDialogComponent {
     image: this.formBuilder.control<File | null>(null, [Validators.required]),
   });
 
-  handleOnSubmit(): void {
+  handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.form.controls.image.markAsDirty();

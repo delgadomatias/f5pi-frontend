@@ -10,7 +10,9 @@ import { GenericWidgetComponent } from '@common/components/generic-widget/generi
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
 import { QueryParamsService } from '@common/services/query-params.service';
 import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
+import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,6 +50,21 @@ export class PlayersWidgetComponent implements OnInit {
         if (result) this.playersResource.reload();
         this.queryParamsService.clearQueryParams();
       },
+    });
+  }
+
+  openEditPlayerDialog(player: Player) {
+    const dialogRef = this.dialog.open(EditPlayerComponent, { data: player });
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) this.playersResource.reload();
+      },
+    });
+  }
+
+  handleDeletePlayer(player: Player) {
+    this.playersService.deletePlayer(player.playerId).subscribe({
+      next: () => this.playersResource.reload(),
     });
   }
 }

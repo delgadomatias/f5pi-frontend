@@ -3,7 +3,9 @@
 <div class="image-picker">
   <div class="image-picker-controls">
     <div class="image-picker-controls__preview">
-      @if (selectedImage) {
+      @if (defaultValue() && !selectedImage) {
+      <img [src]="defaultValue()" alt="Default image" />
+      } @else if (selectedImage) {
       <img [src]="buildBlobUrl(selectedImage)" alt="Selected image" />
       } @else {
       <img src="https://www.svgrepo.com/show/452030/avatar-default.svg" alt="Default image" />
