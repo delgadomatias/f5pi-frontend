@@ -37,7 +37,6 @@ export class PlayersWidgetComponent implements OnInit {
 
   ngOnInit(): void {
     const params = this.queryParamsService.queryParams();
-    console.log({ params });
     if (!params) return;
     if (params['entity'] === 'player' && params['action'] === 'new') this.openNewPlayerDialog();
   }
