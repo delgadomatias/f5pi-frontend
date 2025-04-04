@@ -1,4 +1,4 @@
-import { PaginationResponse } from '@common/interfaces/pagination-response.interface';
+import { PaginatedResponse } from '@common/interfaces/paginated-response.interface';
 import { Player } from '@players/interfaces/player.interface';
 
-export type PlayersResponse = PaginationResponse<Player>;
+export type PlayersResponse = PaginatedResponse<Player>;

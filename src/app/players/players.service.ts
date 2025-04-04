@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { AuthService } from '@auth/auth.service';
+import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
+import { PaginatedRequest } from '@common/interfaces/paginated-request.interface';
+import { CreatePlayerRequest } from '@players/interfaces/create-player-request.interface';
+import { Player } from '@players/interfaces/player.interface';
 import { PlayersResponse } from '@players/interfaces/players.response';
-import { CreatePlayerRequest } from './interfaces/create-player-request.interface';
-import { Player } from './interfaces/player.interface';
-import { UpdatePlayerRequest } from './interfaces/update-player-request.interface';
-import { UploadPlayerImageRequest } from './interfaces/upload-player-image-request.interface';
+import { UpdatePlayerRequest } from '@players/interfaces/update-player-request.interface';
+import { UploadPlayerImageRequest } from '@players/interfaces/upload-player-image-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +17,11 @@ export class PlayersService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  getPlayers() {
+  getPlayers(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
-    return this.http.get<PlayersResponse>(`http://localhost:8080/api/v1/users/${userId}/players`);
+    return this.http.get<PlayersResponse>(`http://localhost:8080/api/v1/users/${userId}/players`, {
+      params: { ...params },
+    });
   }
 
   createPlayer(createPlayerRequest: CreatePlayerRequest) {

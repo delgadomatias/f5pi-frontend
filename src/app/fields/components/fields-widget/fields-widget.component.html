@@ -10,7 +10,6 @@
   <ng-template #content>
     <table
       [dataSource]="fieldsResource.value()?.content || [{ fieldName: 'Loading...', fieldId: 'Loading...' }]"
-      [trackBy]="trackByFn"
       class="mat-elevation-z8"
       mat-table
     >

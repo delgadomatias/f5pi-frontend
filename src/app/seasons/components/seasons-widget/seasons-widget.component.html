@@ -85,6 +85,7 @@
 
   <ng-template #footer>
     <mat-paginator
+      (page)="handlePageChange($event)"
       [hidePageSize]="true"
       [length]="seasonsResource.value()?.totalElements"
       [pageIndex]="seasonsResource.value()?.pageable?.pageNumber"

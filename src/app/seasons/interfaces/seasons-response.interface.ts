@@ -1,4 +1,4 @@
-import { PaginationResponse } from '@common/interfaces/pagination-response.interface';
+import { PaginatedResponse } from '@common/interfaces/paginated-response.interface';
 import { Season } from '@seasons/interfaces/season.interface';
 
-export type SeasonsResponse = PaginationResponse<Season>;
+export type SeasonsResponse = PaginatedResponse<Season>;

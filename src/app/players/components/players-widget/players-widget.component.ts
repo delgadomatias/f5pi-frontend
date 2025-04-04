@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
 import { QueryParamsService } from '@common/services/query-params.service';
+import { EditPlayerComponent } from '@players/components/edit-player/edit-player.component';
 import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
-import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +21,7 @@ import { EditPlayerComponent } from '../edit-player/edit-player.component';
     GenericWidgetComponent,
     MatButtonModule,
     MatIconModule,
+    MatPaginatorModule,
     MatTableModule,
     MatTooltipModule,
     TableActionsComponent,
@@ -30,10 +32,14 @@ import { EditPlayerComponent } from '../edit-player/edit-player.component';
 })
 export class PlayersWidgetComponent implements OnInit {
   dialog = inject(MatDialog);
+  playersService = inject(PlayersService);
   queryParamsService = inject(QueryParamsService);
 
-  playersService = inject(PlayersService);
-  playersResource = rxResource({ loader: () => this.playersService.getPlayers() });
+  pageNumber = signal<number>(0);
+  playersResource = rxResource({
+    loader: ({ request }) => this.playersService.getPlayers(request),
+    request: () => ({ pageNumber: this.pageNumber() }),
+  });
 
   ngOnInit(): void {
     const params = this.queryParamsService.queryParams();
@@ -65,5 +71,10 @@ export class PlayersWidgetComponent implements OnInit {
     this.playersService.deletePlayer(player.playerId).subscribe({
       next: () => this.playersResource.reload(),
     });
+  }
+
+  handlePageChange(event: PageEvent) {
+    const { pageIndex } = event;
+    this.pageNumber.set(pageIndex);
   }
 }

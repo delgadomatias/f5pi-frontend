@@ -2,28 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { AuthService } from '@auth/auth.service';
+import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
+import { PaginatedRequest } from '@common/interfaces/paginated-request.interface';
 import { environment } from '@environments/environment';
 import { CreateFieldRequest } from '@fields/interfaces/create-field-request.interface';
 import { Field } from '@fields/interfaces/field.interface';
 import { FieldResponse } from '@fields/interfaces/fields-response.interface';
 
-interface PaginationRequest {
-  pageNumber: number;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class FieldsService {
-  private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private baseUrl = `${environment.apiUrl}/api/v1/fields`;
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly baseUrl = `${environment.apiUrl}/api/v1/fields`;
 
-  getFields(params?: PaginationRequest) {
-    const pageNumber = params?.pageNumber || 0;
+  getFields(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<FieldResponse>(`http://localhost:8080/api/v1/users/${userId}/fields`, {
-      params: { pageNumber, pageSize: 1 },
+      params: { ...params },
     });
   }
 

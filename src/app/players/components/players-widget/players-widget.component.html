@@ -53,5 +53,17 @@
       <tr mat-row *matRowDef="let row; columns: ['name', 'actions']"></tr>
     </table>
   </ng-template>
-  <ng-template #footer></ng-template>
+
+  <ng-template #footer>
+    <mat-paginator
+      (page)="handlePageChange($event)"
+      [hidePageSize]="true"
+      [length]="playersResource.value()?.totalElements"
+      [pageIndex]="playersResource.value()?.pageable?.pageNumber"
+      [pageSize]="playersResource.value()?.pageable?.pageSize"
+      aria-label="Select page of players"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </ng-template>
 </f5pi-generic-widget>

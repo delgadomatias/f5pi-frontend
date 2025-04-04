@@ -3,8 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
-import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { FieldsWidgetComponent } from '@fields/components/fields-widget/fields-widget.component';
+import { GamesWidgetComponent } from '@games/components/games-widget/games-widget.component';
 import { PlayersWidgetComponent } from '@players/components/players-widget/players-widget.component';
 import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seasons-widget.component';
 
@@ -12,7 +12,7 @@ import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seaso
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     FieldsWidgetComponent,
-    GenericWidgetComponent,
+    GamesWidgetComponent,
     MatButtonModule,
     MatCardModule,
     MatIconModule,

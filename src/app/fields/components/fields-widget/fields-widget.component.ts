@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,6 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
+import { EntityDialogService } from '@common/services/entity-dialog.service';
 import { QueryParamsService } from '@common/services/query-params.service';
 import { EditFieldComponent } from '@fields/components/edit-field/edit-field.component';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
@@ -33,7 +33,7 @@ import { Field } from '@fields/interfaces/field.interface';
   templateUrl: './fields-widget.component.html',
 })
 export class FieldsWidgetComponent implements OnInit {
-  dialog = inject(MatDialog);
+  entityDialogService = inject(EntityDialogService);
   fieldsService = inject(FieldsService);
   queryParamsService = inject(QueryParamsService);
 
@@ -50,25 +50,23 @@ export class FieldsWidgetComponent implements OnInit {
   }
 
   openNewFieldDialog() {
-    this.queryParamsService.pushQueryParams({ entity: 'field', action: 'new' });
-    const dialogRef = this.dialog.open(NewFieldDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.fieldsResource.reload();
-      this.queryParamsService.clearQueryParams();
-    });
+    this.entityDialogService
+      .openNewEntityDialog(NewFieldDialogComponent, {
+        entity: 'field',
+      })
+      .subscribe({
+        next: (result) => {
+          if (result) this.fieldsResource.reload();
+        },
+      });
   }
 
   openEditFieldDialog(field: Field) {
-    const dialogRef = this.dialog.open(EditFieldComponent, { data: field });
-    dialogRef.afterClosed().subscribe({
+    this.entityDialogService.openEditEntityDialog(EditFieldComponent, { data: field }).subscribe({
       next: (result) => {
         if (result) this.fieldsResource.reload();
       },
     });
-  }
-
-  trackByFn(_index: number, field: Field) {
-    return field.fieldId;
   }
 
   onPageChangeEvent(event: PageEvent) {
