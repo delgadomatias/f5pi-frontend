@@ -1,6 +1,7 @@
 <button
   (click)="onEdit.emit()"
   [ariaLabel]="'Edit ' + entityName()"
+  [disabled]="disabled()"
   [matTooltip]="'Edit ' + entityName()"
   mat-icon-button
   matSuffix
@@ -13,6 +14,7 @@
 <button
   (click)="onDelete.emit()"
   [ariaLabel]="'Delete ' + entityName()"
+  [disabled]="disabled()"
   [matTooltip]="'Delete ' + entityName()"
   mat-icon-button
   matSuffix
@@ -22,3 +24,5 @@
 >
   <mat-icon style="color: var(--mat-sys-error)">delete</mat-icon>
 </button>
+
+<ng-content></ng-content>
