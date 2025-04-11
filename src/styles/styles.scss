@@ -1,17 +1,52 @@
-@use "variables" as *;
+@use "@angular/material" as mat;
+
+@use "@styles/material-overrides.scss" as overrides;
+@use "@styles/variables.scss" as *;
+
+:root {
+  --spacing: 8px;
+  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+  --sidenav-width: 120px;
+  --sidenav-accent-foreground: oklch(0.33 0 0);
+  --sidenav-accent: oklch(0.92 0.01 92.99);
+  --sidenav-background: oklch(0.97 0.01 98.88);
+  --sidenav-border: oklch(0.94 0 0);
+  --sidenav-foreground: oklch(0.36 0.01 106.65);
+  --sidenav-primary-foreground: oklch(0.99 0 0);
+  --sidenav-primary: oklch(0.62 0.14 39.04);
+  --sidenav-ring: oklch(0.77 0 0);
+
+  @include overrides.material-theme-overrides();
+  @include overrides.material-component-overrides();
+}
+
+html {
+  @include mat.theme(
+    (
+      typography: Poppins,
+      density: -3,
+    )
+  );
+}
+
+body {
+  &[data-theme="dark"] {
+    color-scheme: dark;
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --sidenav-accent-foreground: oklch(0.81 0.01 93.01);
+    --sidenav-accent: oklch(0.17 0 106.62);
+    --sidenav-background: oklch(0.24 0 67.71);
+    --sidenav-border: oklch(0.94 0 0);
+    --sidenav-foreground: oklch(0.81 0.01 93.01);
+    --sidenav-primary-foreground: oklch(0.99 0 0);
+    --sidenav-primary: oklch(0.33 0 0);
+    --sidenav-ring: oklch(0.77 0 0);
+  }
+}
 
 @layer base {
-  :root {
-    --sidenav-width: 90px;
-    --spacing: 8px;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  * {
+    box-sizing: border-box;
   }
 
   :is(html, body) {
@@ -25,21 +60,8 @@
 
   body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
     color-scheme: light;
-    background: var(--mat-sys-background);
-
-    &.dark {
-      color-scheme: dark;
-      --sidebar-accent-foreground: 240 4.8% 95.9%;
-      --sidebar-accent: 240 3.7% 15.9%;
-      --sidebar-background: 240 5.9% 10%;
-      --sidebar-border: 240 3.7% 15.9%;
-      --sidebar-foreground: 240 4.8% 95.9%;
-      --sidebar-primary-foreground: 240 5.9% 10%;
-      --sidebar-primary: 0 0% 98%;
-      --sidebar-ring: 217.2 91.2% 59.8%;
-    }
+    background: var(--sidenav-background);
   }
 
   h1 {
