@@ -9,6 +9,12 @@ mat-card {
     mat-card-title-group {
       align-items: center;
       gap: 16px;
+
+      mat-card-title {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
     }
   }
 

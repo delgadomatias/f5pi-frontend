@@ -2,13 +2,18 @@
   <!-- Card header -->
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title>{{ widgetTitle() }}</mat-card-title>
+      <mat-card-title>
+        {{ widgetTitle() }}
+        @if (icon()) {
+        <mat-icon>{{ icon() }}</mat-icon>
+        }
+      </mat-card-title>
       <ng-container *ngTemplateOutlet="headerActions()"></ng-container>
     </mat-card-title-group>
   </mat-card-header>
 
   <!-- Card content -->
-  <mat-card-content f5piScrollShadow>
+  <mat-card-content>
     <ng-container *ngTemplateOutlet="content()"></ng-container>
   </mat-card-content>
 
