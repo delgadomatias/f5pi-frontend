@@ -32,7 +32,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles/theme.scss", "src/styles/styles.scss"],
+            "styles": ["src/styles/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
