@@ -1,3 +1,7 @@
 mat-paginator {
   width: 100%;
 }
+
+table.loading {
+  cursor: progress;
+}

@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { finalize, switchMap } from 'rxjs';
 
+import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ImagePickerComponent } from '@common/components/image-picker/image-picker.component';
+import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { PlayersService } from '@players/players.service';
 
 @Component({
@@ -22,6 +23,7 @@ import { PlayersService } from '@players/players.service';
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    AlertComponent,
   ],
   selector: 'f5pi-new-player-dialog',
   styleUrl: './new-player-dialog.component.css',
@@ -31,7 +33,6 @@ export class NewPlayerDialogComponent {
   readonly dialogRef = inject(MatDialogRef);
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly playersService = inject(PlayersService);
-  readonly isCreating = signal<boolean>(false);
 
   form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -48,28 +49,19 @@ export class NewPlayerDialogComponent {
     const { name, image } = this.form.getRawValue();
     if (!image) return;
 
-    this.isCreating.set(true);
     this.dialogRef.disableClose = true;
-
-    this.playersService
-      .createPlayer({ name })
-      .pipe(
-        switchMap((createdPlayer) => {
-          const { playerId } = createdPlayer;
-          return this.playersService.uploadPlayerImage({ playerId, image });
-        }),
-        finalize(() => {
-          this.isCreating.set(false);
-          this.dialogRef.disableClose = false;
-        })
-      )
-      .subscribe({
-        next: () => this.dialogRef.close(true),
-      });
+    this.playersService.createPlayerWithImageMutation.mutate(
+      { name, image },
+      { onSuccess: () => this.dialogRef.close(true), onSettled: () => (this.dialogRef.disableClose = false) }
+    );
   }
 
   onImageSelected(image: File | null): void {
     this.form.patchValue({ image });
     this.form.controls.image.markAsDirty();
+  }
+
+  getErrorMessage() {
+    return getMutationErrorMessage(this.playersService.createPlayerWithImageMutation);
   }
 }

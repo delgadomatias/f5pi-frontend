@@ -3,12 +3,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
+import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { Season } from '@seasons/interfaces/season.interface';
 import { SeasonsService } from '@seasons/seasons.service';
 
@@ -18,11 +20,11 @@ import { SeasonsService } from '@seasons/seasons.service';
     GenericDialogComponent,
     MatButtonModule,
     MatDatepickerModule,
-    MatDialogClose,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    AlertComponent,
   ],
   providers: [provideNativeDateAdapter()],
   selector: 'f5pi-edit-season',
@@ -30,10 +32,11 @@ import { SeasonsService } from '@seasons/seasons.service';
   templateUrl: './edit-season.component.html',
 })
 export class EditSeasonComponent {
-  seasonsService = inject(SeasonsService);
   dialogRef = inject(MatDialogRef);
-  season = inject(MAT_DIALOG_DATA) as Season;
   formBuilder = inject(FormBuilder);
+  season = inject(MAT_DIALOG_DATA) as Season;
+  seasonsService = inject(SeasonsService);
+
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>(this.season.name, [Validators.required]),
     initialDate: this.formBuilder.control<Date | null>(new Date(`${this.season.initialDate}T12:00:00`), [
@@ -52,9 +55,19 @@ export class EditSeasonComponent {
     const initialDate = this.form.getRawValue().initialDate?.toISOString().split('T')[0] as string;
     const finalDate = this.form.getRawValue().finalDate?.toISOString().split('T')[0] as string;
 
-    this.seasonsService.updateSeason(this.season.id, { name, initialDate, finalDate }).subscribe({
-      next: () => this.dialogRef.close(true),
-    });
+    this.seasonsService.updateSeasonMutation.mutate(
+      {
+        seasonId: this.season.id,
+        name,
+        initialDate,
+        finalDate,
+      },
+      { onSuccess: () => this.dialogRef.close(true) }
+    );
+  }
+
+  getErrorMessage() {
+    return getMutationErrorMessage(this.seasonsService.updateSeasonMutation);
   }
 
   private hasSeasonChanged() {

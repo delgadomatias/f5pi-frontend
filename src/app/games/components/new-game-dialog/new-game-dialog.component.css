@@ -1,0 +1,100 @@
+.form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.game {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+
+  & > * {
+    flex: 1 1 min(200px, 100%);
+  }
+}
+
+.option {
+  min-height: 38px;
+}
+
+mat-select {
+  display: flex;
+}
+
+.game-details {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  width: 100%;
+  gap: 12px;
+
+  .team {
+    grid-column: span 6 / span 6;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @media (width < 1024px) {
+      grid-column: span 12 / span 12;
+    }
+
+    .details-of-each-player {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .details-of-each-player__form {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+
+      .player {
+        grid-column: span 8 / span 8;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-left: 4px;
+
+        @media (width < 1280px) {
+          grid-column: span 6 / span 6;
+          width: 100%;
+        }
+
+        @media (width < 768px) {
+          grid-column: span 12 / span 12;
+          width: 100%;
+        }
+      }
+
+      .goals {
+        grid-column: span 2 / span 2;
+
+        @media (width < 1280px) {
+          grid-column: span 3 / span 3;
+          width: 100%;
+        }
+
+        @media (width < 768px) {
+          grid-column: span 12 / span 12;
+          width: 100%;
+        }
+      }
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .second-team {
+    grid-column: span 6 / span 6;
+  }
+}
+
+img {
+  object-fit: cover;
+  border-radius: 50%;
+}

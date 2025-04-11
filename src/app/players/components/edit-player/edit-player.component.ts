@@ -1,23 +1,25 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ImagePickerComponent } from '@common/components/image-picker/image-picker.component';
+import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AlertComponent,
     GenericDialogComponent,
     ImagePickerComponent,
     MatButtonModule,
-    MatDialogClose,
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
@@ -32,7 +34,6 @@ export class EditPlayerComponent {
   formBuilder = inject(NonNullableFormBuilder);
   player = inject(MAT_DIALOG_DATA) as Player;
   playersService = inject(PlayersService);
-  isLoading = signal(false);
 
   form = this.formBuilder.group({
     name: [this.player.name, [Validators.required]],
@@ -55,34 +56,34 @@ export class EditPlayerComponent {
       return;
     }
 
-    this.isLoading.set(true);
     this.dialogRef.disableClose = true;
     if (hasImageChanged && !hasNameChanged) {
       const { image } = this.form.getRawValue();
-      this.playersService
-        .uploadPlayerImage({
-          playerId: this.player.playerId,
-          image: image as File,
-        })
-        .subscribe({
-          next: () => {
-            this.isLoading.set(false);
-            this.dialogRef.close(true);
-          },
-        });
-      return;
+      this.playersService.uploadPlayerImageMutation.mutate(
+        { playerId: this.player.playerId, image: image as File },
+        { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
+      );
+    } else {
+      const { name } = this.form.getRawValue();
+      this.playersService.updatePlayerMutation.mutate(
+        { playerId: this.player.playerId, name },
+        { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
+      );
     }
-
-    const { name } = this.form.getRawValue();
-    this.playersService.updatePlayer(this.player.playerId, { name }).subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        this.dialogRef.close(true);
-      },
-    });
   }
 
   onImageSelected(image: File | null) {
     this.form.patchValue({ image });
+  }
+
+  getErrorMessage() {
+    if (this.playersService.updatePlayerMutation.isError()) {
+      return getMutationErrorMessage(this.playersService.updatePlayerMutation);
+    }
+    if (this.playersService.uploadPlayerImageMutation.isError()) {
+      return getMutationErrorMessage(this.playersService.uploadPlayerImageMutation);
+    }
+
+    return "";
   }
 }

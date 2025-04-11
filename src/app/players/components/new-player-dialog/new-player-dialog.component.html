@@ -1,6 +1,12 @@
+@let isPending = playersService.createPlayerWithImageMutation.isPending();
+@let isError = playersService.createPlayerWithImageMutation.isError();
+
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="New player">
+  <f5pi-generic-dialog dialogTitle="New player" [isPending]="isPending">
     <ng-template #content>
+      @if (isError) {
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      }
       <div class="form">
         <mat-form-field>
           <input matInput [maxLength]="20" cdkFocusInitial formControlName="name" />
@@ -18,15 +24,6 @@
           (onImageSelected)="onImageSelected($event)"
         ></f5pi-image-picker>
       </div>
-    </ng-template>
-
-    <ng-template #footer>
-      <button mat-button [mat-dialog-close]="false" [disabled]="isCreating()">Close</button>
-      <button mat-flat-button type="submit" [disabled]="isCreating()">
-        @if (isCreating()) {
-        <mat-spinner diameter="24"></mat-spinner>
-        } @else {Save}
-      </button>
     </ng-template>
   </f5pi-generic-dialog>
 </form>

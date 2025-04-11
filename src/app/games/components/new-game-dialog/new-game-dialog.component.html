@@ -1,0 +1,146 @@
+@let isCreating = gamesService.createGameMutation.isPending();
+
+<form [formGroup]="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="New game" [isPending]="isCreating">
+    <ng-template #content>
+      <div class="form">
+        <div class="game">
+          <mat-form-field>
+            <input [matDatepicker]="date" formControlName="date" matInput />
+            <mat-label>Date</mat-label>
+            <mat-datepicker-toggle matIconSuffix [for]="date"></mat-datepicker-toggle>
+            <mat-datepicker #date></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput formControlName="individualPrice" />
+            <mat-label>Individual price</mat-label>
+            <mat-icon matSuffix>attach_money</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Season</mat-label>
+            <mat-select name="seasonId" formControlName="seasonId">
+              @for (season of getSeasonsQuery.query.data()?.content; track season.id) {
+              <mat-option class="option" [value]="season.id">{{ season.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Field</mat-label>
+            <mat-select name="fieldId" formControlName="fieldId">
+              @for (field of getFieldsQuery.query.data()?.content; track field.fieldId) {
+              <mat-option class="option" [value]="field.fieldId">{{ field.fieldName }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="game-details">
+          <div class="team">
+            <mat-form-field>
+              <mat-label>Players for first team</mat-label>
+              <mat-select
+                (selectionChange)="onSelectionChangeForFirstTeam($event)"
+                formControlName="playersForFirstTeam"
+                multiple
+                name="playerId"
+              >
+                <mat-select-trigger>
+                  <div style="display: flex; gap: 4px; align-items: center">
+                    @for (player of playersForFirstTeam; track $index) {
+                    <img width="20" height="20" [src]="player.imageURL" />
+                    }
+                  </div>
+                </mat-select-trigger>
+                @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
+                <mat-option [disabled]="!isPlayerAvailableForFirstTeam(player)" class="option" [value]="player">{{
+                  player.name
+                }}</mat-option>
+                }
+              </mat-select>
+              @if (form.controls.playersForFirstTeam.getError('required')) {
+              <mat-error> You must select players for the first team </mat-error>
+              } @else if (form.controls.playersForFirstTeam.getError('minlength')) {
+              <mat-error> You must select 5 players for the first team </mat-error>
+              } @else if (form.controls.playersForFirstTeam.getError('maxlength')) {
+              <mat-error> You must select a maximum of 5 players for the first team </mat-error>
+              }
+            </mat-form-field>
+
+            <div formArrayName="detailsOfEachPlayerOfFirstTeam" class="details-of-each-player">
+              @for (detailForm of detailsOfEachPlayerOfFirstTeam.controls; track $index) {
+              <div [formGroupName]="$index" class="details-of-each-player__form">
+                <div class="player">
+                  <img [src]="detailForm.value.player.imageURL" width="40" height="40" />
+                  <p>{{ detailForm.value.player.name }}</p>
+                </div>
+                <mat-form-field class="goals">
+                  <mat-label>Goals scored</mat-label>
+                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" />
+                </mat-form-field>
+                <mat-form-field class="goals">
+                  <mat-label>Own goals</mat-label>
+                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" />
+                </mat-form-field>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="team">
+            <mat-form-field>
+              <mat-label>Players for second team</mat-label>
+              <mat-select
+                (selectionChange)="onSelectionChangeForSecondTeam($event)"
+                formControlName="playersForSecondTeam"
+                multiple
+                name="playerId"
+              >
+                <mat-select-trigger>
+                  <div style="display: flex; gap: 4px; align-items: center">
+                    @for (player of playersForSecondTeam; track $index) {
+                    <img width="20" height="20" [src]="player.imageURL" />
+                    }
+                  </div>
+                </mat-select-trigger>
+                @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
+                <mat-option [disabled]="!isPlayerAvailableForSecondTeam(player)" [value]="player" class="option"
+                  >{{ player.name }}
+                </mat-option>
+                }
+              </mat-select>
+              @if (form.controls.playersForSecondTeam.getError('required')) {
+              <mat-error> You must select players for the second team </mat-error>
+              } @else if (form.controls.playersForSecondTeam.getError('minlength')) {
+              <mat-error> You must select 5 players for the second team </mat-error>
+              } @else if (form.controls.playersForSecondTeam.getError('maxlength')) {
+              <mat-error> You must select a maximum of 5 players for the second team </mat-error>
+              }
+            </mat-form-field>
+
+            <div formArrayName="detailsOfEachPlayerOfSecondTeam" class="details-of-each-player">
+              @for (detailForm of detailsOfEachPlayerOfSecondTeam.controls; track $index) {
+              <div [formGroupName]="$index" class="details-of-each-player__form">
+                <div class="player">
+                  <img [src]="detailForm.value.player.imageURL" width="40" height="40" />
+                  <p>{{ detailForm.value.player.name }}</p>
+                </div>
+                <mat-form-field class="goals">
+                  <mat-label>Goals scored</mat-label>
+                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" />
+                </mat-form-field>
+                <mat-form-field class="goals">
+                  <mat-label>Own goals</mat-label>
+                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" />
+                </mat-form-field>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

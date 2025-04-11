@@ -1,10 +1,13 @@
+@let isError = fieldsService.createFieldMutation.isError();
+@let isPending = fieldsService.createFieldMutation.isPending();
+
 <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="Create a new field">
+  <f5pi-generic-dialog dialogTitle="New field" [isPending]="isPending">
     <ng-template #content>
-      @if (error()) {
+      @if (isError) {
       <div class="alert" role="alert">
         <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
-        <span>{{ error() }}</span>
+        <span>{{ getErrorMessage() }}</span>
       </div>
       }
       <mat-form-field>
@@ -17,11 +20,6 @@
         <mat-error>Name must be less than 20 characters</mat-error>
         }
       </mat-form-field>
-    </ng-template>
-
-    <ng-template #footer>
-      <button mat-button [mat-dialog-close]="false">Close</button>
-      <button mat-flat-button type="submit">Save</button>
     </ng-template>
   </f5pi-generic-dialog>
 </form>

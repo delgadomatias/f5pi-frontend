@@ -1,0 +1,23 @@
+@let isError = fieldsService.updateFieldMutation.isError();
+@let isPending = fieldsService.updateFieldMutation.isPending();
+
+<form [formGroup]="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="Edit field" [isPending]="isPending">
+    <ng-template #content>
+      @if (isError) {
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      }
+
+      <mat-form-field>
+        <input [maxLength]="20" matInput placeholder="Name" formControlName="name" />
+        <mat-label>Name</mat-label>
+
+        @if (form.controls.name.getError('required')) {
+        <mat-error>Name is required</mat-error>
+        } @else if (form.controls.name.getError('maxlength')) {
+        <mat-error>Name must be less than 20 characters</mat-error>
+        }
+      </mat-form-field>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

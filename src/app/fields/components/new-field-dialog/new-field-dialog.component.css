@@ -11,7 +11,7 @@ mat-form-field {
   color: var(--mat-sys-on-error-container);
   border-radius: 4px;
   padding: 20px 16px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
