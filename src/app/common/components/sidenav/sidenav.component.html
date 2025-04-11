@@ -5,6 +5,11 @@
         @for (item of sidebarItems(); track item.label) {
         <f5pi-sidenav-item [item]="item"></f5pi-sidenav-item>
         }
+        <li class="footer">
+          <button mat-icon-button (click)="toggleTheme()">
+            <mat-icon> @if (currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
+          </button>
+        </li>
       </ul>
     </aside>
   </mat-sidenav>

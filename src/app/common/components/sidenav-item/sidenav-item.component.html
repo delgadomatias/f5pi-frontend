@@ -1,18 +1,21 @@
 <li>
   <a
-    [matTooltip]="item().label"
     [routerLink]="item().path"
     [routerLinkActiveOptions]="{ exact: true }"
     #rla="routerLinkActive"
     class="item"
-    matTooltipPosition="right"
     routerLinkActive="active"
   >
-    <mat-icon
-      [class]="
-        rla.isActive ? 'material-symbols-outlined material-symbols-outlined--filled' : 'material-symbols-outlined'
-      "
-      >{{ item().icon }}</mat-icon
-    >
+    <div class="icon">
+      <mat-icon
+        [class]="
+          rla.isActive ? 'material-symbols-outlined material-symbols-outlined--filled' : 'material-symbols-outlined'
+        "
+        >{{ item().icon }}</mat-icon
+      >
+    </div>
+    <span>
+      {{ item().label }}
+    </span>
   </a>
 </li>
