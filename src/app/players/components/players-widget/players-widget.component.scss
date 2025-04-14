@@ -1,0 +1,15 @@
+@use "@styles/variables.scss" as *;
+
+mat-paginator {
+  width: 100%;
+}
+
+table.loading {
+  cursor: progress;
+}
+
+table {
+  @media (width < $breakpoint-sm) {
+    min-width: max-content;
+  }
+}

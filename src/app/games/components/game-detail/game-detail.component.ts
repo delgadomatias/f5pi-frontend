@@ -1,4 +1,4 @@
-import { JsonPipe } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { Game } from '@games/interfaces/game.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [GenericDialogComponent, JsonPipe, MatChipsModule],
+  imports: [GenericDialogComponent, MatChipsModule, NgClass],
   selector: 'f5pi-game-detail',
   styleUrl: './game-detail.component.scss',
   templateUrl: './game-detail.component.html',

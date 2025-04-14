@@ -9,8 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { AlertComponent } from '@common/components/alert/alert.component';
 
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
+import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
 import { GamesService } from '@games/games.service';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
@@ -23,6 +25,7 @@ import { SeasonsService } from '@seasons/seasons.service';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AlertComponent,
     GenericDialogComponent,
     MatButtonModule,
     MatDatepickerModule,
@@ -126,6 +129,10 @@ export class NewGameDialogComponent implements OnInit {
   onSelectionChangeForSecondTeam(event: MatSelectChange): void {
     const selectedValues = event.value as Player[];
     this.updateTeamPlayerDetails(selectedValues, this.detailsOfEachPlayerOfSecondTeam);
+  }
+
+  getErrorMessage() {
+    return getMutationErrorMessage(this.gamesService.createGameMutation);
   }
 
   private updateTeamPlayerDetails(players: Player[], formArray: FormArray) {

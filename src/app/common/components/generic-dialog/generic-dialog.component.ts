@@ -16,4 +16,5 @@ export class GenericDialogComponent {
   dialogTitle = input.required<string>();
   content = contentChild.required('content', { read: TemplateRef });
   isPending = input<boolean>(false);
+  showSaveButton = input<boolean>(true);
 }

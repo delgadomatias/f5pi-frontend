@@ -30,7 +30,7 @@ import { PlayersService } from '@players/players.service';
     TableActionsComponent,
   ],
   selector: 'f5pi-players-widget',
-  styleUrl: './players-widget.component.css',
+  styleUrl: './players-widget.component.scss',
   templateUrl: './players-widget.component.html',
 })
 export class PlayersWidgetComponent implements OnInit {

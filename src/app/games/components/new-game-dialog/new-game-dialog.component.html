@@ -1,8 +1,12 @@
 @let isCreating = gamesService.createGameMutation.isPending();
+@let isError = gamesService.createGameMutation.isError();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="New game" [isPending]="isCreating">
     <ng-template #content>
+      @if (isError) {
+      <f5pi-alert>{{ getErrorMessage() }}</f5pi-alert>
+      }
       <div class="form">
         <div class="game">
           <mat-form-field>
@@ -20,7 +24,7 @@
 
           <mat-form-field>
             <mat-label>Season</mat-label>
-            <mat-select name="seasonId" formControlName="seasonId">
+            <mat-select [disableRipple]="true" name="seasonId" formControlName="seasonId">
               @for (season of getSeasonsQuery.query.data()?.content; track season.id) {
               <mat-option class="option" [value]="season.id">{{ season.name }}</mat-option>
               }
@@ -29,7 +33,7 @@
 
           <mat-form-field>
             <mat-label>Field</mat-label>
-            <mat-select name="fieldId" formControlName="fieldId">
+            <mat-select [disableRipple]="true" name="fieldId" formControlName="fieldId">
               @for (field of getFieldsQuery.query.data()?.content; track field.fieldId) {
               <mat-option class="option" [value]="field.fieldId">{{ field.fieldName }}</mat-option>
               }
@@ -43,6 +47,7 @@
               <mat-label>Players for first team</mat-label>
               <mat-select
                 (selectionChange)="onSelectionChangeForFirstTeam($event)"
+                [disableRipple]="true"
                 formControlName="playersForFirstTeam"
                 multiple
                 name="playerId"

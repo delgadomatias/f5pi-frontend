@@ -1,28 +1,14 @@
-<button
-  (click)="onEdit.emit()"
-  [ariaLabel]="'Edit ' + entityName()"
-  [disabled]="disabled()"
-  [matTooltip]="'Edit ' + entityName()"
-  mat-icon-button
-  matSuffix
-  matTooltipPosition="left"
-  type="button"
->
-  <mat-icon>edit_square</mat-icon>
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>more_vert</mat-icon>
 </button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onEdit.emit()" [disabled]="disabled()">
+    <span>Edit</span>
+  </button>
 
-<button
-  (click)="onDelete.emit()"
-  [ariaLabel]="'Delete ' + entityName()"
-  [disabled]="disabled()"
-  [matTooltip]="'Delete ' + entityName()"
-  mat-icon-button
-  matSuffix
-  matTooltipClass="tooltip-danger"
-  matTooltipPosition="right"
-  type="button"
->
-  <mat-icon style="color: var(--mat-sys-error)">delete</mat-icon>
-</button>
+  <ng-content></ng-content>
 
-<ng-content></ng-content>
+  <button mat-menu-item (click)="onDelete.emit()" [disabled]="disabled()">
+    <span style="color: var(--mat-sys-error)">Delete</span>
+  </button>
+</mat-menu>

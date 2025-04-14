@@ -6,9 +6,11 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="false" [disabled]="isPending()">Close</button>
+  @if (showSaveButton()) {
   <button mat-flat-button type="submit" [disabled]="isPending()">
     @if (isPending()) {
     <mat-spinner diameter="24"></mat-spinner>
     } @else {Save}
   </button>
+  }
 </mat-dialog-actions>

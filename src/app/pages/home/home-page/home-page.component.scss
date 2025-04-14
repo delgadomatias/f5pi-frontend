@@ -22,6 +22,9 @@
 
   @media (width < $breakpoint-lg) {
     grid-template-rows: auto;
+    min-height: calc(100vh - 2.4rem);
+    height: 100%;
+    margin-right: 0;
   }
 
   @media (width < $breakpoint-2xl) {

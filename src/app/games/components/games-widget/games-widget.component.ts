@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
@@ -23,14 +24,15 @@ import { Game } from '@games/interfaces/game.interface';
     GenericWidgetComponent,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTableModule,
     MatTooltipModule,
     TableActionsComponent,
-    MatPaginatorModule,
   ],
   selector: 'f5pi-games-widget',
-  styleUrl: './games-widget.component.css',
+  styleUrl: './games-widget.component.scss',
   templateUrl: './games-widget.component.html',
 })
 export class GamesWidgetComponent {
@@ -39,19 +41,17 @@ export class GamesWidgetComponent {
   dialog = inject(MatDialog);
 
   openNewGameDialog() {
-    const dialogRef = this.dialog.open(NewGameDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-    });
+    this.dialog.open(NewGameDialogComponent);
   }
 
   openGameDetailDialog(gameId: Game['gameId']) {
-    const dialogRef = this.dialog.open(GameDetailComponent, {
+    this.dialog.open(GameDetailComponent, {
       data: { gameId },
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-    });
+  }
+
+  handleDeleteGame(gameId: Game['gameId']) {
+    this.gamesService.deleteGameMutation.mutate(gameId);
   }
 
   onPageChangeEvent(event: PageEvent) {

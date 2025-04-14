@@ -36,8 +36,8 @@
 
   .mat-mdc-paginator-range-label {
     font: var(--mat-sys-body-large);
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0;
+    margin-right: auto;
   }
 
   .mat-mdc-paginator-container {
@@ -75,14 +75,17 @@
   mat-card {
     box-shadow: var(--shadow);
   }
+
+  .mat-column-actions {
+    text-align: center;
+  }
+
+  .mat-mdc-menu-item {
+    min-height: 36px;
+  }
 }
 
 @mixin material-theme-overrides() {
-  --mat-option-focus-state-layer-color: var(--mat-sys-primary-container);
-  --mat-option-hover-state-layer-color: var(--mat-sys-primary-container);
-  --mat-option-label-text-color: var(--mat-sys-on-primary);
-  --mat-option-label-text-size: var(--mat-sys-body-medium-size);
-
   @include mat.theme-overrides(
     (
       background: light-dark(#faf9f5, #262624),
@@ -97,6 +100,8 @@
       on-secondary-container: light-dark(#3d3929, #e9e6dc),
       surface: light-dark(#faf9f5, #262624),
       on-surface: light-dark(#141413, #faf9f5),
+      surface-container: light-dark(#ffffff, #30302e),
+      on-surface-container: light-dark(#28261b, #e5e5e2),
       surface-variant: light-dark(#ede9de, #1b1b19),
       on-surface-variant: light-dark(#83827d, #b7b5a9),
       error: light-dark(#141413, #ef4444),
@@ -137,20 +142,6 @@
       container-text-size: var(--mat-sys-body-medium-size),
       container-vertical-padding: 12px,
       outlined-label-text-size: var(--mat-sys-body-medium-size),
-    )
-  );
-
-  @include mat.datepicker-overrides(
-    (
-      calendar-body-label-text-color: var(--mat-sys-on-primary),
-      calendar-container-background-color: var(--mat-sys-primary),
-      calendar-container-shape: var(--mat-sys-corner-small),
-      calendar-date-focus-state-background-color: var(--mat-sys-primary-container),
-      calendar-date-hover-state-background-color: var(--mat-sys-primary-container),
-      calendar-date-selected-state-background-color: var(--mat-sys-outline),
-      calendar-date-text-color: var(--mat-sys-on-primary),
-      calendar-date-today-outline-color: var(--mat-sys-on-primary),
-      calendar-date-today-selected-state-outline-color: var(--mat-sys-on-primary),
     )
   );
 
@@ -197,4 +188,6 @@
       filled-focus-active-indicator-color: var(--mat-sys-on-surface),
     )
   );
+
+  @include mat.menu-overrides(());
 }

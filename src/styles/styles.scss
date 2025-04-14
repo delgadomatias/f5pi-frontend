@@ -5,8 +5,13 @@
 
 :root {
   --spacing: 8px;
+  --accent-foreground: #28261b;
+  --accent: #e9e6dc;
+  --muted-foreground: #83827d;
+  --muted: #ede9de;
+  --popover-background: #ffffff;
+  --popover-foreground: #28261b;
   --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --sidenav-width: 120px;
   --sidenav-accent-foreground: oklch(0.33 0 0);
   --sidenav-accent: oklch(0.92 0.01 92.99);
   --sidenav-background: oklch(0.97 0.01 98.88);
@@ -15,6 +20,8 @@
   --sidenav-primary-foreground: oklch(0.99 0 0);
   --sidenav-primary: oklch(0.62 0.14 39.04);
   --sidenav-ring: oklch(0.77 0 0);
+  --sidenav-width: 120px;
+  --success: #16a34a;
 
   @include overrides.material-theme-overrides();
   @include overrides.material-component-overrides();
@@ -32,6 +39,12 @@ html {
 body {
   &[data-theme="dark"] {
     color-scheme: dark;
+    --accent-foreground: #f5f4ee;
+    --accent: #1a1915;
+    --muted-foreground: #b7b5a9;
+    --muted: #1b1b19;
+    --popover-background: #30302e;
+    --popover-foreground: #e5e5e2;
     --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
     --sidenav-accent-foreground: oklch(0.81 0.01 93.01);
     --sidenav-accent: oklch(0.17 0 106.62);
@@ -42,6 +55,24 @@ body {
     --sidenav-primary: oklch(0.33 0 0);
     --sidenav-ring: oklch(0.77 0 0);
   }
+
+  --mat-datepicker-calendar-body-label-text-color: var(--popover-foreground);
+  --mat-datepicker-calendar-container-background-color: var(--popover-background);
+  --mat-datepicker-calendar-date-selected-state-text-color: var(--mat-sys-on-primary);
+  --mat-datepicker-calendar-date-text-color: var(--popover-foreground);
+  --mat-datepicker-calendar-date-today-outline-color: var(--accent);
+  --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--accent);
+  --mat-datepicker-calendar-selected-state-background-color: var(--accent);
+  --mat-menu-container-color: var(--popover-background);
+  --mat-menu-item-hover-state-layer-color: var(--accent);
+  --mat-menu-item-label-text-color: var(--popover-foreground);
+  --mat-option-focus-state-layer-color: var(--accent);
+  --mat-option-hover-state-layer-color: var(--accent);
+  --mat-option-label-text-size: var(--mat-sys-label-large-size);
+  --mat-select-panel-background-color: var(--popover-background);
+  --mdc-icon-button-icon-color: var(--muted-foreground);
+  --mdc-snackbar-container-color: var(--popover-background);
+  --mdc-snackbar-supporting-text-color: var(--popover-foreground);
 }
 
 @layer base {
@@ -95,7 +126,7 @@ body {
 
 @layer components {
   .dialog {
-    padding: 2rem 2rem 2rem calc(var(--sidenav-width) + 2rem);
+    margin: 2rem 2rem 2rem calc(var(--sidenav-width) + 2rem);
     animation: fadeInUp 0.2s ease-in-out;
 
     @media (width < $breakpoint-lg) {

@@ -1,6 +1,6 @@
 @let isError = getGameDetailQuery.isError(); @let isPending = getGameDetailQuery.isPending();
 
-<f5pi-generic-dialog dialogTitle="Game detail" [isPending]="isPending">
+<f5pi-generic-dialog dialogTitle="Game detail" [isPending]="isPending" [showSaveButton]="false">
   <ng-template #content>
     <!-- @if (isError) {
     <div class="alert" role="alert">
@@ -35,8 +35,18 @@
               <span>{{ player.playerName }}</span>
             </div>
             <div class="player-goals">
-              <mat-chip>{{ player.goalsScored }} goals scored</mat-chip>
-              <mat-chip class="own-goals">{{ player.ownGoals }} own goals</mat-chip>
+              <div class="goal">
+                Goals scored
+                <span
+                  [ngClass]="{
+                  'goal--scored': player.goalsScored > 0,
+                }"
+                  >{{ player.goalsScored }}</span
+                >
+              </div>
+              <div class="goal">
+                Own goals <span>{{ player.ownGoals }}</span>
+              </div>
             </div>
           </div>
           }
@@ -55,8 +65,18 @@
               <span>{{ player.playerName }}</span>
             </div>
             <div class="player-goals">
-              <mat-chip>{{ player.goalsScored }} goals scored</mat-chip>
-              <mat-chip class="own-goals">{{ player.ownGoals }} own goals</mat-chip>
+              <div class="goal">
+                Goals scored
+                <span
+                  [ngClass]="{
+                  'goal--scored': player.goalsScored > 0,
+                }"
+                  >{{ player.goalsScored }}</span
+                >
+              </div>
+              <div class="goal">
+                Own goals <span>{{ player.ownGoals }}</span>
+              </div>
             </div>
           </div>
           }

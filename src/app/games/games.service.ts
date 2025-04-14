@@ -46,6 +46,11 @@ export class GamesService {
     }));
   }
 
+  deleteGameMutation = injectMutation(() => ({
+    mutationFn: (gameId: Game['gameId']) => lastValueFrom(this.deleteGame(gameId)),
+    onSuccess: () => this.handleOnSuccessMutation(),
+  }));
+
   private getGames(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<GamesResponse>(`http://localhost:8080/api/v1/users/${userId}/games`, {
@@ -76,6 +81,10 @@ export class GamesService {
 
   private createGameDetail(gameId: Game['gameId'], request: CreateGameDetailRequest) {
     return this.http.post(`http://localhost:8080/api/v1/games/${gameId}/detail`, request);
+  }
+
+  private deleteGame(gameId: Game['gameId']) {
+    return this.http.delete(`http://localhost:8080/api/v1/games/${gameId}`);
   }
 
   private handleOnSuccessMutation() {
