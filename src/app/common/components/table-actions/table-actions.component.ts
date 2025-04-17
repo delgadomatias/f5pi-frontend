@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './table-actions.component.html',
 })
 export class TableActionsComponent {
-  entityName = input.required<string>();
+  entityName = input<string>('');
   disabled = input<boolean>(false);
   onDelete = output();
   onEdit = output();
