@@ -1,7 +1,7 @@
 export interface GameDetailResponse {
   teams: [
     {
-      result: 'WIN' | 'LOSE' | 'DRAW';
+      result: 'WIN' | 'LOSS' | 'DRAW';
       goals: number;
       members: {
         playerName: string;
@@ -11,7 +11,7 @@ export interface GameDetailResponse {
       }[];
     },
     {
-      result: 'WIN' | 'LOSE' | 'DRAW';
+      result: 'WIN' | 'LOSS' | 'DRAW';
       goals: number;
       members: {
         playerName: string;

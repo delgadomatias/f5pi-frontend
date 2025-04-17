@@ -12,6 +12,7 @@ import { GamesResponse } from '@games/interfaces/games-response.interface';
 import { CreateGameDetailRequest } from './interfaces/create-game-detail-request.interface';
 import { GameDetailResponse } from './interfaces/game-detail-response.interface';
 import { Game } from './interfaces/game.interface';
+import { UpdateGameRequest } from './interfaces/update-game-request.interface';
 
 @Injectable({ providedIn: 'root' })
 export class GamesService {
@@ -22,6 +23,12 @@ export class GamesService {
   createGameMutation = injectMutation(() => ({
     mutationFn: ({ game, detail }: { game: CreateGameRequest; detail: CreateGameDetailRequest }) =>
       lastValueFrom(this.createGameWithDetail(game, detail)),
+    onSuccess: () => this.handleOnSuccessMutation(),
+  }));
+
+  updateGameMutation = injectMutation(() => ({
+    mutationFn: ({ gameId, request }: { gameId: Game['gameId']; request: UpdateGameRequest }) =>
+      lastValueFrom(this.updateGame(gameId, request)),
     onSuccess: () => this.handleOnSuccessMutation(),
   }));
 
@@ -85,6 +92,10 @@ export class GamesService {
 
   private deleteGame(gameId: Game['gameId']) {
     return this.http.delete(`http://localhost:8080/api/v1/games/${gameId}`);
+  }
+
+  private updateGame(gameId: Game['gameId'], request: UpdateGameRequest) {
+    return this.http.patch<Game>(`http://localhost:8080/api/v1/games/${gameId}`, request);
   }
 
   private handleOnSuccessMutation() {

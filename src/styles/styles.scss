@@ -130,7 +130,7 @@ body {
     animation: fadeInUp 0.2s ease-in-out;
 
     @media (width < $breakpoint-lg) {
-      padding: 2rem;
+      margin: 2rem;
     }
   }
 

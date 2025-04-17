@@ -1,0 +1,33 @@
+@let isError = gamesService.updateGameMutation.isError();
+@let isPending = gamesService.updateGameMutation.isPending();
+
+<form [formGroup]="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="Edit game" [isPending]="isPending">
+    <ng-template #content>
+      <div class="form">
+        @if (isError) {
+        <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+        }
+
+        <mat-form-field>
+          <input [matDatepicker]="date" formControlName="date" matInput />
+          <mat-label>Date</mat-label>
+          <mat-datepicker-toggle matIconSuffix [for]="date"></mat-datepicker-toggle>
+          <mat-datepicker #date></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput formControlName="individualPrice" />
+          <mat-label>Individual Price</mat-label>
+          <mat-icon matSuffix>attach_money</mat-icon>
+
+          @if (form.controls.individualPrice.getError('required')) {
+          <mat-error>Individual price is required</mat-error>
+          } @else if (form.controls.individualPrice.getError('min')) {
+          <mat-error>Individual price must be greater than 0</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

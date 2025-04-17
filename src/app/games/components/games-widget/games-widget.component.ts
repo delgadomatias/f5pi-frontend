@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
+import { EditGameComponent } from '@games/components/edit-game/edit-game.component';
 import { GameDetailComponent } from '@games/components/game-detail/game-detail.component';
 import { NewGameDialogComponent } from '@games/components/new-game-dialog/new-game-dialog.component';
 import { GamesService } from '@games/games.service';
@@ -47,6 +48,12 @@ export class GamesWidgetComponent {
   openGameDetailDialog(gameId: Game['gameId']) {
     this.dialog.open(GameDetailComponent, {
       data: { gameId },
+    });
+  }
+
+  openEditGameDialog(game: Game) {
+    this.dialog.open(EditGameComponent, {
+      data: { game },
     });
   }
 

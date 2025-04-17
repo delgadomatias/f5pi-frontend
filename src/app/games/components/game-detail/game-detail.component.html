@@ -19,13 +19,15 @@
       }
     </mat-form-field> -->
     @if (isPending) {
-    <div>Loading...</div>
+    <div>
+      Loading...
+    </div>
     } @else {
     <div class="grid">
       <div class="team">
         <div class="team-header">
           <h3>First team</h3>
-          <mat-chip class="winner">Winner</mat-chip>
+          <mat-chip>{{ getResultForFirstTeam() }}</mat-chip>
         </div>
         <div class="players">
           @for (player of getPlayersForFirstTeam(); track player.imageURL) {
@@ -37,12 +39,9 @@
             <div class="player-goals">
               <div class="goal">
                 Goals scored
-                <span
-                  [ngClass]="{
+                <span [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
-                }"
-                  >{{ player.goalsScored }}</span
-                >
+                }">{{ player.goalsScored }}</span>
               </div>
               <div class="goal">
                 Own goals <span>{{ player.ownGoals }}</span>
@@ -55,7 +54,7 @@
       <div class="team">
         <header class="team-header">
           <h3>Second team</h3>
-          <mat-chip class="loser">Loser</mat-chip>
+          <mat-chip class="loser">{{ getResultForSecondTeam() }}</mat-chip>
         </header>
         <div class="players">
           @for (player of getPlayersForSecondTeam(); track player.imageURL) {
@@ -67,12 +66,9 @@
             <div class="player-goals">
               <div class="goal">
                 Goals scored
-                <span
-                  [ngClass]="{
+                <span [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
-                }"
-                  >{{ player.goalsScored }}</span
-                >
+                }">{{ player.goalsScored }}</span>
               </div>
               <div class="goal">
                 Own goals <span>{{ player.ownGoals }}</span>

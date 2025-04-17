@@ -13,6 +13,7 @@ import { PlayersResponse } from '@players/interfaces/players.response';
 import { UpdatePlayerRequest } from '@players/interfaces/update-player-request.interface';
 import { UploadPlayerImageRequest } from '@players/interfaces/upload-player-image-request.interface';
 import { GET_PLAYERS_KEY } from '@players/players.constants';
+import { Statistics } from './interfaces/statistics.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,19 @@ export class PlayersService {
     onSuccess: () => this.handleOnSuccessMutation(),
   }));
 
+  createGetPlayerStatisticsQuery() {
+    const playerId = signal<Player['playerId'] | null>(null);
+    return {
+      playerId,
+      query: injectQuery(() => ({
+        queryFn: () => lastValueFrom(this.getPlayerStatistics(playerId()!)),
+        queryKey: [GET_PLAYERS_KEY, playerId()],
+        staleTime: Infinity,
+        enabled: !!playerId(),
+      })),
+    };
+  }
+
   createGetPlayersQuery() {
     const pageNumber = signal<number>(0);
 
@@ -60,7 +74,7 @@ export class PlayersService {
     const userId = this.authService.getUserId();
     return this.http.get<PlayersResponse>(`${environment.apiUrl}/api/v1/users/${userId}/players`, {
       params: { ...params },
-    });
+    })
   }
 
   private createPlayer(createPlayerRequest: CreatePlayerRequest) {
@@ -101,6 +115,10 @@ export class PlayersService {
 
   private deletePlayer(playerId: Player['playerId']) {
     return this.http.delete(`${this.baseUrl}/${playerId}`);
+  }
+
+  private getPlayerStatistics(playerId: Player['playerId']) {
+    return this.http.get<Statistics>(`${this.baseUrl}/${playerId}/statistics`);
   }
 
   private handleOnSuccessMutation() {

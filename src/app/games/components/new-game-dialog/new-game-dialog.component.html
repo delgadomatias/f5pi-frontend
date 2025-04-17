@@ -5,7 +5,7 @@
   <f5pi-generic-dialog dialogTitle="New game" [isPending]="isCreating">
     <ng-template #content>
       @if (isError) {
-      <f5pi-alert>{{ getErrorMessage() }}</f5pi-alert>
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
       }
       <div class="form">
         <div class="game">
@@ -45,13 +45,8 @@
           <div class="team">
             <mat-form-field>
               <mat-label>Players for first team</mat-label>
-              <mat-select
-                (selectionChange)="onSelectionChangeForFirstTeam($event)"
-                [disableRipple]="true"
-                formControlName="playersForFirstTeam"
-                multiple
-                name="playerId"
-              >
+              <mat-select (selectionChange)="onSelectionChangeForFirstTeam($event)" [disableRipple]="true"
+                formControlName="playersForFirstTeam" multiple name="playerId">
                 <mat-select-trigger>
                   <div style="display: flex; gap: 4px; align-items: center">
                     @for (player of playersForFirstTeam; track $index) {
@@ -62,7 +57,7 @@
                 @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
                 <mat-option [disabled]="!isPlayerAvailableForFirstTeam(player)" class="option" [value]="player">{{
                   player.name
-                }}</mat-option>
+                  }}</mat-option>
                 }
               </mat-select>
               @if (form.controls.playersForFirstTeam.getError('required')) {
@@ -97,12 +92,8 @@
           <div class="team">
             <mat-form-field>
               <mat-label>Players for second team</mat-label>
-              <mat-select
-                (selectionChange)="onSelectionChangeForSecondTeam($event)"
-                formControlName="playersForSecondTeam"
-                multiple
-                name="playerId"
-              >
+              <mat-select (selectionChange)="onSelectionChangeForSecondTeam($event)"
+                formControlName="playersForSecondTeam" multiple name="playerId">
                 <mat-select-trigger>
                   <div style="display: flex; gap: 4px; align-items: center">
                     @for (player of playersForSecondTeam; track $index) {
@@ -111,8 +102,8 @@
                   </div>
                 </mat-select-trigger>
                 @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
-                <mat-option [disabled]="!isPlayerAvailableForSecondTeam(player)" [value]="player" class="option"
-                  >{{ player.name }}
+                <mat-option [disabled]="!isPlayerAvailableForSecondTeam(player)" [value]="player" class="option">{{
+                  player.name }}
                 </mat-option>
                 }
               </mat-select>
