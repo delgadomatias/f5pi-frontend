@@ -1,11 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, provideNativeDateAdapter, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
-import { QueryClient, keepPreviousData, provideTanStackQuery } from '@tanstack/angular-query-experimental';
+import { keepPreviousData, provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { LocalStorageService } from '@common/services/local-storage.service';
@@ -24,6 +24,7 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    provideNativeDateAdapter(),
     provideRouter(routes),
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
