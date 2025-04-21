@@ -1,0 +1,182 @@
+@use "@styles/variables.scss" as *;
+
+.container {
+  background: var(--mat-sys-background);
+  border-radius: 12px;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 100%;
+  height: calc(100dvh - 3rem);
+  margin: 1.5rem 1.5rem 1.5rem 0;
+  padding: 2rem;
+
+  @media (width <=$breakpoint-lg) {
+    height: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    grid-template-rows: auto;
+  }
+}
+
+.list {
+  grid-column: span 5/ span 5;
+
+  @media (width >=$breakpoint-2xl) {
+    grid-column: span 6 / span 6;
+  }
+
+  @media (width <=$breakpoint-lg) {
+    grid-column: span 12 / span 12;
+  }
+
+  f5pi-players-widget {
+    height: 100%;
+  }
+}
+
+.stats {
+  grid-column: span 7 / span 7;
+  background-color: var(--muted);
+  border-radius: 24px;
+  width: 100%;
+  position: relative;
+
+  @media (width >=$breakpoint-2xl) {
+    grid-column: span 6 / span 6;
+  }
+
+  @media (width <=$breakpoint-lg) {
+    grid-column: span 12 / span 12;
+  }
+
+  .stats__grid {
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 12px;
+    padding: 24px;
+    height: 100%;
+    position: relative;
+
+    @media (width <=$breakpoint-lg) {
+      padding: 16px;
+    }
+
+    .stats__grid__card {
+      background: var(--transparent);
+      color: var(--on-transparent);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 1;
+      gap: 12px;
+
+      span:first-child {
+        font: var(--mat-sys-body-large);
+      }
+
+      span:last-child {
+        font: var(--mat-sys-display-large);
+        color: var(--muted-foreground);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &.wins {
+        grid-column: span 4 / span 4;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+      &.losses {
+        grid-column: span 4 / span 4;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+      &.draws {
+        grid-column: span 4 / span 4;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+      &.games {
+        grid-column: span 4 / span 4;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+
+      }
+
+      &.money-spent {
+        grid-column: span 8 / span 8;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+      &.goals {
+        grid-column: span 7 / span 7;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+      &.own-goals {
+        grid-column: span 5 / span 5;
+
+        @media (width <=$breakpoint-lg) {
+          grid-column: span 12 / span 12;
+        }
+      }
+
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  h3 {
+    color: var(--muted-foreground);
+    font: var(--mat-sys-headline-small);
+    opacity: 0.8;
+  }
+}
+
+.loading-state {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fetching-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background-color: var(--overlay);
+  border-radius: 24px;
+  pointer-events: all;
+  z-index: 9999;
+  user-select: none;
+}

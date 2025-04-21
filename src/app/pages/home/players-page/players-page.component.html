@@ -1,59 +1,47 @@
-@let player = selectedPlayer();
-@let playerStatistics = getPlayerStatistics();
+@let isError = getStatisticsQuery.query.isError();
+@let isLoading = getStatisticsQuery.query.isLoading();
+@let isFetching = getStatisticsQuery.query.isFetching();
+@let playerId = selectedPlayerId();
+@let stats = playerStatistics();
 
-<section class="wrapper">
+<section class="container">
+  <article class="list">
+    <f5pi-players-widget [allowSelection]="true" [selectedPlayerId]="selectedPlayerId()"
+      (playerSelected)="handlePlayerSelection($event)"></f5pi-players-widget>
+  </article>
 
-  <div class="player-list">
-    <h1>List of players</h1>
-    <f5pi-players-list (playerSelected)="handlePlayerSelection($event)"
-      [selectedPlayer]="selectedPlayer()"></f5pi-players-list>
-
-  </div>
-
-  <div class="player-statistics">
-    @if (player) {
-    <div class="player-statistics__wrapper">
-
-      <div class="wins">
-        <span>Wins</span>
-        <span>{{playerStatistics?.wins}}</span>
-      </div>
-
-      <div class="losses">
-        <span>Losses</span>
-        <span>{{playerStatistics?.losses}}</span>
-      </div>
-
-      <div class="draws">
-        <span>Draws</span>
-        <span>{{playerStatistics?.draws}}</span>
-      </div>
-
-      <div class="own-goals">
-        <span>Own goals</span>
-        <span>{{playerStatistics?.ownGoals}}</span>
-      </div>
-
-      <div class="money-spent">
-        <span>Money spent</span>
-        <span>{{playerStatistics?.moneySpent}}</span>
-      </div>
-
-      <div class="games">
-        <span>Games</span>
-        <span>{{playerStatistics?.games}}</span>
-      </div>
-
-      <div class="goals">
-        <span>Goals</span>
-        <span>{{playerStatistics?.goals}}</span>
-      </div>
+  <article class="stats">
+    @if (isLoading) {
+    <div class="loading-state">
+      <mat-spinner diameter="32"></mat-spinner>
     </div>
-
+    } @else if (isError) {
+    <div class="error-state">
+      <h3>Error loading statistics</h3>
+      <p>Try refreshing the page or selecting a different player.</p>
+    </div>
+    } @else if (playerId && stats) {
+    <div class="stats__grid">
+      @if (isFetching) {
+      <div class="fetching-state">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+      }
+      @for (block of statisticBlocks; track block.key) {
+      <div class="stats__grid__card" [ngClass]="block.cssClass">
+        <span>{{ block.label }}</span>
+        @if (block.key === 'moneySpent') {
+        <span>{{ stats![block.key] | currency }}</span>
+        } @else {
+        <span>{{ stats![block.key] }}</span>
+        }
+      </div>
+      }
+    </div>
     } @else {
     <div class="empty-state">
       <h3>Select a player to see their statistics</h3>
     </div>
     }
-  </div>
+  </article>
 </section>
