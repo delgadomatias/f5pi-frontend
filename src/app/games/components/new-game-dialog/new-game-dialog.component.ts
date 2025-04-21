@@ -65,6 +65,14 @@ export class NewGameDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    const saved = localStorage.getItem('new-game-form');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        this.form.patchValue(parsed);
+      } catch { }
+    }
+
     this.form.valueChanges.subscribe((values) => {
       if (values.individualPrice) {
         const formattedPrice = this.currencyPipe.transform(
@@ -75,6 +83,8 @@ export class NewGameDialogComponent implements OnInit {
         );
         this.form.patchValue({ individualPrice: formattedPrice! }, { emitEvent: false });
       }
+
+      localStorage.setItem('new-game-form', JSON.stringify(values));
     });
   }
 
@@ -110,7 +120,12 @@ export class NewGameDialogComponent implements OnInit {
       ],
     };
 
-    this.gamesService.createGameMutation.mutate({ game, detail }, { onSuccess: () => this.dialogRef.close() });
+    this.gamesService.createGameMutation.mutate({ game, detail }, {
+      onSuccess: () => {
+        localStorage.removeItem('new-game-form');
+        this.dialogRef.close();
+      }
+    });
   }
 
   isPlayerAvailableForFirstTeam(player: Player): boolean {
@@ -147,6 +162,7 @@ export class NewGameDialogComponent implements OnInit {
     formArray.clear();
     groups.forEach((group) => formArray.push(group));
   }
+
 
   get detailsOfEachPlayerOfFirstTeam() {
     return this.form.controls.detailsOfEachPlayerOfFirstTeam as FormArray;

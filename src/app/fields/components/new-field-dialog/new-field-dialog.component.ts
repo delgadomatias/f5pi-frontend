@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,7 +16,7 @@ import { FieldsService } from '@fields/fields.service';
   styleUrl: './new-field-dialog.component.css',
   templateUrl: './new-field-dialog.component.html',
 })
-export class NewFieldDialogComponent {
+export class NewFieldDialogComponent implements OnInit {
   dialogRef = inject(MatDialogRef);
   fieldsService = inject(FieldsService);
   formBuilder = inject(NonNullableFormBuilder);
@@ -25,8 +25,23 @@ export class NewFieldDialogComponent {
     name: ['', [Validators.required, Validators.maxLength(20)]],
   });
 
+  ngOnInit(): void {
+    const saved = localStorage.getItem('new-field-form');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        this.form.patchValue(parsed);
+      } catch { }
+    }
+
+    this.form.valueChanges.subscribe((values) => {
+      localStorage.setItem('new-field-form', JSON.stringify(values));
+    });
+  }
+
   handleSubmit() {
     if (this.form.invalid) return;
+    localStorage.removeItem('new-field-form');
     this.fieldsService.createFieldMutation.mutate(this.form.getRawValue(), {
       onSuccess: () => this.dialogRef.close(),
     });

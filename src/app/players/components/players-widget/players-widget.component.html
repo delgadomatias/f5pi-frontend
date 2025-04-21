@@ -15,13 +15,9 @@
       <span> Error loading players. Please try again later. </span>
     </div>
     } @else {
-    <table
-      [dataSource]="getPlayersQuery.query.data()!.content"
-      mat-table
-      [ngClass]="{
+    <table [dataSource]="getPlayersQuery.query.data()!.content" mat-table [ngClass]="{
         loading: isDeleting || isFetching
-      }"
-    >
+      }">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
@@ -37,17 +33,16 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
-          <f5pi-table-actions
-            (onDelete)="handleDeletePlayer(element)"
-            (onEdit)="openEditPlayerDialog(element)"
-            [disabled]="isDeleting || isFetching"
-            entityName="player"
-          ></f5pi-table-actions>
+          <f5pi-table-actions (onDelete)="handleDeletePlayer(element)" (onEdit)="openEditPlayerDialog(element)"
+            [disabled]="isDeleting || isFetching" entityName="player"></f5pi-table-actions>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['name', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'actions']" (click)="handleSelection(row)" [ngClass]="{
+        'table-row-selectable': allowSelection(),
+        'table-row-active': row.playerId === selectedPlayerId()
+      }"></tr>
     </table>
     }
   </ng-template>
@@ -56,15 +51,11 @@
     @if (isFetching) {
     <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
     }
-    <mat-paginator
-      (page)="handlePageChange($event)"
-      [hidePageSize]="true"
+    <mat-paginator (page)="handlePageChange($event)" [hidePageSize]="true"
       [length]="getPlayersQuery.query.data()?.totalElements"
       [pageIndex]="getPlayersQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize"
-      aria-label="Select page of players"
-      showFirstLastButtons
-    >
+      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize" aria-label="Select page of players"
+      showFirstLastButtons>
     </mat-paginator>
   </ng-template>
 </f5pi-generic-widget>

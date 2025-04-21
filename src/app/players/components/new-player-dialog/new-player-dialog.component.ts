@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -29,7 +29,7 @@ import { PlayersService } from '@players/players.service';
   styleUrl: './new-player-dialog.component.css',
   templateUrl: './new-player-dialog.component.html',
 })
-export class NewPlayerDialogComponent {
+export class NewPlayerDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef);
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly playersService = inject(PlayersService);
@@ -39,6 +39,20 @@ export class NewPlayerDialogComponent {
     image: this.formBuilder.control<File | null>(null, [Validators.required]),
   });
 
+  ngOnInit(): void {
+    const saved = localStorage.getItem('new-player-form');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        this.form.patchValue(parsed);
+      } catch { }
+    }
+
+    this.form.valueChanges.subscribe((values) => {
+      localStorage.setItem('new-player-form', JSON.stringify(values));
+    });
+  }
+
   handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -46,6 +60,7 @@ export class NewPlayerDialogComponent {
       return;
     }
 
+    localStorage.removeItem('new-player-form');
     const { name, image } = this.form.getRawValue();
     if (!image) return;
 

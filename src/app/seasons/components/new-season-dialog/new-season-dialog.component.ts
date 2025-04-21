@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -31,7 +31,7 @@ import { SeasonsService } from '@seasons/seasons.service';
   styleUrl: './new-season-dialog.component.scss',
   templateUrl: './new-season-dialog.component.html',
 })
-export class NewSeasonDialogComponent {
+export class NewSeasonDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef);
   private readonly formBuilder = inject(FormBuilder);
   readonly seasonsService = inject(SeasonsService);
@@ -42,9 +42,27 @@ export class NewSeasonDialogComponent {
     finalDate: this.formBuilder.control<Date | null>(null, [Validators.required]),
   });
 
-  handleSubmit() {
-    if (this.form.invalid) return this.form.markAllAsTouched();
+  ngOnInit(): void {
+    const saved = localStorage.getItem('new-season-form');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        this.form.patchValue(parsed);
+      } catch { }
+    }
 
+    this.form.valueChanges.subscribe((values) => {
+      localStorage.setItem('new-season-form', JSON.stringify(values));
+    });
+  }
+
+  handleSubmit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    localStorage.removeItem('new-season-form');
     const name = this.form.getRawValue().name as string;
     const initialDate = this.form.getRawValue().initialDate as Date;
     const finalDate = this.form.getRawValue().finalDate as Date;

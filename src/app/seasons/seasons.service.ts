@@ -7,6 +7,7 @@ import { AuthService } from '@auth/auth.service';
 import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
 import { PaginatedRequest } from '@common/interfaces/paginated-request.interface';
 import { environment } from '@environments/environment';
+import { GET_GAMES_KEY } from '@games/games.constants';
 import { CreateSeasonRequest } from '@seasons/interfaces/create-season-request.interface';
 import { Season } from '@seasons/interfaces/season.interface';
 import { SeasonsResponse } from '@seasons/interfaces/seasons-response.interface';
@@ -75,7 +76,10 @@ export class SeasonsService {
     return this.http.patch(`${this.baseUrl}/${seasonId}`, rest);
   }
 
-  private handleOnSuccessMutation() {
-    this.queryClient.invalidateQueries({ queryKey: [GET_SEASONS_KEY] });
+  private async handleOnSuccessMutation() {
+    await Promise.all([
+      this.queryClient.invalidateQueries({ queryKey: [GET_SEASONS_KEY] }),
+      this.queryClient.invalidateQueries({ queryKey: [GET_GAMES_KEY] })
+    ])
   }
 }

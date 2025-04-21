@@ -2,7 +2,6 @@
 
 :host {
   --gutter: 1.2rem;
-  margin: 0.5rem;
 }
 
 .home-page {
@@ -10,21 +9,21 @@
   grid-gap: var(--gutter);
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: calc((100% - var(--gutter)) / 2) calc((100% - var(--gutter)) / 2);
-  height: calc(100vh - 2.4rem);
+  height: calc(100vh - 3rem);
   padding: 2rem;
   background: var(--mat-sys-background);
   border-radius: 12px;
-  margin-right: 1rem;
+  margin: 1.5rem 1.5rem 1.5rem 0;
 
   @media (width > $breakpoint-2xl) {
     grid-template-rows: calc((100% - var(--gutter)) * 0.6) calc((100% - var(--gutter)) * 0.4);
   }
 
-  @media (width < $breakpoint-lg) {
+  @media (width < $breakpoint-xl) {
     grid-template-rows: auto;
-    min-height: calc(100vh - 2.4rem);
+    min-height: calc(100vh - 3rem);
     height: 100%;
-    margin-right: 0;
+    margin: 1rem;
   }
 
   @media (width < $breakpoint-2xl) {

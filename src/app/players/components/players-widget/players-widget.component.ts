@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -38,6 +38,9 @@ export class PlayersWidgetComponent implements OnInit {
   playersService = inject(PlayersService);
   getPlayersQuery = this.playersService.createGetPlayersQuery();
   queryParamsService = inject(QueryParamsService);
+  allowSelection = input<boolean>(false);
+  selectedPlayerId = input<string | null>();
+  playerSelected = output<Player>();
 
   ngOnInit() {
     this.checkQueryParams();
@@ -62,6 +65,12 @@ export class PlayersWidgetComponent implements OnInit {
   handlePageChange(event: PageEvent) {
     const { pageIndex } = event;
     this.getPlayersQuery.pageNumber.set(pageIndex);
+  }
+
+  handleSelection(row: Player) {
+    if (this.allowSelection()) {
+      this.playerSelected.emit(row);
+    }
   }
 
   private checkQueryParams() {

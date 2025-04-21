@@ -13,3 +13,16 @@ table {
     min-width: max-content;
   }
 }
+
+
+.table-row-selectable {
+  cursor: pointer;
+
+  &.table-row-active {
+    background-color: var(--muted);
+  }
+
+  &:hover {
+    background-color: var(--muted);
+  }
+}
