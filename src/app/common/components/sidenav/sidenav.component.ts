@@ -25,9 +25,19 @@ export class SidenavComponent {
       label: 'Dashboard',
     },
     {
+      path: "/games",
+      icon: 'sports_soccer',
+      label: 'Games',
+    },
+    {
       path: '/players',
       icon: 'group',
       label: 'Players',
+    },
+    {
+      path: '/seasons',
+      icon: 'calendar_month',
+      label: 'Seasons',
     },
     {
       path: '/fields',

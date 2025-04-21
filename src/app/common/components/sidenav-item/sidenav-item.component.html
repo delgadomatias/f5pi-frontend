@@ -1,18 +1,9 @@
 <li>
-  <a
-    [routerLink]="item().path"
-    [routerLinkActiveOptions]="{ exact: true }"
-    #rla="routerLinkActive"
-    class="item"
-    routerLinkActive="active"
-  >
+  <a [routerLink]="item().path" class="item" [class.active]="isActive()">
     <div class="icon">
-      <mat-icon
-        [class]="
-          rla.isActive ? 'material-symbols-outlined material-symbols-outlined--filled' : 'material-symbols-outlined'
-        "
-        >{{ item().icon }}</mat-icon
-      >
+      <mat-icon [class]="
+          isActive() ? 'material-symbols-outlined material-symbols-outlined--filled' : 'material-symbols-outlined'
+        ">{{ item().icon }}</mat-icon>
     </div>
     <span>
       {{ item().label }}
