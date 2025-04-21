@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Observable, of, tap, timeout } from 'rxjs';
+import { lastValueFrom, Observable, of, tap, timeout } from 'rxjs';
 
 import { AuthState } from '@auth/interfaces/auth-state.interface';
 import { AuthStatus } from '@auth/interfaces/auth-status.enum';
@@ -8,6 +8,8 @@ import { LoginResponse } from '@auth/interfaces/login-response.interface';
 import { User } from '@auth/interfaces/user.interface';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { environment } from '@environments/environment';
+import { injectMutation } from '@tanstack/angular-query-experimental';
+import { CreateUserRequest } from './interfaces/create-user-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +47,11 @@ export class AuthService {
     );
   }
 
+  registerMutation = injectMutation(() => ({
+    mutationFn: (credentials: CreateUserRequest) => lastValueFrom(this.register(credentials)),
+    mutationKey: ['register'],
+  }))
+
   checkStatus(): Observable<User | null> {
     const accessToken = this.storage.get<string>('accessToken');
     if (!accessToken) return of(null);
@@ -60,6 +67,10 @@ export class AuthService {
     const userId = this.user()?.id;
     if (!userId) throw new Error('User is not authenticated');
     return userId;
+  }
+
+  private register(credentials: CreateUserRequest) {
+    return this.http.post<void>(`${environment.apiUrl}/auth/register`, credentials);
   }
 
   private clearTokens(): void {
