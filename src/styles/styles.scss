@@ -5,6 +5,9 @@
 
 :root {
   --spacing: 8px;
+  --transparent: rgba(255, 255, 255, 0.4);
+  --overlay: rgba(0, 0, 0, 0.1);
+  --on-transparent: #000000;
   --accent-foreground: #28261b;
   --accent: #e9e6dc;
   --muted-foreground: #83827d;
@@ -28,17 +31,17 @@
 }
 
 html {
-  @include mat.theme(
-    (
-      typography: Poppins,
+  @include mat.theme((typography: Poppins,
       density: -3,
-    )
-  );
+    ));
 }
 
 body {
   &[data-theme="dark"] {
     color-scheme: dark;
+    --transparent: rgba(0, 0, 0, 0.2);
+    --overlay: rgba(255, 255, 255, 0.1);
+    --on-transparent: #ffffff;
     --accent-foreground: #f5f4ee;
     --accent: #1a1915;
     --muted-foreground: #b7b5a9;
@@ -153,6 +156,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
