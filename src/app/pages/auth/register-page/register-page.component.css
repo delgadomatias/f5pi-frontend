@@ -1,0 +1,51 @@
+h1 {
+  text-align: center;
+}
+
+.register-content {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  header h1 {
+    text-align: center;
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+footer {
+  color: var(--mat-sys-on-surface-variant);
+  text-align: center;
+
+  a {
+    color: var(--mat-sys-primary);
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--mat-sys-secondary-container);
+    }
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.form__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.form__fields mat-form-field {
+  flex: 1 1 min(200px, 100%);
+  min-width: 0;
+}

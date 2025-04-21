@@ -1,1 +1,85 @@
-<p>register-page works!</p>
+@let isPending = authService.registerMutation.isPending();
+
+<div class="register-content">
+  <header>
+    <h1>
+      Step Into
+      <br />
+      The Stats
+    </h1>
+  </header>
+
+  <form class="form" [formGroup]="form" (submit)="handleSubmit()">
+    <div class="form__fields">
+      <mat-form-field>
+        <input matInput formControlName="fullName" />
+        <mat-label>Full Name</mat-label>
+        <mat-icon matSuffix>person</mat-icon>
+
+        @if (form.controls.fullName.getError('required')) {
+        <mat-error> Full name is required </mat-error>
+        }
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="email" />
+        <mat-label>Email</mat-label>
+        <mat-icon matSuffix>mail</mat-icon>
+
+        @if (form.controls.email.getError('email')) {
+        <mat-error> Invalid email address </mat-error>
+        }
+
+        @if (form.controls.email.getError('required')) {
+        <mat-error> Email is required </mat-error>
+        }
+
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="username" />
+        <mat-label>Username</mat-label>
+        @if (form.controls.username.getError('required')) {
+        <mat-error>Username is required </mat-error>
+        }
+
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'" />
+        <mat-label>Password</mat-label>
+
+        @if (form.controls.password.getError('minlength')) {
+        <mat-error> Password must be at least 3 characters long </mat-error>
+        }
+
+        @if (form.controls.password.getError('required')) {
+        <mat-error> Password is required </mat-error>
+        }
+
+        <button (click)="handleTogglePasswordVisibility()" [attr.aria-pressed]="hidePassword()"
+          aria-label="Hide password" mat-icon-button matSuffix type="button">
+          <mat-icon>{{ hidePassword() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <button mat-flat-button [disabled]="isPending">
+      @if (isPending) {
+      <mat-spinner diameter="24"></mat-spinner>
+      } @else {
+      Sign Up
+      }
+    </button>
+  </form>
+
+  <footer>
+    <p>
+      Already have an account? <br />
+      <a routerLink="/auth/login">Sign In here</a>
+    </p>
+  </footer>
+</div>
