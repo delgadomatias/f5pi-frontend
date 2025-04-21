@@ -17,7 +17,14 @@ export class AppComponent {
 
   constructor() {
     this.matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
-    const savedTheme = this.clientStorage.get<string>('theme') || 'light';
-    this.document.body.setAttribute('data-theme', savedTheme);
+    const savedTheme = this.clientStorage.get<string>('theme');
+    const preferredTheme = this.getPreferredTheme();
+    const themeToApply = savedTheme || preferredTheme;
+    this.document.body.setAttribute('data-theme', themeToApply);
+  }
+
+  private getPreferredTheme(): string {
+    const darkModeMediaQuery = this.document.defaultView?.matchMedia('(prefers-color-scheme: dark)');
+    return darkModeMediaQuery?.matches ? 'dark' : 'light';
   }
 }
