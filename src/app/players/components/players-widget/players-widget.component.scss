@@ -1,0 +1,23 @@
+@use "@styles/variables.scss" as *;
+
+mat-paginator {
+  width: 100%;
+}
+
+table.loading {
+  cursor: progress;
+}
+
+
+
+.table-row-selectable {
+  cursor: pointer;
+
+  &.table-row-active {
+    background-color: var(--muted);
+  }
+
+  &:hover {
+    background-color: var(--muted);
+  }
+}

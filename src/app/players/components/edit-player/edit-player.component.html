@@ -1,0 +1,29 @@
+@let isPending = playersService.updatePlayerMutation.isPending() || playersService.uploadPlayerImageMutation.isPending();
+@let isError = playersService.updatePlayerMutation.isError() || playersService.uploadPlayerImageMutation.isError();
+
+<form [formGroup]="form" class="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="Edit player" [isPending]="isPending">
+    <ng-template #content>
+      <div class="content">
+        @if (isError) {
+        <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+        }
+        <mat-form-field>
+          <input [maxLength]="20" matInput placeholder="Name" formControlName="name" />
+          <mat-label>Name</mat-label>
+
+          @if (form.controls.name.getError('required')) {
+          <mat-error>Name is required</mat-error>
+          } @else if (form.controls.name.getError('maxlength')) {
+          <mat-error>Name must be less than 20 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <f5pi-image-picker
+          (onImageSelected)="onImageSelected($event)"
+          [defaultValue]="this.form.controls.imageURL.value"
+        ></f5pi-image-picker>
+      </div>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

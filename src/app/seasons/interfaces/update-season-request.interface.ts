@@ -1,5 +1,6 @@
 export interface UpdateSeasonRequest {
-  name: string;
-  initialDate: string;
   finalDate: string;
+  initialDate: string;
+  name: string;
+  seasonId: string;
 }

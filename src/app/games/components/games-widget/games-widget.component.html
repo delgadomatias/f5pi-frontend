@@ -1,0 +1,86 @@
+@let isPending = getGamesQuery.query.isPending();
+@let isError = getGamesQuery.query.isError();
+@let isFetching = getGamesQuery.query.isFetching();
+@let isDeleting = gamesService.deleteGameMutation.isPending();
+
+<f5pi-generic-widget widgetTitle="Games" icon="sports_soccer">
+  <ng-template #headerActions>
+    <button mat-mini-fab (click)="openNewGameDialog()" matTooltip="Add a new game">
+      <mat-icon>add</mat-icon>
+    </button>
+  </ng-template>
+  <ng-template #content>
+    @if (isPending){
+    <div class="loading"></div>
+    } @else if (isError) {
+    <div class="error">
+      <span> Error loading games. Please try again later. </span>
+    </div>
+    } @else {
+    <table mat-table [dataSource]="getGamesQuery.query.data()!.content">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.date | date : "MMMM d, yyyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="individualPrice">
+        <th mat-header-cell *matHeaderCellDef>Individual price</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.individualPrice | currency : "$" : "symbol" : "1.2-2" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="field">
+        <th mat-header-cell *matHeaderCellDef>Field</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.field }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="season">
+        <th mat-header-cell *matHeaderCellDef>Season</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.season }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <f5pi-table-actions entityName="game" [disabled]="isPending || isDeleting"
+            (onDelete)="handleDeleteGame(element.gameId)" (onEdit)="openEditGameDialog(element)">
+            <button (click)="openGameDetailDialog(element.gameId)" mat-menu-item>
+              <span>Details</span>
+            </button>
+          </f5pi-table-actions>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['date', 'individualPrice', 'field', 'season', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['date', 'individualPrice', 'field', 'season', 'actions']"></tr>
+
+      <ng-container matColumnDef="noRecords">
+        <td mat-footer-cell *matFooterCellDef colspan="5">
+          No games found
+        </td>
+      </ng-container>
+
+      <tr mat-footer-row *matFooterRowDef="!getGamesQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
+    </table>
+    }
+  </ng-template>
+
+  <ng-template #footer>
+    @if (isFetching) {
+    <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
+    }
+    <mat-paginator (page)="onPageChangeEvent($event)" [hidePageSize]="true"
+      [length]="getGamesQuery.query.data()?.totalElements"
+      [pageIndex]="getGamesQuery.query.data()?.pageable?.pageNumber"
+      [pageSize]="getGamesQuery.query.data()?.pageable?.pageSize" aria-label="Select page of games"
+      showFirstLastButtons>
+    </mat-paginator>
+  </ng-template>
+</f5pi-generic-widget>

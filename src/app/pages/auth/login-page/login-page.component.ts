@@ -27,7 +27,7 @@ export class LoginPageComponent {
     this.authService.login(username, password).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.snackBar.open('Logged in successfully', 'Close', { duration: 400, panelClass: 'auth-snackbar' });
+        this.snackBar.open('Logged in successfully', undefined, { duration: 400, panelClass: 'auth-snackbar' });
         setTimeout(() => this.router.navigateByUrl('/', { replaceUrl: true }), 800);
       },
       error: (error) => {

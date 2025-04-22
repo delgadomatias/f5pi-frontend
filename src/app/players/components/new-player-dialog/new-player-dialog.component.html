@@ -1,0 +1,29 @@
+@let isPending = playersService.createPlayerWithImageMutation.isPending();
+@let isError = playersService.createPlayerWithImageMutation.isError();
+
+<form [formGroup]="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="New player" [isPending]="isPending">
+    <ng-template #content>
+      @if (isError) {
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      }
+      <div class="form">
+        <mat-form-field>
+          <input matInput [maxLength]="20" cdkFocusInitial formControlName="name" />
+          <mat-label>Name</mat-label>
+
+          @if (form.controls.name.getError('required')) {
+          <mat-error>Name is required</mat-error>
+          } @else if (form.controls.name.getError('maxlength')) {
+          <mat-error>Name must be less than 20 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <f5pi-image-picker
+          [error]="form.controls.image.hasError('required') && form.controls.image.dirty"
+          (onImageSelected)="onImageSelected($event)"
+        ></f5pi-image-picker>
+      </div>
+    </ng-template>
+  </f5pi-generic-dialog>
+</form>

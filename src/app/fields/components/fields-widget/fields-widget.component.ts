@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,7 +8,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
-import { EditFieldComponent } from '@fields/components/edit-field/edit-field.component';
+import { EntityDialogService } from '@common/services/entity-dialog.service';
+import { QueryParamsService } from '@common/services/query-params.service';
+import { EditFieldDialogComponent } from '@fields/components/edit-field-dialog/edit-field-dialog.component';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
 import { FieldsService } from '@fields/fields.service';
 import { Field } from '@fields/interfaces/field.interface';
@@ -31,48 +31,40 @@ import { Field } from '@fields/interfaces/field.interface';
   styleUrl: './fields-widget.component.css',
   templateUrl: './fields-widget.component.html',
 })
-export class FieldsWidgetComponent {
-  dialog = inject(MatDialog);
+export class FieldsWidgetComponent implements OnInit {
+  entityDialogService = inject(EntityDialogService);
   fieldsService = inject(FieldsService);
+  getFieldsQuery = this.fieldsService.createGetFieldsQuery();
+  queryParamsService = inject(QueryParamsService);
 
-  pageNumber = signal<number>(0);
-  fieldsResource = rxResource({
-    loader: ({ request }) => this.fieldsService.getFields(request),
-    request: () => ({ pageNumber: this.pageNumber() }),
-  });
+  ngOnInit() {
+    this.checkQueryParams();
+  }
 
   openNewFieldDialog() {
-    const dialogRef = this.dialog.open(NewFieldDialogComponent);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.fieldsResource.reload();
+    this.entityDialogService.openNewEntityDialog(NewFieldDialogComponent, { entity: 'field' }).subscribe({
+      next: () => this.fieldsService.createFieldMutation.reset(),
     });
   }
 
   openEditFieldDialog(field: Field) {
-    const dialogRef = this.dialog.open(EditFieldComponent, {
-      data: field,
-    });
-
-    dialogRef.afterClosed().subscribe({
-      next: (result) => {
-        if (result) this.fieldsResource.reload();
-      },
+    this.entityDialogService.openEditEntityDialog(EditFieldDialogComponent, { data: field }).subscribe({
+      next: () => this.fieldsService.updateFieldMutation.reset(),
     });
   }
 
-  trackByFn(_index: number, field: Field) {
-    return field.fieldId;
+  handleDeleteField(field: Field) {
+    this.fieldsService.deleteFieldMutation.mutate(field.fieldId);
   }
 
   onPageChangeEvent(event: PageEvent) {
     const { pageIndex } = event;
-    this.pageNumber.set(pageIndex);
+    this.getFieldsQuery.pageNumber.set(pageIndex);
   }
 
-  handleDeleteField(field: Field) {
-    this.fieldsService.deleteField(field.fieldId).subscribe({
-      next: () => this.fieldsResource.reload(),
-    });
+  private checkQueryParams() {
+    const params = this.queryParamsService.queryParams();
+    if (!params) return;
+    if (params['entity'] === 'field' && params['action'] === 'new') this.openNewFieldDialog();
   }
 }

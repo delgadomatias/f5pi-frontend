@@ -1,0 +1,77 @@
+@use "variables" as *;
+
+.image-picker-controls {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+
+  @media (width < $breakpoint-xs) {
+    flex-wrap: wrap;
+  }
+
+  .image-picker-controls__preview {
+    height: 82px;
+
+    @media (width < $breakpoint-xs) {
+      flex: 1;
+    }
+
+    img {
+      border-radius: 6px;
+      border: 1px solid var(--mat-sys-outline);
+      height: 80px;
+      object-fit: cover;
+      width: 80px;
+
+      @media (width < $breakpoint-xs) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.image-picker-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+
+  .image-picker-actions__choose {
+    background: transparent !important;
+    border: 1px dashed var(--mat-sys-outline);
+    color: var(--mat-sys-primary) !important;
+    height: 82px;
+    transition: background 0.1s ease-in-out;
+    width: 100%;
+
+    &.invalid {
+      border: 1px solid var(--mat-sys-error) !important;
+    }
+
+    &:hover {
+      background: var(--mat-sys-outline-variant) !important;
+    }
+
+    &:focus {
+      background: var(--mat-sys-outline-variant) !important;
+    }
+  }
+
+  .image-picker-actions__clear {
+    height: 82px;
+    width: 40px;
+  }
+}
+
+.image-picker__error {
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-body-small);
+  padding-top: 7px;
+}
+
+::ng-deep .error-snackbar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: calc(var(--sidenav-width) + 2rem);
+}

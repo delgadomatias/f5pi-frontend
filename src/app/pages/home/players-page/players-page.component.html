@@ -1,1 +1,47 @@
-<p>players-page works!</p>
+@let isError = getStatisticsQuery.query.isError();
+@let isLoading = getStatisticsQuery.query.isLoading();
+@let isFetching = getStatisticsQuery.query.isFetching();
+@let playerId = selectedPlayerId();
+@let stats = playerStatistics();
+
+<section class="container">
+  <article class="list">
+    <f5pi-players-widget [allowSelection]="true" [selectedPlayerId]="selectedPlayerId()"
+      (playerSelected)="handlePlayerSelection($event)"></f5pi-players-widget>
+  </article>
+
+  <article class="stats">
+    @if (isLoading) {
+    <div class="loading-state">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+    } @else if (isError) {
+    <div class="error-state">
+      <h3>Error loading statistics</h3>
+      <p>Try refreshing the page or selecting a different player.</p>
+    </div>
+    } @else if (playerId && stats) {
+    <div class="stats__grid">
+      @if (isFetching) {
+      <div class="fetching-state">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+      }
+      @for (block of statisticBlocks; track block.key) {
+      <div class="stats__grid__card" [ngClass]="block.cssClass">
+        <span>{{ block.label }}</span>
+        @if (block.key === 'moneySpent') {
+        <span>{{ stats![block.key] | currency }}</span>
+        } @else {
+        <span>{{ stats![block.key] }}</span>
+        }
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="empty-state">
+      <h3>Select a player to see their statistics</h3>
+    </div>
+    }
+  </article>
+</section>

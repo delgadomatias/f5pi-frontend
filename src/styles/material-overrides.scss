@@ -36,8 +36,8 @@
 
   .mat-mdc-paginator-range-label {
     font: var(--mat-sys-body-large);
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0;
+    margin-right: auto;
   }
 
   .mat-mdc-paginator-container {
@@ -63,53 +63,53 @@
     content: "";
     display: none;
   }
+
+  mat-card-title {
+    color: var(--mat-sys-on-surface);
+  }
+
+  mat-sidenav-content {
+    background-color: var(--sidenav-background);
+  }
+
+  mat-card {
+    box-shadow: var(--shadow);
+  }
+
+  .mat-column-actions {
+    text-align: center;
+  }
+
+  .mat-mdc-menu-item {
+    min-height: 36px;
+  }
 }
 
 @mixin material-theme-overrides() {
   @include mat.theme-overrides(
     (
-      primary: light-dark(#000000, #ffffff),
-      on-primary: light-dark(#ffffff, #000000),
-      primary-container: light-dark(#1b1b1b, #e4e4e4),
-      on-primary-container: light-dark(#d0d0d0, #303030),
-      inverse-primary: light-dark(#c6c6c6, #404040),
-      primary-fixed: light-dark(#494949, #b6b6b6),
-      primary-fixed-dim: light-dark(#333333, #cccccc),
-      on-primary-fixed: light-dark(#ffffff, #000000),
-      on-primary-fixed-variant: light-dark(#ffffff, #000000),
-      secondary: light-dark(#2c2c2c, #d3d3d3),
-      on-secondary: light-dark(#ffffff, #000000),
-      secondary-container: light-dark(#494949, #b6b6b6),
-      on-secondary-container: light-dark(#ffffff, #000000),
-      secondary-fixed: light-dark(#494949, #b6b6b6),
-      secondary-fixed-dim: light-dark(#333333, #cccccc),
-      on-secondary-fixed: light-dark(#ffffff, #000000),
-      on-secondary-fixed-variant: light-dark(#ffffff, #000000),
-      tertiary: light-dark(#000000, #ffffff),
-      on-tertiary: light-dark(#ffffff, #000000),
-      tertiary-container: light-dark(#1b1b1b, #e4e4e4),
-      on-tertiary-container: light-dark(#d0d0d0, #303030),
-      tertiary-fixed: light-dark(#494949, #b6b6b6),
-      tertiary-fixed-dim: light-dark(#333333, #cccccc),
-      on-tertiary-fixed: light-dark(#ffffff, #000000),
-      on-tertiary-fixed-variant: light-dark(#ffffff, #000000),
-      error: light-dark(#c03040, #cf6679),
-      on-error: light-dark(#ffffff, #000000),
-      error-container: light-dark(#ffe5e5, #8b0000),
-      on-error-container: light-dark(#8c3030, #ffdada),
-      surface: light-dark(#ffffff, #121212),
-      on-surface: light-dark(#000000, #ffffff),
-      surface-variant: light-dark(#f5f5f5, #2c2c2c),
-      on-surface-variant: light-dark(#717171, #bebebe),
-      surface-container: light-dark(#f0f0f0, #1e1e1e),
-      on-surface-container: light-dark(#000000, #ffffff),
-      background: light-dark(#ffffff, #000000),
-      on-background: light-dark(#121212, #ffffff),
-      outline: light-dark(#79747e, #938f99),
-      outline-variant: light-dark(#e4e4e7, #48464c),
-      shadow: light-dark(#000000, #000000),
-      inverse-surface: light-dark(#121212, #ffffff),
-      inverse-on-surface: light-dark(#ffffff, #000000),
+      background: light-dark(#faf9f5, #262624),
+      on-background: light-dark(#3d3929, #c3c0b6),
+      primary: light-dark(#c96442, #d97757),
+      on-primary: light-dark(#ffffff, #ffffff),
+      primary-container: light-dark(#faf9f5, #262624),
+      on-primary-container: light-dark(#141413, #faf9f5),
+      secondary: light-dark(#e9e6dc, #faf9f5),
+      on-secondary: light-dark(#535146, #30302e),
+      secondary-container: light-dark(#f5f3eb, #3a3a35),
+      on-secondary-container: light-dark(#3d3929, #e9e6dc),
+      surface: light-dark(#faf9f5, #262624),
+      on-surface: light-dark(#141413, #faf9f5),
+      surface-container: light-dark(#ffffff, #30302e),
+      on-surface-container: light-dark(#28261b, #e5e5e2),
+      surface-variant: light-dark(#ede9de, #1b1b19),
+      on-surface-variant: light-dark(#83827d, #b7b5a9),
+      error: light-dark(#141413, #ef4444),
+      on-error: light-dark(#ffffff, #ffffff),
+      error-container: light-dark(#f9dcdc, #7f1d1d),
+      on-error-container: light-dark(#5a1a0e, #f9dcdc),
+      outline: light-dark(#dad9d4, #3e3e38),
+      outline-variant: light-dark(#dad9d4, #3e3e38),
     )
   );
 
@@ -124,6 +124,19 @@
     )
   );
 
+  @include mat.icon-button-overrides(
+    (
+      icon-color: var(--muted),
+    )
+  );
+
+  @include mat.fab-overrides(
+    (
+      small-container-color: var(--mat-sys-primary),
+      small-foreground-color: var(--mat-sys-on-primary),
+    )
+  );
+
   @include mat.form-field-overrides(
     (
       container-text-size: var(--mat-sys-body-medium-size),
@@ -132,24 +145,9 @@
     )
   );
 
-  @include mat.datepicker-overrides(
-    (
-      calendar-body-label-text-color: var(--mat-sys-on-primary),
-      calendar-container-background-color: var(--mat-sys-primary),
-      calendar-container-shape: 4px,
-      calendar-date-focus-state-background-color: var(--mat-sys-primary-container),
-      calendar-date-hover-state-background-color: var(--mat-sys-primary-container),
-      calendar-date-selected-state-background-color: var(--mat-sys-outline),
-      calendar-date-text-color: var(--mat-sys-on-primary),
-      calendar-date-today-outline-color: var(--mat-sys-on-primary),
-      calendar-date-today-selected-state-outline-color: var(--mat-sys-on-primary),
-    )
-  );
-
   @include mat.table-overrides(
     (
-      row-item-outline-color: hsl(240 5.9% 90%),
-      header-headline-color: hsl(240 3.8% 46.1%),
+      row-item-outline-color: var(--mat-sys-outline-variant),
     )
   );
 
@@ -157,9 +155,39 @@
     (
       container-max-width: 100%,
       container-shape: 12px,
-      content-padding: 35px 30px,
+      with-actions-content-padding: 30px 30px 0,
       headline-padding: 0 0 16px 0,
       subhead-size: var(--mat-sys-headline-medium-size),
+      actions-padding: 24px 24px 30px 30px,
     )
   );
+
+  @include mat.select-overrides(
+    (
+      trigger-text-size: var(--mat-sys-body-medium-size),
+      panel-background-color: var(--mat-sys-primary),
+    )
+  );
+
+  @include mat.table-overrides(
+    (
+      row-item-label-text-color: var(--mat-sys-on-background),
+      row-item-outline-color: var(--mat-sys-outline-variant),
+    )
+  );
+
+  @include mat.tooltip-overrides(
+    (
+      container-color: var(--mat-sys-primary),
+      supporting-text-color: var(--mat-sys-on-primary),
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      filled-focus-active-indicator-color: var(--mat-sys-on-surface),
+    )
+  );
+
+  @include mat.menu-overrides(());
 }

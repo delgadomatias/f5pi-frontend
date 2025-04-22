@@ -1,0 +1,84 @@
+@let isPending = getGameDetailQuery.isPending();
+
+<f5pi-generic-dialog dialogTitle="Game detail" [isPending]="isPending" [showSaveButton]="false">
+  <ng-template #content>
+    <!-- @if (isError) {
+    <div class="alert" role="alert">
+      <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
+      <span>{{ getErrorMessage() }}</span>
+    </div>
+    } -->
+    <!-- <mat-form-field>
+      <input matInput cdkFocusInitial [maxLength]="20" formControlName="name" />
+      <mat-label>Name</mat-label>
+
+      @if (form.controls.name.getError('required')) {
+      <mat-error>Name is required</mat-error>
+      } @else if (form.controls.name.getError('maxlength')) {
+      <mat-error>Name must be less than 20 characters</mat-error>
+      }
+    </mat-form-field> -->
+    @if (isPending) {
+    <div>
+      Loading...
+    </div>
+    } @else {
+    <div class="grid">
+      <div class="team">
+        <div class="team-header">
+          <h3>First team</h3>
+          <mat-chip>{{ getResultForFirstTeam() }}</mat-chip>
+        </div>
+        <div class="players">
+          @for (player of getPlayersForFirstTeam(); track player.imageURL) {
+          <div class="player">
+            <div class="player-info">
+              <img [src]="player.imageURL" width="30" height="30" />
+              <span>{{ player.playerName }}</span>
+            </div>
+            <div class="player-goals">
+              <div class="goal">
+                Goals scored
+                <span [ngClass]="{
+                  'goal--scored': player.goalsScored > 0,
+                }">{{ player.goalsScored }}</span>
+              </div>
+              <div class="goal">
+                Own goals <span>{{ player.ownGoals }}</span>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="team">
+        <header class="team-header">
+          <h3>Second team</h3>
+          <mat-chip class="loser">{{ getResultForSecondTeam() }}</mat-chip>
+        </header>
+        <div class="players">
+          @for (player of getPlayersForSecondTeam(); track player.imageURL) {
+          <div class="player">
+            <div class="player-info">
+              <img [src]="player.imageURL" width="30" height="30" />
+              <span>{{ player.playerName }}</span>
+            </div>
+            <div class="player-goals">
+              <div class="goal">
+                Goals scored
+                <span [ngClass]="{
+                  'goal--scored': player.goalsScored > 0,
+                }">{{ player.goalsScored }}</span>
+              </div>
+              <div class="goal">
+                Own goals <span>{{ player.ownGoals }}</span>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </ng-template>
+</f5pi-generic-dialog>

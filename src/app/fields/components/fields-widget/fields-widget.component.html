@@ -1,6 +1,6 @@
-@let isLoading = fieldsResource.isLoading();
+@let isDeleting = fieldsService.deleteFieldMutation.isPending();
 
-<f5pi-generic-widget widgetTitle="Fields">
+<f5pi-generic-widget widgetTitle="Fields" icon="ballot">
   <ng-template #headerActions>
     <button mat-mini-fab (click)="openNewFieldDialog()" matTooltip="Add a new field" aria-label="Add a new field">
       <mat-icon>add</mat-icon>
@@ -8,57 +8,52 @@
   </ng-template>
 
   <ng-template #content>
-    <table
-      [dataSource]="fieldsResource.value()?.content || [{ fieldName: 'Loading...', fieldId: 'Loading...' }]"
-      [trackBy]="trackByFn"
-      class="mat-elevation-z8"
-      mat-table
-    >
+    @if (getFieldsQuery.query.isPending()){
+    <div class="loading"></div>
+    } @else if (getFieldsQuery.query.isError()) {
+    <div class="error">
+      <span> Error loading fields. Please try again later. </span>
+    </div>
+    } @else {
+    <table [dataSource]="getFieldsQuery.query.data()!.content" mat-table>
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        @if (isLoading) {
-        <td mat-cell *matCellDef="let element">
-          <div class="loading"></div>
-        </td>
-        } @else {
         <td mat-cell *matCellDef="let element">
           {{ element.fieldName }}
         </td>
-        }
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
-        @if (isLoading) {
         <td mat-cell *matCellDef="let element">
-          <div class="loading"></div>
+          <f5pi-table-actions (onDelete)="handleDeleteField(element)" (onEdit)="openEditFieldDialog(element)"
+            [disabled]="isDeleting" entityName="field"></f5pi-table-actions>
         </td>
-        } @else {
-        <td mat-cell *matCellDef="let element">
-          <f5pi-table-actions
-            (onDelete)="handleDeleteField(element)"
-            (onEdit)="openEditFieldDialog(element)"
-            entityName="field"
-          ></f5pi-table-actions>
-        </td>
-        }
       </ng-container>
+
+      <ng-container matColumnDef="noRecords">
+        <td mat-footer-cell *matFooterCellDef colspan="5">
+          No fields found
+        </td>
+      </ng-container>
+
+      <tr mat-footer-row *matFooterRowDef="!getFieldsQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
 
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
       <tr mat-row *matRowDef="let row; columns: ['name', 'actions']"></tr>
     </table>
+    }
   </ng-template>
 
   <ng-template #footer>
-    <mat-paginator
-      (page)="onPageChangeEvent($event)"
-      [hidePageSize]="true"
-      [length]="fieldsResource.value()?.totalElements"
-      [pageIndex]="fieldsResource.value()?.pageable?.pageNumber"
-      [pageSize]="fieldsResource.value()?.pageable?.pageSize"
-      aria-label="Select page of fields"
-      showFirstLastButtons
-    >
+    @if (getFieldsQuery.query.isFetching()) {
+    <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
+    }
+    <mat-paginator (page)="onPageChangeEvent($event)" [hidePageSize]="true"
+      [length]="getFieldsQuery.query.data()?.totalElements"
+      [pageIndex]="getFieldsQuery.query.data()?.pageable?.pageNumber"
+      [pageSize]="getFieldsQuery.query.data()?.pageable?.pageSize" aria-label="Select page of fields"
+      showFirstLastButtons>
     </mat-paginator>
   </ng-template>
 </f5pi-generic-widget>

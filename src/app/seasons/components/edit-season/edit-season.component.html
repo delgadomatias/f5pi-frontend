@@ -1,10 +1,20 @@
+@let isPending = seasonsService.updateSeasonMutation.isPending();
+@let isError = seasonsService.updateSeasonMutation.isError();
+
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog title="Edit season">
+  <f5pi-generic-dialog dialogTitle="Edit season" [isPending]="isPending">
     <ng-template #content>
+      @if (isError) {
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      }
+
       <div class="form">
         <mat-form-field>
           <input matInput [maxLength]="20" cdkFocusInitial formControlName="name" />
           <mat-label>Name</mat-label>
+          @if (form.controls.name.getError('required')) {
+          <mat-error> Name is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field>
@@ -17,6 +27,9 @@
           <mat-label>Initial date</mat-label>
           <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>
+          @if (form.controls.initialDate.getError('required')) {
+          <mat-error> Initial date is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field>
@@ -24,13 +37,11 @@
           <mat-label>Final date</mat-label>
           <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker></mat-datepicker>
+          @if (form.controls.finalDate.getError('required')) {
+          <mat-error> Final date is required </mat-error>
+          }
         </mat-form-field>
       </div>
-    </ng-template>
-
-    <ng-template #footer>
-      <button mat-button [mat-dialog-close]="false">Close</button>
-      <button mat-flat-button type="submit">Save</button>
     </ng-template>
   </f5pi-generic-dialog>
 </form>

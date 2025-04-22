@@ -2,12 +2,11 @@
 
 mat-sidenav {
   align-items: center;
-  background: hsl(var(--sidebar-background));
+  background: var(--sidenav-background);
   border-radius: 0;
-  border: 1px solid hsl(var(--sidebar-border));
   display: flex;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 3rem 0;
   position: fixed;
   width: var(--sidenav-width);
 
@@ -27,5 +26,39 @@ mat-sidenav {
 .sidebar__menu {
   display: flex;
   flex-direction: column;
+  height: 100%;
   width: 100%;
+  gap: 10px;
+
+  .footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+
+    button {
+      display: flex;
+    }
+
+    .user {
+      align-self: center;
+      justify-self: center;
+      text-align: center;
+
+      p {
+        font: var(--mat-sys-body-medium);
+      }
+    }
+
+    .actions {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }

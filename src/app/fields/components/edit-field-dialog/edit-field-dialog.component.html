@@ -1,12 +1,13 @@
-<form [formGroup]="form" (submit)="handleOnSubmit()">
-  <f5pi-generic-dialog title="Edit field">
+@let isError = fieldsService.updateFieldMutation.isError();
+@let isPending = fieldsService.updateFieldMutation.isPending();
+
+<form [formGroup]="form" (submit)="handleSubmit()">
+  <f5pi-generic-dialog dialogTitle="Edit field" [isPending]="isPending">
     <ng-template #content>
-      @if (error()) {
-      <div class="alert" role="alert">
-        <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
-        <span>{{ error() }}</span>
-      </div>
+      @if (isError) {
+      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
       }
+
       <mat-form-field>
         <input [maxLength]="20" matInput placeholder="Name" formControlName="name" />
         <mat-label>Name</mat-label>
@@ -17,11 +18,6 @@
         <mat-error>Name must be less than 20 characters</mat-error>
         }
       </mat-form-field>
-    </ng-template>
-
-    <ng-template #footer>
-      <button mat-button [mat-dialog-close]="false">Close</button>
-      <button mat-flat-button type="submit">Save</button>
     </ng-template>
   </f5pi-generic-dialog>
 </form>

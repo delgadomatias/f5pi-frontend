@@ -23,8 +23,10 @@
       "@common/*": ["src/app/common/*"],
       "@environments/*": ["src/environments/*"],
       "@fields/*": ["src/app/fields/*"],
+      "@games/*": ["src/app/games/*"],
       "@layouts/*": ["src/app/layouts/*"],
       "@pages/*": ["src/app/pages/*"],
+      "@players/*": ["src/app/players/*"],
       "@seasons/*": ["src/app/seasons/*"],
       "@styles/*": ["src/styles/*"]
     }

@@ -1,15 +1,16 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GenericWidgetComponent } from '@common/components/generic-widget/generic-widget.component';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
+import { EntityDialogService } from '@common/services/entity-dialog.service';
+import { QueryParamsService } from '@common/services/query-params.service';
 import { EditSeasonComponent } from '@seasons/components/edit-season/edit-season.component';
 import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
 import { Season } from '@seasons/interfaces/season.interface';
@@ -23,6 +24,7 @@ import { SeasonsService } from '@seasons/seasons.service';
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
     MatTableModule,
     MatTooltipModule,
     TableActionsComponent,
@@ -31,50 +33,42 @@ import { SeasonsService } from '@seasons/seasons.service';
   styleUrl: './seasons-widget.component.scss',
   templateUrl: './seasons-widget.component.html',
 })
-export class SeasonsWidgetComponent {
+export class SeasonsWidgetComponent implements OnInit {
+  entityDialogService = inject(EntityDialogService);
+  queryParamsService = inject(QueryParamsService);
   seasonsService = inject(SeasonsService);
-  dialog = inject(MatDialog);
+  getSeasonsQuery = this.seasonsService.createGetSeasonsQuery();
 
-  pageNumber = signal<number>(0);
-  seasonsResource = rxResource({
-    loader: ({ request }) => this.seasonsService.getSeasons(request),
-    request: () => ({ pageNumber: this.pageNumber() }),
-  });
+  ngOnInit() {
+    this.checkQueryParams();
+  }
 
   openNewSeasonDialog() {
-    const dialogRef = this.dialog.open(NewSeasonDialogComponent);
-
-    dialogRef.beforeClosed().subscribe({
-      next: (result) => {
-        if (result) this.seasonsResource.reload();
-      },
+    this.entityDialogService.openNewEntityDialog(NewSeasonDialogComponent, { entity: 'season' }).subscribe({
+      next: () => this.seasonsService.createSeasonMutation.reset(),
     });
   }
 
   openEditSeasonDialog(season: Season) {
-    const dialogRef = this.dialog.open(EditSeasonComponent, {
-      data: season,
-    });
-
-    dialogRef.beforeClosed().subscribe({
-      next: (result) => {
-        if (result) this.seasonsResource.reload();
-      },
+    this.entityDialogService.openEditEntityDialog(EditSeasonComponent, { data: season }).subscribe({
+      next: () => this.seasonsService.updateSeasonMutation.reset(),
     });
   }
 
   handleDeleteSeason(season: Season) {
-    this.seasonsService.deleteSeason(season.id).subscribe({
-      next: () => this.seasonsResource.reload(),
-    });
+    this.seasonsService.deleteSeasonMutation.mutate(season.id);
   }
 
   handlePageChange(event: PageEvent) {
     const { pageIndex } = event;
-    this.pageNumber.set(pageIndex);
+    this.getSeasonsQuery.pageNumber.set(pageIndex);
   }
 
-  trackBySeasonId(_index: number, season: Season) {
-    return season.id;
+  private checkQueryParams() {
+    const params = this.queryParamsService.queryParams();
+    if (!params) return;
+
+    const { entity, action } = params;
+    if (entity === 'season' && action === 'new') this.openNewSeasonDialog();
   }
 }

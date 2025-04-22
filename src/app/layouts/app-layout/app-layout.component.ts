@@ -9,4 +9,4 @@ import { SidenavComponent } from '@common/components/sidenav/sidenav.component';
   selector: 'f5pi-app-layout',
   templateUrl: './app-layout.component.html',
 })
-export class AppLayoutComponent {}
+export class AppLayoutComponent { }
