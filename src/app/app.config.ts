@@ -7,7 +7,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter } from '@angular/router';
 import { keepPreviousData, provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { LocalStorageService } from '@common/services/local-storage.service';
 import { routes } from './app.routes';
