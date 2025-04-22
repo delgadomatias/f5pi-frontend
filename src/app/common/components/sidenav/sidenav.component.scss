@@ -47,6 +47,10 @@ mat-sidenav {
       align-self: center;
       justify-self: center;
       text-align: center;
+
+      p {
+        font: var(--mat-sys-body-medium);
+      }
     }
 
     .actions {
