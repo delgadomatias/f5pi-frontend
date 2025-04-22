@@ -55,7 +55,7 @@ export class SeasonsService {
   private getSeasons(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS): Observable<SeasonsResponse> {
     const userId = this.authService.getUserId();
     return this.http.get<SeasonsResponse>(`${environment.apiUrl}/api/v1/users/${userId}/seasons`, {
-      params: { ...params },
+      params: { ...params, pageSize: 20 },
     });
   }
 

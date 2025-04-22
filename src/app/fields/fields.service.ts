@@ -54,7 +54,7 @@ export class FieldsService {
   private getFields(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<FieldResponse>(`${environment.apiUrl}/api/v1/users/${userId}/fields`, {
-      params: { ...params },
+      params: { ...params, pageSize: 20 },
     });
   }
 

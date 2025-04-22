@@ -62,7 +62,7 @@ export class GamesService {
   private getGames(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<GamesResponse>(`http://localhost:8080/api/v1/users/${userId}/games`, {
-      params: { ...params },
+      params: { ...params, pageSize: 20 },
     });
   }
 
