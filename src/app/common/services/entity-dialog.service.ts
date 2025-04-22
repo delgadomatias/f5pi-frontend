@@ -20,7 +20,7 @@ export class EntityDialogService {
     const dialogRef = this.dialog.open(component, rest);
     return dialogRef.afterClosed().pipe(
       finalize(() => {
-        this.queryParamsService.clearQueryParams();
+        this.queryParamsService.removeQueryParams(['entity', 'action']);
       })
     );
   }

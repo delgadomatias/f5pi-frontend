@@ -12,6 +12,7 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { AlertComponent } from '@common/components/alert/alert.component';
 
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
 import { GamesService } from '@games/games.service';
@@ -49,6 +50,7 @@ export class NewGameDialogComponent implements OnInit {
   gamesService = inject(GamesService);
   playersService = inject(PlayersService);
   seasonsService = inject(SeasonsService);
+  clientStorage = inject(ClientStorageService);
   getFieldsQuery = this.fieldsService.createGetFieldsQuery();
   getPlayersQuery = this.playersService.createGetPlayersQuery();
   getSeasonsQuery = this.seasonsService.createGetSeasonsQuery();
@@ -65,11 +67,10 @@ export class NewGameDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('new-game-form');
+    const saved = this.clientStorage.get<any>('new-game-form');
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        this.form.patchValue(parsed);
+        this.form.patchValue(saved);
       } catch { }
     }
 
@@ -84,7 +85,7 @@ export class NewGameDialogComponent implements OnInit {
         this.form.patchValue({ individualPrice: formattedPrice! }, { emitEvent: false });
       }
 
-      localStorage.setItem('new-game-form', JSON.stringify(values));
+      this.clientStorage.set('new-game-form', values);
     });
   }
 
@@ -122,7 +123,7 @@ export class NewGameDialogComponent implements OnInit {
 
     this.gamesService.createGameMutation.mutate({ game, detail }, {
       onSuccess: () => {
-        localStorage.removeItem('new-game-form');
+        this.clientStorage.remove('new-game-form');
         this.dialogRef.close();
       }
     });

@@ -6,8 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
+import { CreateFieldRequest } from '@fields/interfaces/create-field-request.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +19,7 @@ import { FieldsService } from '@fields/fields.service';
   templateUrl: './new-field-dialog.component.html',
 })
 export class NewFieldDialogComponent implements OnInit {
+  clientStorage = inject(ClientStorageService)
   dialogRef = inject(MatDialogRef);
   fieldsService = inject(FieldsService);
   formBuilder = inject(NonNullableFormBuilder);
@@ -26,22 +29,17 @@ export class NewFieldDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('new-field-form');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        this.form.patchValue(parsed);
-      } catch { }
-    }
+    const saved = this.clientStorage.get<CreateFieldRequest>('new-field-form');
+    if (saved) this.form.patchValue(saved);
 
     this.form.valueChanges.subscribe((values) => {
-      localStorage.setItem('new-field-form', JSON.stringify(values));
+      this.clientStorage.set('new-field-form', values);
     });
   }
 
   handleSubmit() {
     if (this.form.invalid) return;
-    localStorage.removeItem('new-field-form');
+    this.clientStorage.remove('new-field-form');
     this.fieldsService.createFieldMutation.mutate(this.form.getRawValue(), {
       onSuccess: () => this.dialogRef.close(),
     });

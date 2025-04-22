@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ImagePickerComponent } from '@common/components/image-picker/image-picker.component';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { PlayersService } from '@players/players.service';
 
@@ -33,6 +34,7 @@ export class NewPlayerDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef);
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly playersService = inject(PlayersService);
+  readonly clientStorage = inject(ClientStorageService);
 
   form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -40,16 +42,11 @@ export class NewPlayerDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('new-player-form');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        this.form.patchValue(parsed);
-      } catch { }
-    }
+    const saved = this.clientStorage.get<{ name: string; image: File | null }>('new-player-form');
+    if (saved) this.form.patchValue(saved);
 
     this.form.valueChanges.subscribe((values) => {
-      localStorage.setItem('new-player-form', JSON.stringify(values));
+      this.clientStorage.set('new-player-form', values);
     });
   }
 
@@ -60,7 +57,7 @@ export class NewPlayerDialogComponent implements OnInit {
       return;
     }
 
-    localStorage.removeItem('new-player-form');
+    this.clientStorage.remove('new-player-form');
     const { name, image } = this.form.getRawValue();
     if (!image) return;
 

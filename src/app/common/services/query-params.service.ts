@@ -21,6 +21,21 @@ export class QueryParamsService {
     this.router.navigate([], {
       queryParams: params,
       relativeTo: this.route,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  removeQueryParams(params: string[]): void {
+    const currentParams = this.route.snapshot.queryParams;
+    const newParams = { ...currentParams };
+
+    params.forEach((param) => {
+      delete newParams[param];
+    });
+
+    this.router.navigate([], {
+      queryParams: newParams,
+      relativeTo: this.route,
     });
   }
 }

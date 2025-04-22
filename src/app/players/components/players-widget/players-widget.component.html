@@ -23,7 +23,7 @@
         <td mat-cell *matCellDef="let element">
           <div style="display: flex; gap: 12px; align-items: center">
             <img [src]="element.imageURL" [width]="24" [height]="24" style="object-fit: cover; border-radius: 50%" />
-            <span>
+            <span style="min-width: max-content;">
               {{ element.name }}
             </span>
           </div>

@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { CreateSeasonRequest } from '@seasons/interfaces/create-season-request.interface';
 import { SeasonsService } from '@seasons/seasons.service';
@@ -35,6 +36,7 @@ export class NewSeasonDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef);
   private readonly formBuilder = inject(FormBuilder);
   readonly seasonsService = inject(SeasonsService);
+  private readonly clientStorage = inject(ClientStorageService);
 
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>('', [Validators.required]),
@@ -43,16 +45,11 @@ export class NewSeasonDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('new-season-form');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        this.form.patchValue(parsed);
-      } catch { }
-    }
+    const saved = this.clientStorage.get<{ name: string; initialDate: Date | null; finalDate: Date | null }>('new-season-form');
+    if (saved) this.form.patchValue(saved);
 
     this.form.valueChanges.subscribe((values) => {
-      localStorage.setItem('new-season-form', JSON.stringify(values));
+      this.clientStorage.set('new-season-form', values);
     });
   }
 
@@ -62,7 +59,7 @@ export class NewSeasonDialogComponent implements OnInit {
       return;
     }
 
-    localStorage.removeItem('new-season-form');
+    this.clientStorage.remove('new-season-form');
     const name = this.form.getRawValue().name as string;
     const initialDate = this.form.getRawValue().initialDate as Date;
     const finalDate = this.form.getRawValue().finalDate as Date;

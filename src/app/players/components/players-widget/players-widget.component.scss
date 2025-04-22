@@ -8,11 +8,6 @@ table.loading {
   cursor: progress;
 }
 
-table {
-  @media (width < $breakpoint-sm) {
-    min-width: max-content;
-  }
-}
 
 
 .table-row-selectable {
