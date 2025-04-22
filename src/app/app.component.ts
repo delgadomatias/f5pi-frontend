@@ -21,6 +21,7 @@ export class AppComponent {
     const preferredTheme = this.getPreferredTheme();
     const themeToApply = savedTheme || preferredTheme;
     this.document.body.setAttribute('data-theme', themeToApply);
+    this.clientStorage.set('theme', themeToApply);
     this.clientStorage.remove('new-field-form');
     this.clientStorage.remove('new-game-form');
     this.clientStorage.remove('new-player-form');

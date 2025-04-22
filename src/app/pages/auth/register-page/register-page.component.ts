@@ -33,7 +33,7 @@ export class RegisterPageComponent {
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.authService.registerMutation.mutate(this.form.getRawValue(), {
       onSuccess: () => {
-        this.snackBar.open('Account created', 'Close', { duration: 400, panelClass: 'auth-snackbar' })
+        this.snackBar.open('Account created', undefined, { duration: 400, panelClass: 'auth-snackbar' })
         setTimeout(() => {
           this.router.navigateByUrl('/auth/login', { replaceUrl: true })
         }, 800);

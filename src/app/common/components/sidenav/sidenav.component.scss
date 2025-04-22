@@ -30,20 +30,31 @@ mat-sidenav {
   width: 100%;
   gap: 10px;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .footer {
     margin-top: auto;
     display: flex;
+    flex-direction: column;
+    gap: 12px;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem;
 
     button {
-      --mdc-icon-button-state-layer-size: 48px;
+      display: flex;
+    }
+
+    .user {
+      align-self: center;
+      justify-self: center;
+      text-align: center;
+    }
+
+    .actions {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
     }
   }
 }

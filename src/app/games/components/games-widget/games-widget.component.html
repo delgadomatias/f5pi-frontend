@@ -1,5 +1,7 @@
-@let isPending = getGamesQuery.query.isPending(); @let isError = getGamesQuery.query.isError(); @let isFetching =
-getGamesQuery.query.isFetching(); @let isDeleting = gamesService.deleteGameMutation.isPending();
+@let isPending = getGamesQuery.query.isPending();
+@let isError = getGamesQuery.query.isError();
+@let isFetching = getGamesQuery.query.isFetching();
+@let isDeleting = gamesService.deleteGameMutation.isPending();
 
 <f5pi-generic-widget widgetTitle="Games" icon="sports_soccer">
   <ng-template #headerActions>
@@ -58,6 +60,14 @@ getGamesQuery.query.isFetching(); @let isDeleting = gamesService.deleteGameMutat
 
       <tr mat-header-row *matHeaderRowDef="['date', 'individualPrice', 'field', 'season', 'actions']"></tr>
       <tr mat-row *matRowDef="let row; columns: ['date', 'individualPrice', 'field', 'season', 'actions']"></tr>
+
+      <ng-container matColumnDef="noRecords">
+        <td mat-footer-cell *matFooterCellDef colspan="5">
+          No games found
+        </td>
+      </ng-container>
+
+      <tr mat-footer-row *matFooterRowDef="!getGamesQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
     </table>
     }
   </ng-template>

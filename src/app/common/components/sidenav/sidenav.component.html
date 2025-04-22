@@ -1,3 +1,5 @@
+@let loggedInUser = authService.user();
+
 <mat-sidenav-container>
   <mat-sidenav mode="side" opened class="mat-sidenav--collapsed">
     <aside class="sidebar">
@@ -6,9 +8,18 @@
         <f5pi-sidenav-item [item]="item"></f5pi-sidenav-item>
         }
         <li class="footer">
-          <button mat-icon-button (click)="toggleTheme()">
-            <mat-icon> @if (currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
-          </button>
+          <div class="user">
+            <p>Hello,</p>
+            <p style="font:var(--mat-sys-body-medium)">{{loggedInUser?.fullName}}</p>
+          </div>
+          <div class="actions">
+            <button mat-icon-button (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+            <button mat-icon-button (click)="toggleTheme()">
+              <mat-icon> @if (currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
+            </button>
+          </div>
         </li>
       </ul>
     </aside>

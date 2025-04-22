@@ -12,7 +12,7 @@ import { Player } from '@players/interfaces/player.interface';
 import { PlayersResponse } from '@players/interfaces/players.response';
 import { UpdatePlayerRequest } from '@players/interfaces/update-player-request.interface';
 import { UploadPlayerImageRequest } from '@players/interfaces/upload-player-image-request.interface';
-import { GET_PLAYERS_KEY } from '@players/players.constants';
+import { GET_PLAYER_STATISTICS_KEY, GET_PLAYERS_KEY } from '@players/players.constants';
 import { Statistics } from './interfaces/statistics.interface';
 
 @Injectable({
@@ -50,7 +50,7 @@ export class PlayersService {
       playerId,
       query: injectQuery(() => ({
         queryFn: () => lastValueFrom(this.getPlayerStatistics(playerId()!)),
-        queryKey: [GET_PLAYERS_KEY, playerId()],
+        queryKey: [GET_PLAYER_STATISTICS_KEY, playerId()],
         staleTime: Infinity,
         enabled: !!playerId(),
       })),

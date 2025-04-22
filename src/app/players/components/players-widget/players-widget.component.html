@@ -38,6 +38,14 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="noRecords">
+        <td mat-footer-cell *matFooterCellDef colspan="5">
+          No players found
+        </td>
+      </ng-container>
+
+      <tr mat-footer-row *matFooterRowDef="!getPlayersQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
+
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
       <tr mat-row *matRowDef="let row; columns: ['name', 'actions']" (click)="handleSelection(row)" [ngClass]="{
         'table-row-selectable': allowSelection(),

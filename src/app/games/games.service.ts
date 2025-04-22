@@ -9,6 +9,7 @@ import { PaginatedRequest } from '@common/interfaces/paginated-request.interface
 import { GET_GAMES_KEY } from '@games/games.constants';
 import { CreateGameRequest } from '@games/interfaces/create-game-request.interface';
 import { GamesResponse } from '@games/interfaces/games-response.interface';
+import { GET_PLAYER_STATISTICS_KEY } from '@players/players.constants';
 import { CreateGameDetailRequest } from './interfaces/create-game-detail-request.interface';
 import { GameDetailResponse } from './interfaces/game-detail-response.interface';
 import { Game } from './interfaces/game.interface';
@@ -98,7 +99,10 @@ export class GamesService {
     return this.http.patch<Game>(`http://localhost:8080/api/v1/games/${gameId}`, request);
   }
 
-  private handleOnSuccessMutation() {
-    this.queryClient.invalidateQueries({ queryKey: [GET_GAMES_KEY] });
+  private async handleOnSuccessMutation() {
+    await Promise.all([
+      this.queryClient.invalidateQueries({ queryKey: [GET_GAMES_KEY] }),
+      this.queryClient.invalidateQueries({ queryKey: [GET_PLAYER_STATISTICS_KEY] })
+    ])
   }
 }

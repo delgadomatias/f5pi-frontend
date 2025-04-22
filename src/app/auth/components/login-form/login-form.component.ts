@@ -20,7 +20,7 @@ export class LoginFormComponent {
   formBuilder = inject(NonNullableFormBuilder);
   hidePassword = signal<boolean>(true);
   loginForm = this.formBuilder.group({
-    username: ['', [Validators.required]],
+    username: ['', [Validators.required, Validators.maxLength(30)]],
     password: ['', [Validators.required]],
   });
 

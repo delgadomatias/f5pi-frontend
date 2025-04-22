@@ -149,6 +149,26 @@ body {
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
   }
+
+  .container {
+    background: var(--mat-sys-background);
+    border-radius: 12px;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 100%;
+    height: calc(100dvh - 3rem);
+    margin: 1.5rem 1.5rem 1.5rem 0;
+    padding: 2rem;
+
+    @media (width <=$breakpoint-lg) {
+      height: 100%;
+      min-height: calc(100dvh - 2rem);
+      margin: 1rem;
+      padding: 1rem;
+      grid-template-rows: auto;
+    }
+  }
 }
 
 @keyframes fadeInUp {
