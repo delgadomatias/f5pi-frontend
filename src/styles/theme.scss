@@ -1,0 +1,16 @@
+@use "@angular/material" as mat;
+@use "./material-overrides.scss" as overrides;
+
+html {
+  @include mat.theme(
+    (
+      typography: Poppins,
+      density: -3,
+    )
+  );
+}
+
+:root {
+  @include overrides.material-theme-overrides();
+  @include overrides.material-component-overrides();
+}
