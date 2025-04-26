@@ -42,7 +42,10 @@ export class GamesWidgetComponent {
   dialog = inject(MatDialog);
 
   openNewGameDialog() {
-    this.dialog.open(NewGameDialogComponent);
+    const dialogRef = this.dialog.open(NewGameDialogComponent);
+    dialogRef.afterClosed().subscribe(() => {
+      this.gamesService.createGameMutation.reset();
+    })
   }
 
   openGameDetailDialog(gameId: Game['gameId']) {

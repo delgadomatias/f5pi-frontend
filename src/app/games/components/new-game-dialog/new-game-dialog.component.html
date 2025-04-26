@@ -1,11 +1,15 @@
 @let isCreating = gamesService.createGameMutation.isPending();
 @let isError = gamesService.createGameMutation.isError();
+@let teamsError = form.errors?.['teamsNotSameLength'];
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="New game" [isPending]="isCreating">
     <ng-template #content>
       @if (isError) {
       <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      }
+      @if (teamsError) {
+      <mat-error style="margin-bottom: 24px;">Both teams must have the same number of players.</mat-error>
       }
       <div class="form">
         <div class="game">
@@ -45,8 +49,7 @@
           <div class="team">
             <mat-form-field>
               <mat-label>Players for first team</mat-label>
-              <mat-select (selectionChange)="onSelectionChangeForFirstTeam($event)" [disableRipple]="true"
-                formControlName="playersForFirstTeam" multiple name="playerId">
+              <mat-select [disableRipple]="true" formControlName="playersForFirstTeam" multiple>
                 <mat-select-trigger>
                   <div style="display: flex; gap: 4px; align-items: center">
                     @for (player of playersForFirstTeam; track $index) {
@@ -55,7 +58,8 @@
                   </div>
                 </mat-select-trigger>
                 @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
-                <mat-option [disabled]="!isPlayerAvailableForFirstTeam(player)" class="option" [value]="player">{{
+                <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
+                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)" class="option" [value]="player">{{
                   player.name
                   }}</mat-option>
                 }
@@ -92,8 +96,7 @@
           <div class="team">
             <mat-form-field>
               <mat-label>Players for second team</mat-label>
-              <mat-select (selectionChange)="onSelectionChangeForSecondTeam($event)"
-                formControlName="playersForSecondTeam" multiple name="playerId">
+              <mat-select formControlName="playersForSecondTeam" multiple>
                 <mat-select-trigger>
                   <div style="display: flex; gap: 4px; align-items: center">
                     @for (player of playersForSecondTeam; track $index) {
@@ -102,7 +105,8 @@
                   </div>
                 </mat-select-trigger>
                 @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
-                <mat-option [disabled]="!isPlayerAvailableForSecondTeam(player)" [value]="player" class="option">{{
+                <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
+                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)" [value]="player" class="option">{{
                   player.name }}
                 </mat-option>
                 }

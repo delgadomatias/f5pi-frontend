@@ -70,7 +70,7 @@ export class PlayersService {
     };
   }
 
-  private getPlayers(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
+  getPlayers(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<PlayersResponse>(`${environment.apiUrl}/api/v1/users/${userId}/players`, {
       params: { ...params, pageSize: 20 },

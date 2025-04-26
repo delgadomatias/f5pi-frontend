@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@use "@styles/variables.scss" as *;
 
 img {
   object-fit: cover;
@@ -8,12 +9,9 @@ img {
 mat-chip {
   padding: 16px 6px;
 
-  @include mat.chips-overrides(
-    (
-      container-shape-radius: var(--mat-sys-corner-large),
+  @include mat.chips-overrides((container-shape-radius: var(--mat-sys-corner-large),
       label-text-font: var(--mat-sys-label-medium-font),
-    )
-  );
+    ));
 }
 
 .grid {
@@ -26,6 +24,10 @@ mat-chip {
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    @media(width <=$breakpoint-xl) {
+      grid-column: span 12 / span 12;
+    }
 
     .team-header {
       display: flex;
@@ -52,16 +54,30 @@ mat-chip {
         padding: 12px;
         justify-content: space-between;
 
+        @media (width <=$breakpoint-md) {
+          flex-wrap: wrap;
+        }
+
         .player-info {
           display: flex;
           gap: 8px;
           align-items: center;
           padding-left: 4px;
 
+          @media (width <=$breakpoint-md) {
+            width: 100%;
+          }
+
           span {
             color: var(--mat-sys-on-surface);
             font: var(--mat-sys-body-large);
             font-weight: 500;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 
@@ -69,7 +85,13 @@ mat-chip {
           display: flex;
           gap: 8px;
 
+          @media (width <=$breakpoint-md) {
+            flex-wrap: wrap;
+            width: 100%;
+          }
+
           .goal {
+            flex: 1 1 min(150px, 100%);
             background: var(--muted);
             border-radius: var(--mat-sys-corner-small);
             display: flex;
@@ -82,18 +104,19 @@ mat-chip {
               color: var(--success);
             }
 
-            span {
+            span:first-child {
+              width: max-content;
+            }
+
+            span:last-child {
               font: var(--mat-sys-body-large);
               font-weight: 500;
             }
           }
 
           .own-goals {
-            @include mat.chips-overrides(
-              (
-                label-text-color: var(--mat-sys-error),
-              )
-            );
+            @include mat.chips-overrides((label-text-color: var(--mat-sys-error),
+              ));
           }
         }
       }

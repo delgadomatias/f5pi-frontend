@@ -2,22 +2,6 @@
 
 <f5pi-generic-dialog dialogTitle="Game detail" [isPending]="isPending" [showSaveButton]="false">
   <ng-template #content>
-    <!-- @if (isError) {
-    <div class="alert" role="alert">
-      <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
-      <span>{{ getErrorMessage() }}</span>
-    </div>
-    } -->
-    <!-- <mat-form-field>
-      <input matInput cdkFocusInitial [maxLength]="20" formControlName="name" />
-      <mat-label>Name</mat-label>
-
-      @if (form.controls.name.getError('required')) {
-      <mat-error>Name is required</mat-error>
-      } @else if (form.controls.name.getError('maxlength')) {
-      <mat-error>Name must be less than 20 characters</mat-error>
-      }
-    </mat-form-field> -->
     @if (isPending) {
     <div>
       Loading...
@@ -38,13 +22,13 @@
             </div>
             <div class="player-goals">
               <div class="goal">
-                Goals scored
+                <span>Goals scored</span>
                 <span [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
                 }">{{ player.goalsScored }}</span>
               </div>
               <div class="goal">
-                Own goals <span>{{ player.ownGoals }}</span>
+                <span>Own goals</span> <span>{{ player.ownGoals }}</span>
               </div>
             </div>
           </div>
@@ -65,13 +49,13 @@
             </div>
             <div class="player-goals">
               <div class="goal">
-                Goals scored
+                <span>Goals scored</span>
                 <span [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
                 }">{{ player.goalsScored }}</span>
               </div>
               <div class="goal">
-                Own goals <span>{{ player.ownGoals }}</span>
+                <span>Own goals</span> <span>{{ player.ownGoals }}</span>
               </div>
             </div>
           </div>
