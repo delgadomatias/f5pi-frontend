@@ -143,6 +143,22 @@
   }
 }
 
+.error-state {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  flex-direction: column;
+
+  h3 {
+    color: var(--muted-foreground);
+    font: var(--mat-sys-headline-small);
+    opacity: 0.8;
+  }
+}
+
 .loading-state {
   height: 100%;
   display: flex;

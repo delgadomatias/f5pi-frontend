@@ -79,7 +79,6 @@ export class NewGameDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.playersForFirstTeam.length, this.playersForSecondTeam.length)
     this.restoreFromStorage();
 
     this.form.valueChanges.subscribe((values) => {
