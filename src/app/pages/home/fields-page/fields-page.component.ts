@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { FieldsWidgetComponent } from "@fields/components/fields-widget/fields-widget.component";
 
@@ -10,5 +11,9 @@ import { FieldsWidgetComponent } from "@fields/components/fields-widget/fields-w
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldsPageComponent {
+  titleService = inject(Title)
 
+  constructor() {
+    this.titleService.setTitle('Fields • f5pi');
+  }
 }

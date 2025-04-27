@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { FieldsWidgetComponent } from '@fields/components/fields-widget/fields-widget.component';
 import { GamesWidgetComponent } from '@games/components/games-widget/games-widget.component';
@@ -13,9 +11,6 @@ import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seaso
   imports: [
     FieldsWidgetComponent,
     GamesWidgetComponent,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
     PlayersWidgetComponent,
     SeasonsWidgetComponent,
   ],
@@ -23,4 +18,10 @@ import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seaso
   styleUrl: './home-page.component.scss',
   templateUrl: './home-page.component.html',
 })
-export class HomePageComponent {}
+export class HomePageComponent {
+  titleService = inject(Title)
+
+  constructor() {
+    this.titleService.setTitle('Home • f5pi');
+  }
+}
