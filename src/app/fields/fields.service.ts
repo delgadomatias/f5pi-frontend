@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { injectMutation, injectQuery, QueryClient } from '@tanstack/angular-query-experimental';
-import { lastValueFrom } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { QueryClient } from '@tanstack/angular-query-experimental';
 
 import { AuthService } from '@auth/auth.service';
 import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
@@ -23,42 +22,14 @@ export class FieldsService {
   private readonly http = inject(HttpClient);
   private readonly queryClient = inject(QueryClient);
 
-  createFieldMutation = injectMutation(() => ({
-    mutationFn: (createFieldRequest: CreateFieldRequest) => lastValueFrom(this.createField(createFieldRequest)),
-    onSuccess: () => this.handleOnSuccessMutation(),
-  }));
-
-  deleteFieldMutation = injectMutation(() => ({
-    mutationFn: (fieldId: string) => lastValueFrom(this.deleteField(fieldId)),
-    onSuccess: () => this.handleOnSuccessMutation(),
-  }));
-
-  updateFieldMutation = injectMutation(() => ({
-    mutationFn: (updateFieldRequest: UpdateFieldRequest) => lastValueFrom(this.updateField(updateFieldRequest)),
-    onSuccess: () => this.handleOnSuccessMutation(),
-  }));
-
-  createGetFieldsQuery() {
-    const pageNumber = signal<number>(0);
-
-    return {
-      pageNumber,
-      query: injectQuery(() => ({
-        queryFn: () => lastValueFrom(this.getFields({ pageNumber: pageNumber() })),
-        queryKey: [GET_FIELDS_KEY, pageNumber()],
-        staleTime: Infinity,
-      })),
-    };
-  }
-
-  private getFields(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
+  getFields(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     return this.http.get<FieldResponse>(`${environment.apiUrl}/api/v1/users/${userId}/fields`, {
       params: { ...params, pageSize: 20 },
     });
   }
 
-  private createField(createFieldRequest: CreateFieldRequest) {
+  createField(createFieldRequest: CreateFieldRequest) {
     const userId = this.authService.getUserId();
     return this.http.post<Field>(this.baseUrl, {
       ...createFieldRequest,
@@ -66,18 +37,18 @@ export class FieldsService {
     });
   }
 
-  private deleteField(fieldId: Field['fieldId']) {
+  deleteField(fieldId: Field['fieldId']) {
     return this.http.delete<Field>(`${this.baseUrl}/${fieldId}`);
   }
 
-  private updateField(updateFieldRequest: UpdateFieldRequest) {
+  updateField(updateFieldRequest: UpdateFieldRequest) {
     const { fieldId, name } = updateFieldRequest;
     return this.http.patch<Field>(`${this.baseUrl}/${fieldId}`, {
       name,
     });
   }
 
-  private async handleOnSuccessMutation() {
+  async handleOnSuccessMutation() {
     await Promise.all([
       this.queryClient.invalidateQueries({ queryKey: [GET_FIELDS_KEY] }),
       this.queryClient.invalidateQueries({ queryKey: [GET_GAMES_KEY] }),
