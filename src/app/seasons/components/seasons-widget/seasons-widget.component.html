@@ -1,4 +1,5 @@
-@let isDeleting = seasonsService.deleteSeasonMutation.isPending(); @let isFetching = getSeasonsQuery.query.isFetching();
+@let isDeleting = deleteSeasonMutation.isPending();
+@let isFetching = getSeasonsQuery.query.isFetching();
 
 <f5pi-generic-widget widgetTitle="Seasons" icon="calendar_month">
   <ng-template #headerActions>
