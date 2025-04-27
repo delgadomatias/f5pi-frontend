@@ -8,45 +8,28 @@
       } @else if (selectedImage) {
       <img [src]="buildBlobUrl(selectedImage)" alt="Selected image" />
       } @else {
-      <img src="https://www.svgrepo.com/show/452030/avatar-default.svg" alt="Default image" />
+      <img src="http://res.cloudinary.com/dlomx8sc1/image/upload/v1723231116/ae2c845b-8b2a-4585-8be7-5a2860bb28f7.png"
+        alt="Default image" />
       }
     </div>
 
     <div class="image-picker-actions">
-      <button
-        (click)="handleChooseImage()"
-        [ngClass]="{ invalid: error() }"
-        class="image-picker-actions__choose"
-        mat-flat-button
-        type="button"
-      >
+      <button (click)="handleChooseImage()" [ngClass]="{ invalid: error() }" class="image-picker-actions__choose"
+        mat-flat-button type="button">
         @if (selectedImage) {
         <span>Change image</span>
         } @else {
         <span>Choose image</span>
         }
       </button>
-      <button
-        (click)="handleDeleteImage()"
-        [disabled]="!selectedImage"
-        [disableRipple]="true"
-        class="image-picker-actions__clear"
-        mat-fab
-        type="button"
-      >
+      <button (click)="handleDeleteImage()" [disabled]="!selectedImage" [disableRipple]="true"
+        class="image-picker-actions__clear" mat-fab type="button">
         <mat-icon>clear</mat-icon>
       </button>
     </div>
 
-    <input
-      (change)="handleFileInputChange($event)"
-      #fileInput
-      accept="image/*"
-      max="1"
-      maxlength="1"
-      style="display: none"
-      type="file"
-    />
+    <input (change)="handleFileInputChange($event)" #fileInput accept="image/*" max="1" maxlength="1"
+      style="display: none" type="file" />
   </div>
 
   @if (error()) {
