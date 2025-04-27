@@ -7,6 +7,7 @@ import { AuthService } from '@auth/auth.service';
 
 import { SidenavItemComponent } from '@common/components/sidenav-item/sidenav-item.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
+import { ThemeService } from '@common/services/theme.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +20,7 @@ export class SidenavComponent {
   document = inject(DOCUMENT);
   clientStorage = inject(ClientStorageService);
   authService = inject(AuthService);
-  currentTheme = signal(this.clientStorage.get('theme') || 'light');
+  themeService = inject(ThemeService);
   sidebarItems = signal([
     {
       path: '/',
@@ -49,14 +50,11 @@ export class SidenavComponent {
   ]);
 
   toggleTheme() {
-    const newTheme = this.currentTheme() === 'light' ? 'dark' : 'light';
-    this.document.body.setAttribute('data-theme', newTheme);
-    this.clientStorage.set('theme', newTheme);
-    this.currentTheme.set(newTheme);
+    this.themeService.toggleTheme();
   }
 
   logout() {
-    this.authService.logout();
     window.location.reload();
+    this.authService.logout();
   }
 }

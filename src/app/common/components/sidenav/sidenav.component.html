@@ -17,7 +17,7 @@
               <mat-icon>exit_to_app</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleTheme()">
-              <mat-icon> @if (currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
+              <mat-icon> @if (themeService.currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
             </button>
           </div>
         </li>
