@@ -1,5 +1,5 @@
-@let isPending = playersService.updatePlayerMutation.isPending() || playersService.uploadPlayerImageMutation.isPending();
-@let isError = playersService.updatePlayerMutation.isError() || playersService.uploadPlayerImageMutation.isError();
+@let isPending = updatePlayerMutation.isPending() || uploadPlayerImageMutation.isPending();
+@let isError = updatePlayerMutation.isError() || uploadPlayerImageMutation.isError();
 
 <form [formGroup]="form" class="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="Edit player" [isPending]="isPending">
@@ -19,10 +19,8 @@
           }
         </mat-form-field>
 
-        <f5pi-image-picker
-          (onImageSelected)="onImageSelected($event)"
-          [defaultValue]="this.form.controls.imageURL.value"
-        ></f5pi-image-picker>
+        <f5pi-image-picker (onImageSelected)="onImageSelected($event)"
+          [defaultValue]="this.form.controls.imageURL.value"></f5pi-image-picker>
       </div>
     </ng-template>
   </f5pi-generic-dialog>

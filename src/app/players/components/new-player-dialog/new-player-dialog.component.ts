@@ -12,10 +12,12 @@ import { ImagePickerComponent } from '@common/components/image-picker/image-pick
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { PlayersService } from '@players/players.service';
+import { injectCreatePlayerMutation } from '@players/queries/inject-create-player-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AlertComponent,
     GenericDialogComponent,
     ImagePickerComponent,
     MatButtonModule,
@@ -24,7 +26,6 @@ import { PlayersService } from '@players/players.service';
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    AlertComponent,
   ],
   selector: 'f5pi-new-player-dialog',
   styleUrl: './new-player-dialog.component.css',
@@ -35,10 +36,11 @@ export class NewPlayerDialogComponent implements OnInit {
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly playersService = inject(PlayersService);
   readonly clientStorage = inject(ClientStorageService);
+  createPlayerMutation = injectCreatePlayerMutation();
 
   form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-    image: this.formBuilder.control<File | null>(null, [Validators.required]),
+    image: this.formBuilder.control<File | null>(null),
   });
 
   ngOnInit(): void {
@@ -59,10 +61,9 @@ export class NewPlayerDialogComponent implements OnInit {
 
     this.clientStorage.remove('new-player-form');
     const { name, image } = this.form.getRawValue();
-    if (!image) return;
 
     this.dialogRef.disableClose = true;
-    this.playersService.createPlayerWithImageMutation.mutate(
+    this.createPlayerMutation.mutate(
       { name, image },
       { onSuccess: () => this.dialogRef.close(true), onSettled: () => (this.dialogRef.disableClose = false) }
     );
@@ -74,6 +75,6 @@ export class NewPlayerDialogComponent implements OnInit {
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.playersService.createPlayerWithImageMutation);
+    return getMutationErrorMessage(this.createPlayerMutation);
   }
 }

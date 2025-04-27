@@ -1,5 +1,5 @@
-@let isPending = playersService.createPlayerWithImageMutation.isPending();
-@let isError = playersService.createPlayerWithImageMutation.isError();
+@let isPending = createPlayerMutation.isPending();
+@let isError = createPlayerMutation.isError();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="New player" [isPending]="isPending">
@@ -19,10 +19,8 @@
           }
         </mat-form-field>
 
-        <f5pi-image-picker
-          [error]="form.controls.image.hasError('required') && form.controls.image.dirty"
-          (onImageSelected)="onImageSelected($event)"
-        ></f5pi-image-picker>
+        <f5pi-image-picker [error]="form.controls.image.hasError('required') && form.controls.image.dirty"
+          (onImageSelected)="onImageSelected($event)"></f5pi-image-picker>
       </div>
     </ng-template>
   </f5pi-generic-dialog>

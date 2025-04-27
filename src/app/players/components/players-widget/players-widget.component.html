@@ -1,4 +1,5 @@
-@let isDeleting = playersService.deletePlayerMutation.isPending(); @let isFetching = getPlayersQuery.query.isFetching();
+@let isDeleting = deletePlayerMutation.isPending();
+@let isFetching = getPlayersQuery.query.isFetching();
 
 <f5pi-generic-widget widgetTitle="Players" icon="group">
   <ng-template #headerActions>

@@ -1,5 +1,5 @@
-@let isCreating = gamesService.createGameMutation.isPending();
-@let isError = gamesService.createGameMutation.isError();
+@let isCreating = createGameMutation.isPending();
+@let isError = createGameMutation.isError();
 @let teamsError = form.errors?.['teamsNotSameLength'];
 
 <form [formGroup]="form" (submit)="handleSubmit()">
@@ -29,8 +29,19 @@
           <mat-form-field>
             <mat-label>Season</mat-label>
             <mat-select [disableRipple]="true" name="seasonId" formControlName="seasonId">
-              @for (season of getSeasonsQuery.query.data()?.content; track season.id) {
+              @for (page of getInfiniteSeasonsQuery.data()?.pages; track $index) {
+              @for (season of page?.content; track season.id) {
               <mat-option class="option" [value]="season.id">{{ season.name }}</mat-option>
+              }
+              }
+              @if (getInfiniteSeasonsQuery.hasNextPage()) {
+              <div
+                style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
+                <button style="width: 100%;" mat-flat-button (click)="getInfiniteSeasonsQuery.fetchNextPage()"
+                  class="option">
+                  Load more
+                </button>
+              </div>
               }
             </mat-select>
           </mat-form-field>
@@ -38,8 +49,19 @@
           <mat-form-field>
             <mat-label>Field</mat-label>
             <mat-select [disableRipple]="true" name="fieldId" formControlName="fieldId">
-              @for (field of getFieldsQuery.query.data()?.content; track field.fieldId) {
+              @for (page of getInfiniteFieldsQuery.data()?.pages; track $index) {
+              @for (field of page?.content; track field.fieldId) {
               <mat-option class="option" [value]="field.fieldId">{{ field.fieldName }}</mat-option>
+              }
+              }
+              @if (getInfiniteFieldsQuery.hasNextPage()) {
+              <div
+                style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
+                <button style="width: 100%;" mat-flat-button (click)="getInfiniteFieldsQuery.fetchNextPage()"
+                  class="option">
+                  Load more
+                </button>
+              </div>
               }
             </mat-select>
           </mat-form-field>
@@ -57,11 +79,22 @@
                     }
                   </div>
                 </mat-select-trigger>
-                @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
+                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
+                @for (player of page?.content; track player.playerId) {
                 <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
                   [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)" class="option" [value]="player">{{
                   player.name
                   }}</mat-option>
+                }
+                }
+                @if (getInfinitePlayersQuery.hasNextPage()) {
+                <div
+                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
+                  <button style="width: 100%;" mat-flat-button (click)="getInfinitePlayersQuery.fetchNextPage()"
+                    class="option">
+                    Load more
+                  </button>
+                </div>
                 }
               </mat-select>
               @if (form.controls.playersForFirstTeam.getError('required')) {
@@ -82,11 +115,11 @@
                 </div>
                 <mat-form-field class="goals">
                   <mat-label>Goals scored</mat-label>
-                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" />
+                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" pattern="^[0-9]*$" />
                 </mat-form-field>
                 <mat-form-field class="goals">
                   <mat-label>Own goals</mat-label>
-                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" />
+                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" pattern="^[0-9]*$" />
                 </mat-form-field>
               </div>
               }
@@ -104,11 +137,22 @@
                     }
                   </div>
                 </mat-select-trigger>
-                @for (player of getPlayersQuery.query.data()?.content; track player.playerId) {
+                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
+                @for (player of page?.content; track player.playerId) {
                 <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
                   [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)" [value]="player" class="option">{{
                   player.name }}
                 </mat-option>
+                }
+                }
+                @if (getInfinitePlayersQuery.hasNextPage()) {
+                <div
+                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
+                  <button style="width: 100%;" mat-flat-button (click)="getInfinitePlayersQuery.fetchNextPage()"
+                    class="option">
+                    Load more
+                  </button>
+                </div>
                 }
               </mat-select>
               @if (form.controls.playersForSecondTeam.getError('required')) {
@@ -129,11 +173,11 @@
                 </div>
                 <mat-form-field class="goals">
                   <mat-label>Goals scored</mat-label>
-                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" />
+                  <input formControlName="goalsScored" matInput max="20" min="0" type="number" pattern="^[0-9]*$" />
                 </mat-form-field>
                 <mat-form-field class="goals">
                   <mat-label>Own goals</mat-label>
-                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" />
+                  <input formControlName="ownGoals" matInput max="20" min="0" type="number" pattern="^[0-9]*$" />
                 </mat-form-field>
               </div>
               }

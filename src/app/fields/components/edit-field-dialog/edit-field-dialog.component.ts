@@ -10,6 +10,7 @@ import { GenericDialogComponent } from '@common/components/generic-dialog/generi
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
 import { Field } from '@fields/interfaces/field.interface';
+import { injectUpdateFieldMutation } from '@fields/queries/inject-update-field-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +30,7 @@ export class EditFieldDialogComponent {
   dialogRef = inject(MatDialogRef);
   field = inject(MAT_DIALOG_DATA) as Field;
   fieldsService = inject(FieldsService);
+  updateField = injectUpdateFieldMutation();
   formBuilder = inject(NonNullableFormBuilder);
 
   form = this.formBuilder.group({
@@ -39,13 +41,13 @@ export class EditFieldDialogComponent {
     if (this.form.invalid) return this.form.markAllAsTouched();
     const updatedName = this.form.getRawValue().name;
     if (updatedName === this.field.fieldName) return this.dialogRef.close(false);
-    this.fieldsService.updateFieldMutation.mutate(
+    this.updateField.mutate(
       { fieldId: this.field.fieldId, name: updatedName },
       { onSuccess: () => this.dialogRef.close() }
     );
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.fieldsService.updateFieldMutation);
+    return getMutationErrorMessage(this.updateField);
   }
 }

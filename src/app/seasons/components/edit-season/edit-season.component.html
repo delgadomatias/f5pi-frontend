@@ -1,5 +1,5 @@
-@let isPending = seasonsService.updateSeasonMutation.isPending();
-@let isError = seasonsService.updateSeasonMutation.isError();
+@let isPending = updateSeasonMutation.isPending();
+@let isError = updateSeasonMutation.isError();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="Edit season" [isPending]="isPending">
@@ -18,12 +18,8 @@
         </mat-form-field>
 
         <mat-form-field>
-          <input
-            (focus)="startDatePicker.open()"
-            [matDatepicker]="startDatePicker"
-            formControlName="initialDate"
-            matInput
-          />
+          <input (focus)="startDatePicker.open()" [matDatepicker]="startDatePicker" formControlName="initialDate"
+            matInput />
           <mat-label>Initial date</mat-label>
           <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>

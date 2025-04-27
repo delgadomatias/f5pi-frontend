@@ -1,5 +1,5 @@
-@let isError = gamesService.updateGameMutation.isError();
-@let isPending = gamesService.updateGameMutation.isPending();
+@let isError = updateGameMutation.isError();
+@let isPending = updateGameMutation.isPending();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="Edit game" [isPending]="isPending">

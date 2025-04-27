@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TableActionsComponent } from '@common/components/table-actions/table-actions.component';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
+import { injectGetPlayersQuery } from '@players/queries/inject-get-players-query';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,9 +20,9 @@ export class PlayersListComponent {
   playerSelected = output<Player | null>();
   selectedPlayer = input<Player | null>();
   playersService = inject(PlayersService);
-  getPlayersQuery = this.playersService.createGetPlayersQuery();
+  getPlayersQuery = injectGetPlayersQuery();
 
   handlePageChange(event: PageEvent) {
-    this.getPlayersQuery.pageNumber.set(event.pageIndex);
+    this.getPlayersQuery.setPageNumber(event.pageIndex);
   }
 }

@@ -13,6 +13,7 @@ import { getMutationErrorMessage } from '@common/utils/get-mutation-error-messag
 import { GamesService } from '@games/games.service';
 import { Game } from '@games/interfaces/game.interface';
 import { UpdateGameRequest } from '@games/interfaces/update-game-request.interface';
+import { injectUpdateGameMutation } from '@games/queries/inject-update-game-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +29,7 @@ export class EditGameComponent implements OnInit {
   game = inject(MAT_DIALOG_DATA).game as Game;
   gamesService = inject(GamesService)
   currencyPipe = inject(CurrencyPipe);
+  updateGameMutation = injectUpdateGameMutation();
 
   form = this.formBuilder.group({
     date: [this.parseLocalDate(this.game.date), [Validators.required]],
@@ -54,14 +56,14 @@ export class EditGameComponent implements OnInit {
       individualPrice: Number(formattedPrice),
     }
 
-    this.gamesService.updateGameMutation.mutate({
+    this.updateGameMutation.mutate({
       gameId: this.game.gameId,
       request: updateGameRequest,
     }, { onSuccess: () => this.dialogRef.close() });
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.gamesService.updateGameMutation);
+    return getMutationErrorMessage(this.updateGameMutation);
   }
 
   private parseLocalDate(dateString: string): Date {

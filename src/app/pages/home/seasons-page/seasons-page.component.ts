@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { SeasonsWidgetComponent } from "@seasons/components/seasons-widget/seasons-widget.component";
 
@@ -10,5 +11,9 @@ import { SeasonsWidgetComponent } from "@seasons/components/seasons-widget/seaso
   templateUrl: './seasons-page.component.html',
 })
 export class SeasonsPageComponent {
+  titleService = inject(Title)
 
+  constructor() {
+    this.titleService.setTitle('Seasons • f5pi');
+  }
 }

@@ -14,8 +14,9 @@ import { TableActionsComponent } from '@common/components/table-actions/table-ac
 import { EditGameComponent } from '@games/components/edit-game/edit-game.component';
 import { GameDetailComponent } from '@games/components/game-detail/game-detail.component';
 import { NewGameDialogComponent } from '@games/components/new-game-dialog/new-game-dialog.component';
-import { GamesService } from '@games/games.service';
 import { Game } from '@games/interfaces/game.interface';
+import { injectDeleteGameMutation } from '@games/queries/inject-delete-game-mutation';
+import { injectGetGamesQuery } from '@games/queries/inject-get-games-query';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,15 +38,12 @@ import { Game } from '@games/interfaces/game.interface';
   templateUrl: './games-widget.component.html',
 })
 export class GamesWidgetComponent {
-  gamesService = inject(GamesService);
-  getGamesQuery = this.gamesService.createGetGamesQuery();
+  deleteGameMutation = injectDeleteGameMutation();
+  getGamesQuery = injectGetGamesQuery();
   dialog = inject(MatDialog);
 
   openNewGameDialog() {
-    const dialogRef = this.dialog.open(NewGameDialogComponent);
-    dialogRef.afterClosed().subscribe(() => {
-      this.gamesService.createGameMutation.reset();
-    })
+    this.dialog.open(NewGameDialogComponent);
   }
 
   openGameDetailDialog(gameId: Game['gameId']) {
@@ -61,11 +59,11 @@ export class GamesWidgetComponent {
   }
 
   handleDeleteGame(gameId: Game['gameId']) {
-    this.gamesService.deleteGameMutation.mutate(gameId);
+    this.deleteGameMutation.mutate(gameId);
   }
 
   onPageChangeEvent(event: PageEvent) {
     const { pageIndex } = event;
-    this.getGamesQuery.pageNumber.set(pageIndex);
+    this.getGamesQuery.setPageNumber(pageIndex);
   }
 }

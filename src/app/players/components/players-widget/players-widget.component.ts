@@ -15,6 +15,8 @@ import { EditPlayerComponent } from '@players/components/edit-player/edit-player
 import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
+import { injectDeletePlayerMutation } from '@players/queries/inject-delete-player-mutation';
+import { injectGetPlayersQuery } from '@players/queries/inject-get-players-query';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,35 +38,32 @@ import { PlayersService } from '@players/players.service';
 export class PlayersWidgetComponent implements OnInit {
   entityDialogService = inject(EntityDialogService);
   playersService = inject(PlayersService);
-  getPlayersQuery = this.playersService.createGetPlayersQuery();
   queryParamsService = inject(QueryParamsService);
   allowSelection = input<boolean>(false);
   selectedPlayerId = input<string | null>();
   playerSelected = output<Player>();
+  deletePlayerMutation = injectDeletePlayerMutation();
+  getPlayersQuery = injectGetPlayersQuery();
 
   ngOnInit() {
     this.checkQueryParams();
   }
 
   openNewPlayerDialog() {
-    this.entityDialogService.openNewEntityDialog(NewPlayerDialogComponent, { entity: 'player' }).subscribe({
-      next: () => this.playersService.createPlayerWithImageMutation.reset(),
-    });
+    this.entityDialogService.openNewEntityDialog(NewPlayerDialogComponent, { entity: 'player' }).subscribe();
   }
 
   openEditPlayerDialog(player: Player) {
-    this.entityDialogService.openEditEntityDialog(EditPlayerComponent, { data: player }).subscribe({
-      next: () => this.playersService.updatePlayerMutation.reset(),
-    });
+    this.entityDialogService.openEditEntityDialog(EditPlayerComponent, { data: player }).subscribe();
   }
 
   handleDeletePlayer(player: Player) {
-    this.playersService.deletePlayerMutation.mutate(player.playerId);
+    this.deletePlayerMutation.mutate(player.playerId);
   }
 
   handlePageChange(event: PageEvent) {
     const { pageIndex } = event;
-    this.getPlayersQuery.pageNumber.set(pageIndex);
+    this.getPlayersQuery.setPageNumber(pageIndex);
   }
 
   handleSelection(row: Player) {

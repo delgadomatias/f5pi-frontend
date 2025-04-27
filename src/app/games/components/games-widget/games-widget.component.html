@@ -1,11 +1,11 @@
 @let isPending = getGamesQuery.query.isPending();
 @let isError = getGamesQuery.query.isError();
 @let isFetching = getGamesQuery.query.isFetching();
-@let isDeleting = gamesService.deleteGameMutation.isPending();
+@let isDeleting = deleteGameMutation.isPending();
 
 <f5pi-generic-widget widgetTitle="Games" icon="sports_soccer">
   <ng-template #headerActions>
-    <button mat-mini-fab (click)="openNewGameDialog()" matTooltip="Add a new game">
+    <button mat-mini-fab (mousedown)="openNewGameDialog()" matTooltip="Add a new game">
       <mat-icon>add</mat-icon>
     </button>
   </ng-template>

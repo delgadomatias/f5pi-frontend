@@ -1,5 +1,5 @@
-@let isError = fieldsService.createFieldMutation.isError();
-@let isPending = fieldsService.createFieldMutation.isPending();
+@let isError = createFieldMutation.isError();
+@let isPending = createFieldMutation.isPending();
 
 <form [formGroup]="form" (ngSubmit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="New field" [isPending]="isPending">

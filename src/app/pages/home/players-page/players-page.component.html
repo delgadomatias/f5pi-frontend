@@ -13,7 +13,7 @@
   <article class="stats">
     @if (isLoading) {
     <div class="loading-state">
-      <mat-spinner diameter="32"></mat-spinner>
+      <mat-progress-bar mode="query"></mat-progress-bar>
     </div>
     } @else if (isError) {
     <div class="error-state">
@@ -22,9 +22,12 @@
     </div>
     } @else if (playerId && stats) {
     <div class="stats__grid">
+      <div style="position: absolute; top: 0">
+      </div>
       @if (isFetching) {
       <div class="fetching-state">
-        <mat-spinner diameter="32"></mat-spinner>
+
+        <mat-progress-bar mode="query"></mat-progress-bar>
       </div>
       }
       @for (block of statisticBlocks; track block.key) {

@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { GamesService } from '@games/games.service';
 import { Game } from '@games/interfaces/game.interface';
+import { injectGetGameDetailQuery } from '@games/queries/inject-get-game-detail-query';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,7 +19,7 @@ import { Game } from '@games/interfaces/game.interface';
 export class GameDetailComponent {
   gamesService = inject(GamesService);
   gameId = inject(MAT_DIALOG_DATA).gameId as Game['gameId'];
-  getGameDetailQuery = this.gamesService.getGameDetailQuery(this.gameId);
+  getGameDetailQuery = injectGetGameDetailQuery(this.gameId);
 
   getPlayersForFirstTeam() {
     const teams = this.getGameDetailQuery.data()!.teams;

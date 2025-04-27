@@ -15,11 +15,16 @@ import { GenericDialogComponent } from '@common/components/generic-dialog/generi
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
+import { injectGetFieldsQuery } from '@fields/queries/inject-get-fields-query';
+import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields-query';
 import { GamesService } from '@games/games.service';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
 import { CreateGameRequest } from '@games/interfaces/create-game-request.interface';
+import { injectCreateGameMutation } from '@games/queries/inject-create-game-mutation';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
+import { injectGetInfinitePlayersQuery } from '@players/queries/inject-get-infinite-players-query';
+import { injectGetInfiniteSeasonsQuery } from '@seasons/queries/inject-get-infinite-seasons-query';
 import { SeasonsService } from '@seasons/seasons.service';
 
 enum Team {
@@ -61,9 +66,12 @@ export class NewGameDialogComponent implements OnInit {
   playersService = inject(PlayersService);
   seasonsService = inject(SeasonsService);
   clientStorage = inject(ClientStorageService);
-  getFieldsQuery = this.fieldsService.createGetFieldsQuery();
-  getPlayersQuery = this.playersService.createGetPlayersQuery();
-  getSeasonsQuery = this.seasonsService.createGetSeasonsQuery();
+  createGameMutation = injectCreateGameMutation();
+  getFieldsQuery = injectGetFieldsQuery();
+  getInfiniteFieldsQuery = injectGetInfiniteFieldsQuery();
+  // Cambiar a infinite query para players y seasons
+  getInfinitePlayersQuery = injectGetInfinitePlayersQuery();
+  getInfiniteSeasonsQuery = injectGetInfiniteSeasonsQuery();
 
   form = this.formBuilder.group({
     date: [new Date(), [Validators.required]],
@@ -79,22 +87,12 @@ export class NewGameDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.restoreFromStorage();
-
-    this.form.valueChanges.subscribe((values) => {
-      const { individualPrice } = values;
-      if (individualPrice) this.formatCurrency(individualPrice);
-      const valuesWithoutPlayers = { ...values };
-      delete valuesWithoutPlayers.playersForFirstTeam;
-      delete valuesWithoutPlayers.playersForSecondTeam;
-      delete valuesWithoutPlayers.detailsOfEachPlayerOfFirstTeam;
-      delete valuesWithoutPlayers.detailsOfEachPlayerOfSecondTeam;
-      this.clientStorage.set('new-game-form', valuesWithoutPlayers);
-    });
+    this.syncStateWithStorage();
   }
 
   handleSubmit() {
     if (this.form.invalid) return this.form.markAllAsTouched();
+    this.dialogRef.disableClose = true;
     const rawValues = this.form.getRawValue();
     rawValues.individualPrice = rawValues.individualPrice.replace(/\D/g, '').replace(/^0+/, '');
     const formattedDate = formatDate(rawValues.date, 'yyyy-MM-dd', 'en');
@@ -125,7 +123,7 @@ export class NewGameDialogComponent implements OnInit {
       ],
     };
 
-    this.gamesService.createGameMutation.mutate({ game, detail }, {
+    this.createGameMutation.mutate({ game, detail }, {
       onSuccess: () => {
         this.clientStorage.remove('new-game-form');
         this.dialogRef.close();
@@ -158,7 +156,7 @@ export class NewGameDialogComponent implements OnInit {
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.gamesService.createGameMutation);
+    return getMutationErrorMessage(this.createGameMutation);
   }
 
   private getTeamControl(team: Team) {
@@ -173,9 +171,20 @@ export class NewGameDialogComponent implements OnInit {
       : this.detailsOfEachPlayerOfSecondTeam
   }
 
-  private restoreFromStorage() {
+  private syncStateWithStorage() {
     const saved = this.clientStorage.get<any>('new-game-form');
     if (saved) this.form.patchValue(saved);
+
+    this.form.valueChanges.subscribe((values) => {
+      const { individualPrice } = values;
+      if (individualPrice) this.formatCurrency(individualPrice);
+      const valuesWithoutPlayers = { ...values };
+      delete valuesWithoutPlayers.playersForFirstTeam;
+      delete valuesWithoutPlayers.playersForSecondTeam;
+      delete valuesWithoutPlayers.detailsOfEachPlayerOfFirstTeam;
+      delete valuesWithoutPlayers.detailsOfEachPlayerOfSecondTeam;
+      this.clientStorage.set('new-game-form', valuesWithoutPlayers);
+    });
   }
 
   private formatCurrency(value: string) {

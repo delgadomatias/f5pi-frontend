@@ -13,7 +13,7 @@ import { GenericDialogComponent } from '@common/components/generic-dialog/generi
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { CreateSeasonRequest } from '@seasons/interfaces/create-season-request.interface';
-import { SeasonsService } from '@seasons/seasons.service';
+import { injectCreateSeasonMutation } from '@seasons/queries/inject-create-season-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,8 +35,8 @@ import { SeasonsService } from '@seasons/seasons.service';
 export class NewSeasonDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef);
   private readonly formBuilder = inject(FormBuilder);
-  readonly seasonsService = inject(SeasonsService);
   private readonly clientStorage = inject(ClientStorageService);
+  createSeasonMutation = injectCreateSeasonMutation();
 
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>('', [Validators.required]),
@@ -59,6 +59,7 @@ export class NewSeasonDialogComponent implements OnInit {
       return;
     }
 
+    this.dialogRef.disableClose = true;
     this.clientStorage.remove('new-season-form');
     const name = this.form.getRawValue().name as string;
     const initialDate = this.form.getRawValue().initialDate as Date;
@@ -70,12 +71,13 @@ export class NewSeasonDialogComponent implements OnInit {
       finalDate: finalDate.toISOString().split('T')[0],
     };
 
-    this.seasonsService.createSeasonMutation.mutate(createSeasonRequest, {
+    this.createSeasonMutation.mutate(createSeasonRequest, {
       onSuccess: () => this.dialogRef.close(),
+      onSettled: () => this.dialogRef.disableClose = false,
     });
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.seasonsService.createSeasonMutation);
+    return getMutationErrorMessage(this.createSeasonMutation);
   }
 }

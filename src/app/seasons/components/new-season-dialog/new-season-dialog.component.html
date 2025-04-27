@@ -1,5 +1,5 @@
-@let isPending = seasonsService.createSeasonMutation.isPending();
-@let isError = seasonsService.createSeasonMutation.isError();
+@let isPending = createSeasonMutation.isPending();
+@let isError = createSeasonMutation.isError();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="Create a new season" [isPending]="isPending">

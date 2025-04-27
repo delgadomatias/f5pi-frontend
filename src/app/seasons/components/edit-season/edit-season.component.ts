@@ -12,7 +12,7 @@ import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { Season } from '@seasons/interfaces/season.interface';
-import { SeasonsService } from '@seasons/seasons.service';
+import { injectUpdateSeasonMutation } from '@seasons/queries/inject-update-season-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +35,7 @@ export class EditSeasonComponent {
   dialogRef = inject(MatDialogRef);
   formBuilder = inject(FormBuilder);
   season = inject(MAT_DIALOG_DATA) as Season;
-  seasonsService = inject(SeasonsService);
+  updateSeasonMutation = injectUpdateSeasonMutation();
 
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>(this.season.name, [Validators.required]),
@@ -55,7 +55,7 @@ export class EditSeasonComponent {
     const initialDate = this.form.getRawValue().initialDate?.toISOString().split('T')[0] as string;
     const finalDate = this.form.getRawValue().finalDate?.toISOString().split('T')[0] as string;
 
-    this.seasonsService.updateSeasonMutation.mutate(
+    this.updateSeasonMutation.mutate(
       {
         seasonId: this.season.id,
         name,
@@ -67,7 +67,7 @@ export class EditSeasonComponent {
   }
 
   getErrorMessage() {
-    return getMutationErrorMessage(this.seasonsService.updateSeasonMutation);
+    return getMutationErrorMessage(this.updateSeasonMutation);
   }
 
   private hasSeasonChanged() {

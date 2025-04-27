@@ -1,5 +1,5 @@
-@let isError = fieldsService.updateFieldMutation.isError();
-@let isPending = fieldsService.updateFieldMutation.isPending();
+@let isError = updateField.isError();
+@let isPending = updateField.isPending();
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="Edit field" [isPending]="isPending">

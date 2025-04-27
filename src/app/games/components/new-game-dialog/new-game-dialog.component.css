@@ -30,6 +30,10 @@ mat-select {
   width: 100%;
   gap: 12px;
 
+  @media (width < 768px) {
+    grid-template-columns: auto;
+  }
+
   .team {
     display: flex;
     flex-direction: column;
@@ -47,28 +51,30 @@ mat-select {
       gap: 12px;
 
       .player {
-        grid-column: span 8 / span 8;
+        grid-column: span 6 / span 6;
         display: flex;
         gap: 12px;
         align-items: center;
         margin-left: 4px;
 
         @media (width < 1280px) {
-          grid-column: span 6 / span 6;
           width: 100%;
         }
 
         @media (width < 768px) {
           grid-column: span 12 / span 12;
           width: 100%;
+
+          p {
+            margin-left: auto;
+          }
         }
       }
 
       .goals {
-        grid-column: span 2 / span 2;
+        grid-column: span 3 / span 3;
 
         @media (width < 1280px) {
-          grid-column: span 3 / span 3;
           width: 100%;
         }
 

@@ -14,6 +14,8 @@ import { EditFieldDialogComponent } from '@fields/components/edit-field-dialog/e
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
 import { FieldsService } from '@fields/fields.service';
 import { Field } from '@fields/interfaces/field.interface';
+import { injectDeleteFieldMutation } from '@fields/queries/inject-delete-field-mutation';
+import { injectGetFieldsQuery } from '@fields/queries/inject-get-fields-query';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,32 +36,29 @@ import { Field } from '@fields/interfaces/field.interface';
 export class FieldsWidgetComponent implements OnInit {
   entityDialogService = inject(EntityDialogService);
   fieldsService = inject(FieldsService);
-  getFieldsQuery = this.fieldsService.createGetFieldsQuery();
   queryParamsService = inject(QueryParamsService);
+  deleteFieldMutation = injectDeleteFieldMutation();
+  getFieldsQuery = injectGetFieldsQuery();
 
   ngOnInit() {
     this.checkQueryParams();
   }
 
   openNewFieldDialog() {
-    this.entityDialogService.openNewEntityDialog(NewFieldDialogComponent, { entity: 'field' }).subscribe({
-      next: () => this.fieldsService.createFieldMutation.reset(),
-    });
+    this.entityDialogService.openNewEntityDialog(NewFieldDialogComponent, { entity: 'field' }).subscribe();
   }
 
   openEditFieldDialog(field: Field) {
-    this.entityDialogService.openEditEntityDialog(EditFieldDialogComponent, { data: field }).subscribe({
-      next: () => this.fieldsService.updateFieldMutation.reset(),
-    });
+    this.entityDialogService.openEditEntityDialog(EditFieldDialogComponent, { data: field });
   }
 
   handleDeleteField(field: Field) {
-    this.fieldsService.deleteFieldMutation.mutate(field.fieldId);
+    this.deleteFieldMutation.mutate(field.fieldId);
   }
 
   onPageChangeEvent(event: PageEvent) {
     const { pageIndex } = event;
-    this.getFieldsQuery.pageNumber.set(pageIndex);
+    this.getFieldsQuery.setPageNumber(pageIndex);
   }
 
   private checkQueryParams() {

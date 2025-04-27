@@ -12,6 +12,8 @@ import { ImagePickerComponent } from '@common/components/image-picker/image-pick
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { Player } from '@players/interfaces/player.interface';
 import { PlayersService } from '@players/players.service';
+import { injectUpdatePlayerMutation } from '@players/queries/inject-update-player-mutation';
+import { injectUploadPlayerImageMutation } from '@players/queries/inject-upload-player-image-mutation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +36,8 @@ export class EditPlayerComponent {
   formBuilder = inject(NonNullableFormBuilder);
   player = inject(MAT_DIALOG_DATA) as Player;
   playersService = inject(PlayersService);
+  updatePlayerMutation = injectUpdatePlayerMutation();
+  uploadPlayerImageMutation = injectUploadPlayerImageMutation();
 
   form = this.formBuilder.group({
     name: [this.player.name, [Validators.required]],
@@ -59,13 +63,13 @@ export class EditPlayerComponent {
     this.dialogRef.disableClose = true;
     if (hasImageChanged && !hasNameChanged) {
       const { image } = this.form.getRawValue();
-      this.playersService.uploadPlayerImageMutation.mutate(
+      this.uploadPlayerImageMutation.mutate(
         { playerId: this.player.playerId, image: image as File },
         { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
       );
     } else {
       const { name } = this.form.getRawValue();
-      this.playersService.updatePlayerMutation.mutate(
+      this.updatePlayerMutation.mutate(
         { playerId: this.player.playerId, name },
         { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
       );
@@ -77,11 +81,11 @@ export class EditPlayerComponent {
   }
 
   getErrorMessage() {
-    if (this.playersService.updatePlayerMutation.isError()) {
-      return getMutationErrorMessage(this.playersService.updatePlayerMutation);
+    if (this.updatePlayerMutation.isError()) {
+      return getMutationErrorMessage(this.updatePlayerMutation);
     }
-    if (this.playersService.uploadPlayerImageMutation.isError()) {
-      return getMutationErrorMessage(this.playersService.uploadPlayerImageMutation);
+    if (this.uploadPlayerImageMutation.isError()) {
+      return getMutationErrorMessage(this.uploadPlayerImageMutation);
     }
 
     return "";
