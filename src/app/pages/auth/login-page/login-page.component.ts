@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '@auth/auth.service';
@@ -9,16 +10,21 @@ import { LoginRequest } from '@auth/interfaces/login-request.interface';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, LoginFormComponent],
+  providers: [MatSnackBar],
   selector: 'f5pi-login-page',
   styleUrl: './login-page.component.css',
   templateUrl: './login-page.component.html',
-  providers: [MatSnackBar],
 })
 export class LoginPageComponent {
+  titleService = inject(Title);
   authService = inject(AuthService);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
   isLoading = signal<boolean>(false);
+
+  constructor() {
+    this.titleService.setTitle('Login •  f5pi');
+  }
 
   onSubmit(credentials: LoginRequest) {
     this.isLoading.set(true);

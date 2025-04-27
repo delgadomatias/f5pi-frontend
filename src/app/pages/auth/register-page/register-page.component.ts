@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '@auth/auth.service';
@@ -17,6 +18,7 @@ import { AuthService } from '@auth/auth.service';
   styleUrl: './register-page.component.css',
 })
 export class RegisterPageComponent {
+  readonly titleService = inject(Title)
   readonly authService = inject(AuthService);
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly router = inject(Router);
@@ -28,6 +30,10 @@ export class RegisterPageComponent {
     password: ['', [Validators.required, Validators.minLength(3)]],
     username: ['', [Validators.required]],
   })
+
+  constructor() {
+    this.titleService.setTitle('Register •  f5pi');
+  }
 
   handleSubmit() {
     if (this.form.invalid) return this.form.markAllAsTouched();
