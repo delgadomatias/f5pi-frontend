@@ -20,6 +20,7 @@ export const appConfig: ApplicationConfig = {
         defaultOptions: {
           queries: {
             placeholderData: keepPreviousData,
+            staleTime: Infinity
           },
         },
       })
