@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { QueryClient } from '@tanstack/angular-query-experimental';
-import { delay } from 'rxjs';
 
 import { AuthService } from '@auth/auth.service';
 import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
@@ -56,7 +55,7 @@ export class PlayersService {
   }
 
   getPlayerStatistics(playerId: Player['playerId']) {
-    return this.http.get<Statistics>(`${this.baseUrl}/${playerId}/statistics`).pipe(delay(5000))
+    return this.http.get<Statistics>(`${this.baseUrl}/${playerId}/statistics`);
   }
 
   handleOnSuccessMutation() {
