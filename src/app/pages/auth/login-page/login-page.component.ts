@@ -23,7 +23,7 @@ export class LoginPageComponent {
   isLoading = signal<boolean>(false);
 
   constructor() {
-    this.titleService.setTitle('Login •  f5pi');
+    this.titleService.setTitle('Login | f5pi');
   }
 
   onSubmit(credentials: LoginRequest) {

@@ -22,6 +22,6 @@ export class HomePageComponent {
   titleService = inject(Title)
 
   constructor() {
-    this.titleService.setTitle('Home • f5pi');
+    this.titleService.setTitle('Dashboard | f5pi');
   }
 }

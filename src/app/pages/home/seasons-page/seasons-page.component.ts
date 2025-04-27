@@ -14,6 +14,6 @@ export class SeasonsPageComponent {
   titleService = inject(Title)
 
   constructor() {
-    this.titleService.setTitle('Seasons • f5pi');
+    this.titleService.setTitle('Seasons | f5pi');
   }
 }

@@ -106,6 +106,7 @@
               }
             </mat-form-field>
 
+            @if (detailsOfEachPlayerOfFirstTeam.length > 0) {
             <div formArrayName="detailsOfEachPlayerOfFirstTeam" class="details-of-each-player">
               @for (detailForm of detailsOfEachPlayerOfFirstTeam.controls; track $index) {
               <div [formGroupName]="$index" class="details-of-each-player__form">
@@ -124,6 +125,7 @@
               </div>
               }
             </div>
+            }
           </div>
 
           <div class="team">
@@ -164,6 +166,7 @@
               }
             </mat-form-field>
 
+            @if (detailsOfEachPlayerOfSecondTeam.length > 0) {
             <div formArrayName="detailsOfEachPlayerOfSecondTeam" class="details-of-each-player">
               @for (detailForm of detailsOfEachPlayerOfSecondTeam.controls; track $index) {
               <div [formGroupName]="$index" class="details-of-each-player__form">
@@ -182,6 +185,7 @@
               </div>
               }
             </div>
+            }
           </div>
         </div>
       </div>

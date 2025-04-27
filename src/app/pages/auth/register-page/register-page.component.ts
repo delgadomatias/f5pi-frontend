@@ -32,7 +32,7 @@ export class RegisterPageComponent {
   })
 
   constructor() {
-    this.titleService.setTitle('Register •  f5pi');
+    this.titleService.setTitle('Register | f5pi');
   }
 
   handleSubmit() {

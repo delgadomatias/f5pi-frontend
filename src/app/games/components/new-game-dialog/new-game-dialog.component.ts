@@ -15,7 +15,6 @@ import { GenericDialogComponent } from '@common/components/generic-dialog/generi
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { FieldsService } from '@fields/fields.service';
-import { injectGetFieldsQuery } from '@fields/queries/inject-get-fields-query';
 import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields-query';
 import { GamesService } from '@games/games.service';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
@@ -67,9 +66,7 @@ export class NewGameDialogComponent implements OnInit {
   seasonsService = inject(SeasonsService);
   clientStorage = inject(ClientStorageService);
   createGameMutation = injectCreateGameMutation();
-  getFieldsQuery = injectGetFieldsQuery();
   getInfiniteFieldsQuery = injectGetInfiniteFieldsQuery();
-  // Cambiar a infinite query para players y seasons
   getInfinitePlayersQuery = injectGetInfinitePlayersQuery();
   getInfiniteSeasonsQuery = injectGetInfiniteSeasonsQuery();
 
@@ -173,17 +170,42 @@ export class NewGameDialogComponent implements OnInit {
 
   private syncStateWithStorage() {
     const saved = this.clientStorage.get<any>('new-game-form');
-    if (saved) this.form.patchValue(saved);
+    if (saved) {
+      this.form.patchValue(saved);
+
+      if (Array.isArray(saved.detailsOfEachPlayerOfFirstTeam)) {
+        const arr = this.detailsOfEachPlayerOfFirstTeam;
+        arr.clear();
+        saved.detailsOfEachPlayerOfFirstTeam.forEach((member: any) => {
+          arr.push(
+            this.formBuilder.group({
+              player: [member.player, [Validators.required]],
+              goalsScored: [member.goalsScored ?? 0, [Validators.required]],
+              ownGoals: [member.ownGoals ?? 0, [Validators.required]],
+            })
+          );
+        });
+      }
+
+      if (Array.isArray(saved.detailsOfEachPlayerOfSecondTeam)) {
+        const arr = this.detailsOfEachPlayerOfSecondTeam;
+        arr.clear();
+        saved.detailsOfEachPlayerOfSecondTeam.forEach((member: any) => {
+          arr.push(
+            this.formBuilder.group({
+              player: [member.player, [Validators.required]],
+              goalsScored: [member.goalsScored ?? 0, [Validators.required]],
+              ownGoals: [member.ownGoals ?? 0, [Validators.required]],
+            })
+          );
+        });
+      }
+    }
 
     this.form.valueChanges.subscribe((values) => {
       const { individualPrice } = values;
       if (individualPrice) this.formatCurrency(individualPrice);
-      const valuesWithoutPlayers = { ...values };
-      delete valuesWithoutPlayers.playersForFirstTeam;
-      delete valuesWithoutPlayers.playersForSecondTeam;
-      delete valuesWithoutPlayers.detailsOfEachPlayerOfFirstTeam;
-      delete valuesWithoutPlayers.detailsOfEachPlayerOfSecondTeam;
-      this.clientStorage.set('new-game-form', valuesWithoutPlayers);
+      this.clientStorage.set('new-game-form', values);
     });
   }
 

@@ -9,7 +9,7 @@
     <ng-container *ngTemplateOutlet="content()"></ng-container>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions>
   <button mat-button [mat-dialog-close]="false" [disabled]="isPending()">Close</button>
   @if (showSaveButton()) {
   <button mat-flat-button type="submit" [disabled]="isPending()">

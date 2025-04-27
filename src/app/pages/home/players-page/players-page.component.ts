@@ -43,7 +43,7 @@ export class PlayersPageComponent implements OnInit {
   ];
 
   constructor() {
-    this.titleService.setTitle('Players • f5pi');
+    this.titleService.setTitle('Players | f5pi');
   }
 
   ngOnInit(): void {

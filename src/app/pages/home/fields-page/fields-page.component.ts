@@ -14,6 +14,6 @@ export class FieldsPageComponent {
   titleService = inject(Title)
 
   constructor() {
-    this.titleService.setTitle('Fields • f5pi');
+    this.titleService.setTitle('Fields | f5pi');
   }
 }

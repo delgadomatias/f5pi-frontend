@@ -23,7 +23,18 @@
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
           <div style="display: flex; gap: 12px; align-items: center">
+
+            @if (DEFAULT_AVATAR_URLS.includes(element.imageURL)) {
+
+            @if (themeService.currentTheme() === 'light') {
+            <img
+              src="https://res.cloudinary.com/dlomx8sc1/image/upload/v1723231116/ae2c845b-8b2a-4585-8be7-5a2860bb28f7.png"
+              [width]="24" [height]="24" style="object-fit: cover; border-radius: 50%" />
+            } @else { <img src="https://res.cloudinary.com/dlomx8sc1/image/upload/v1745780042/f6yw6kuokwcnszkqkizf.webp"
+              [width]="24" [height]="24" style="object-fit: cover; border-radius: 50%" />}
+            } @else {
             <img [src]="element.imageURL" [width]="24" [height]="24" style="object-fit: cover; border-radius: 50%" />
+            }
             <span style="min-width: max-content;">
               {{ element.name }}
             </span>
