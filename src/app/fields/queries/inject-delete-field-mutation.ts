@@ -11,6 +11,6 @@ export function injectDeleteFieldMutation() {
   const queryClient = inject(QueryClient);
   return injectMutation(() => ({
     mutationFn: (fieldId: Field['fieldId']) => lastValueFrom(fieldsService.deleteField(fieldId)),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [GET_FIELDS_KEY] }),
+    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [GET_FIELDS_KEY] }),
   }));
 }

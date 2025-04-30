@@ -1,4 +1,17 @@
+@let isPending = loginMutation.isPending();
+@let isError = loginMutation.isError();
+
 <form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
+  @if (isError) {
+  <f5pi-alert [message]="loginMutation.getErrorMessage()"></f5pi-alert>
+  }
+  @if (recentlyCreatedAccount()) {
+  <div class="account-created">
+    <span>
+      Your account has been created.
+    </span>
+  </div>
+  }
   <div class="login-form__fields">
     <mat-form-field>
       <input matInput formControlName="username" [maxLength]="30" />
@@ -30,8 +43,8 @@
     </mat-form-field>
   </div>
 
-  <button mat-flat-button [disabled]="isLoading()">
-    @if (isLoading()) {
+  <button mat-flat-button [disabled]="isPending">
+    @if (isPending) {
     <mat-spinner [diameter]="24"></mat-spinner>
     } @else { Sign In }
   </button>

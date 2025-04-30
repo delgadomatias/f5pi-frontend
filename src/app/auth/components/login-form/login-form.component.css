@@ -15,3 +15,12 @@
   flex: 1 1 200px;
   min-width: 0;
 }
+
+.account-created {
+  color: var(--mat-sys-on-surface);
+  background-color: var(--mat-sys-surface);
+  padding: 1rem;
+  font: var(--mat-sys-body-large);
+  border-radius: var(--mat-sys-corner-small);
+  text-align: center;
+}

@@ -10,6 +10,7 @@ import { ClientStorageService } from '@common/services/client-storage.service.ab
 import { environment } from '@environments/environment';
 import { injectMutation } from '@tanstack/angular-query-experimental';
 import { CreateUserRequest } from './interfaces/create-user-request.interface';
+import { LoginRequest } from './interfaces/login-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -37,8 +38,8 @@ export class AuthService {
     });
   }
 
-  login(username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { username, password }).pipe(
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
       tap((response) => {
         const { accessToken, refreshToken, user } = response;
         this.state.set({ accessToken, refreshToken, user, status: AuthStatus.AUTHENTICATED });
@@ -69,7 +70,7 @@ export class AuthService {
     return userId;
   }
 
-  private register(credentials: CreateUserRequest) {
+  register(credentials: CreateUserRequest) {
     return this.http.post<void>(`${environment.apiUrl}/auth/register`, credentials);
   }
 

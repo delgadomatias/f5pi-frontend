@@ -1,0 +1,8 @@
+@use "@styles/variables.scss" as *;
+
+mat-toolbar {
+
+  @media (width > $breakpoint-lg) {
+    display: none;
+  }
+}

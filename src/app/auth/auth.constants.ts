@@ -1,0 +1,1 @@
+export const RECENTLY_CREATED_ACCOUNT_COOKIE_NAME = 'account_created';

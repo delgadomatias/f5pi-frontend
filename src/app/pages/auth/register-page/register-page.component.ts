@@ -9,41 +9,49 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
+import { RECENTLY_CREATED_ACCOUNT_COOKIE_NAME } from '@auth/auth.constants';
 import { AuthService } from '@auth/auth.service';
+import { injectRegisterMutation } from '@auth/queries/inject-register-mutation';
+import { AlertComponent } from "@common/components/alert/alert.component";
+import { CookieService } from '@common/services/cookie.service';
 
 @Component({
+  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatProgressSpinnerModule, AlertComponent],
+  providers: [CookieService],
   selector: 'f5pi-register-page',
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatProgressSpinnerModule],
-  templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.css',
+  templateUrl: './register-page.component.html',
 })
 export class RegisterPageComponent {
-  readonly titleService = inject(Title)
   readonly authService = inject(AuthService);
+  readonly cookieService = inject(CookieService);
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly router = inject(Router);
   readonly snackBar = inject(MatSnackBar);
+  readonly titleService = inject(Title)
+  readonly registerMutation = injectRegisterMutation();
+
   hidePassword = signal<boolean>(true);
   form = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    fullName: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(3)]],
-    username: ['', [Validators.required]],
+    email: ['mmatidelga2@gmail.com', [Validators.required, Validators.email]],
+    fullName: ['Matías Delgado', [Validators.required]],
+    password: ['123456', [Validators.required, Validators.minLength(3)]],
+    username: ['matias', [Validators.required]],
   })
 
   constructor() {
-    this.titleService.setTitle('Register | f5pi');
+    this.titleService.setTitle('Step Into The Stats | f5pi');
   }
 
   handleSubmit() {
     if (this.form.invalid) return this.form.markAllAsTouched();
-    this.authService.registerMutation.mutate(this.form.getRawValue(), {
+
+    const credentials = this.form.getRawValue();
+    this.registerMutation.mutate(credentials, {
       onSuccess: () => {
-        this.snackBar.open('Account created', undefined, { duration: 400, panelClass: 'auth-snackbar' })
-        setTimeout(() => {
-          this.router.navigateByUrl('/auth/login', { replaceUrl: true })
-        }, 800);
-      }
+        this.cookieService.set(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME, 'true');
+        this.router.navigateByUrl('/auth/login', { replaceUrl: true })
+      },
     })
   }
 

@@ -1,5 +1,5 @@
 import { CurrencyPipe, formatDate } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionSelectionChange, provideNativeDateAdapter } from '@angular/material/core';
@@ -13,18 +13,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
+import { EntityDialogService } from '@common/services/entity-dialog.service';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { FieldsService } from '@fields/fields.service';
+import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
+import { Field } from '@fields/interfaces/field.interface';
 import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields-query';
-import { GamesService } from '@games/games.service';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
 import { CreateGameRequest } from '@games/interfaces/create-game-request.interface';
 import { injectCreateGameMutation } from '@games/queries/inject-create-game-mutation';
+import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
 import { Player } from '@players/interfaces/player.interface';
-import { PlayersService } from '@players/players.service';
 import { injectGetInfinitePlayersQuery } from '@players/queries/inject-get-infinite-players-query';
+import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
 import { injectGetInfiniteSeasonsQuery } from '@seasons/queries/inject-get-infinite-seasons-query';
-import { SeasonsService } from '@seasons/seasons.service';
 
 enum Team {
   FIRST = 'first',
@@ -35,6 +36,26 @@ interface MemberControl {
   player: FormControl<Player>;
   goalsScored: FormControl<number>;
   ownGoals: FormControl<number>;
+}
+
+interface GameForm {
+  date: Date;
+  fieldId: string;
+  individualPrice: string;
+  seasonId: string;
+  playersForFirstTeam: Player[];
+  detailsOfEachPlayerOfFirstTeam: MemberControl[];
+  playersForSecondTeam: Player[];
+  detailsOfEachPlayerOfSecondTeam: MemberControl[];
+}
+
+function fieldIdExistsValidator(fieldsProvider: () => Field[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return { required: true };
+    const exists = fieldsProvider().some(f => f.fieldId === value);
+    return exists ? null : { fieldNotExists: true };
+  };
 }
 
 @Component({
@@ -57,14 +78,11 @@ interface MemberControl {
   providers: [provideNativeDateAdapter(), CurrencyPipe],
 })
 export class NewGameDialogComponent implements OnInit {
+  clientStorage = inject(ClientStorageService);
   currencyPipe = inject(CurrencyPipe);
   dialogRef = inject(MatDialogRef);
-  fieldsService = inject(FieldsService);
+  entityDialogService = inject(EntityDialogService);
   formBuilder = inject(NonNullableFormBuilder);
-  gamesService = inject(GamesService);
-  playersService = inject(PlayersService);
-  seasonsService = inject(SeasonsService);
-  clientStorage = inject(ClientStorageService);
   createGameMutation = injectCreateGameMutation();
   getInfiniteFieldsQuery = injectGetInfiniteFieldsQuery();
   getInfinitePlayersQuery = injectGetInfinitePlayersQuery();
@@ -83,8 +101,72 @@ export class NewGameDialogComponent implements OnInit {
     validators: [teamsHaveSameLengthValidator()],
   });
 
+  syncState = effect(() => {
+    const fields = this.getInfiniteFieldsQuery.data()?.pages.flatMap(page => page?.content) || [];
+    const players = this.getInfinitePlayersQuery.data()?.pages.flatMap(page => page?.content) || [];
+    const seasons = this.getInfiniteSeasonsQuery.data()?.pages.flatMap(page => page?.content) || [];
+
+    const newGameForm = this.clientStorage.get<GameForm>('new-game-form');
+    if (!newGameForm) return;
+    this.form.patchValue(newGameForm);
+
+    if (newGameForm?.fieldId && !fields.some(field => field?.fieldId === newGameForm.fieldId)) {
+      this.form.patchValue({ fieldId: '' });
+    }
+
+    if (newGameForm?.seasonId && !seasons.some(season => season?.id === newGameForm.seasonId)) {
+      this.form.patchValue({ seasonId: '' });
+    }
+
+    if (newGameForm?.playersForFirstTeam) {
+      const validFirstTeam = newGameForm.playersForFirstTeam.filter(player =>
+        players.some(p => p?.playerId === player.playerId)
+      );
+      this.form.controls.playersForFirstTeam.setValue(validFirstTeam);
+
+      const arr = this.detailsOfEachPlayerOfFirstTeam;
+      arr.clear();
+      if (newGameForm.detailsOfEachPlayerOfFirstTeam) {
+        newGameForm.detailsOfEachPlayerOfFirstTeam
+          .filter((member: any) => players.some(p => p?.playerId === member.player.playerId))
+          .forEach((member: any) => {
+            arr.push(
+              this.formBuilder.group({
+                player: [member.player, [Validators.required]],
+                goalsScored: [member.goalsScored ?? 0, [Validators.required]],
+                ownGoals: [member.ownGoals ?? 0, [Validators.required]],
+              })
+            );
+          });
+      }
+    }
+
+    if (newGameForm?.playersForSecondTeam) {
+      const validSecondTeam = newGameForm.playersForSecondTeam.filter(player =>
+        players.some(p => p?.playerId === player.playerId)
+      );
+      this.form.controls.playersForSecondTeam.setValue(validSecondTeam);
+
+      const arr = this.detailsOfEachPlayerOfSecondTeam;
+      arr.clear();
+      if (newGameForm.detailsOfEachPlayerOfSecondTeam) {
+        newGameForm.detailsOfEachPlayerOfSecondTeam
+          .filter((member: any) => players.some(p => p?.playerId === member.player.playerId))
+          .forEach((member: any) => {
+            arr.push(
+              this.formBuilder.group({
+                player: [member.player, [Validators.required]],
+                goalsScored: [member.goalsScored ?? 0, [Validators.required]],
+                ownGoals: [member.ownGoals ?? 0, [Validators.required]],
+              })
+            );
+          });
+      }
+    }
+  });
+
   ngOnInit(): void {
-    this.syncStateWithStorage();
+    this.persistFormStateToStorage();
   }
 
   handleSubmit() {
@@ -156,6 +238,18 @@ export class NewGameDialogComponent implements OnInit {
     return getMutationErrorMessage(this.createGameMutation);
   }
 
+  openNewSeasonDialog() {
+    this.entityDialogService.openNewEntityDialog(NewSeasonDialogComponent, { entity: 'season' }).subscribe();
+  }
+
+  openNewFieldDialog() {
+    this.entityDialogService.openNewEntityDialog(NewFieldDialogComponent, { entity: 'field' }).subscribe();
+  }
+
+  openNewPlayerDialog() {
+    this.entityDialogService.openNewEntityDialog(NewPlayerDialogComponent, { entity: 'player' }).subscribe();
+  }
+
   private getTeamControl(team: Team) {
     return team === Team.FIRST
       ? this.form.controls.playersForFirstTeam
@@ -168,40 +262,7 @@ export class NewGameDialogComponent implements OnInit {
       : this.detailsOfEachPlayerOfSecondTeam
   }
 
-  private syncStateWithStorage() {
-    const saved = this.clientStorage.get<any>('new-game-form');
-    if (saved) {
-      this.form.patchValue(saved);
-
-      if (Array.isArray(saved.detailsOfEachPlayerOfFirstTeam)) {
-        const arr = this.detailsOfEachPlayerOfFirstTeam;
-        arr.clear();
-        saved.detailsOfEachPlayerOfFirstTeam.forEach((member: any) => {
-          arr.push(
-            this.formBuilder.group({
-              player: [member.player, [Validators.required]],
-              goalsScored: [member.goalsScored ?? 0, [Validators.required]],
-              ownGoals: [member.ownGoals ?? 0, [Validators.required]],
-            })
-          );
-        });
-      }
-
-      if (Array.isArray(saved.detailsOfEachPlayerOfSecondTeam)) {
-        const arr = this.detailsOfEachPlayerOfSecondTeam;
-        arr.clear();
-        saved.detailsOfEachPlayerOfSecondTeam.forEach((member: any) => {
-          arr.push(
-            this.formBuilder.group({
-              player: [member.player, [Validators.required]],
-              goalsScored: [member.goalsScored ?? 0, [Validators.required]],
-              ownGoals: [member.ownGoals ?? 0, [Validators.required]],
-            })
-          );
-        });
-      }
-    }
-
+  private persistFormStateToStorage() {
     this.form.valueChanges.subscribe((values) => {
       const { individualPrice } = values;
       if (individualPrice) this.formatCurrency(individualPrice);
