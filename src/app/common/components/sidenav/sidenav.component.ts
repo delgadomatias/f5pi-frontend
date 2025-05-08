@@ -54,7 +54,6 @@ export class SidenavComponent {
   }
 
   logout() {
-    window.location.reload();
     this.authService.logout();
   }
 }

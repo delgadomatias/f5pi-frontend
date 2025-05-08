@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { injectMutation } from '@tanstack/angular-query-experimental';
 import { lastValueFrom, Observable, of, tap, timeout } from 'rxjs';
 
 import { AuthState } from '@auth/interfaces/auth-state.interface';
@@ -8,7 +9,6 @@ import { LoginResponse } from '@auth/interfaces/login-response.interface';
 import { User } from '@auth/interfaces/user.interface';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { environment } from '@environments/environment';
-import { injectMutation } from '@tanstack/angular-query-experimental';
 import { CreateUserRequest } from './interfaces/create-user-request.interface';
 import { LoginRequest } from './interfaces/login-request.interface';
 
@@ -32,7 +32,6 @@ export class AuthService {
         this.state.set({ accessToken, refreshToken, user, status });
       },
       error: () => {
-        this.state.set({ accessToken: null, refreshToken: null, user: null, status: AuthStatus.UNAUTHENTICATED });
         this.logout();
       },
     });
@@ -60,8 +59,8 @@ export class AuthService {
   }
 
   logout(): void {
-    this.state.set({ accessToken: null, refreshToken: null, user: null, status: AuthStatus.UNAUTHENTICATED });
     this.clearTokens();
+    window.location.reload();
   }
 
   getUserId(): string {
