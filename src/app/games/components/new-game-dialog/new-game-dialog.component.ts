@@ -16,7 +16,6 @@ import { ClientStorageService } from '@common/services/client-storage.service.ab
 import { EntityDialogService } from '@common/services/entity-dialog.service';
 import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
-import { Field } from '@fields/interfaces/field.interface';
 import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields-query';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
 import { CreateGameRequest } from '@games/interfaces/create-game-request.interface';
@@ -47,15 +46,6 @@ interface GameForm {
   detailsOfEachPlayerOfFirstTeam: MemberControl[];
   playersForSecondTeam: Player[];
   detailsOfEachPlayerOfSecondTeam: MemberControl[];
-}
-
-function fieldIdExistsValidator(fieldsProvider: () => Field[]): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-    if (!value) return { required: true };
-    const exists = fieldsProvider().some(f => f.fieldId === value);
-    return exists ? null : { fieldNotExists: true };
-  };
 }
 
 @Component({
@@ -119,49 +109,21 @@ export class NewGameDialogComponent implements OnInit {
     }
 
     if (newGameForm?.playersForFirstTeam) {
-      const validFirstTeam = newGameForm.playersForFirstTeam.filter(player =>
-        players.some(p => p?.playerId === player.playerId)
-      );
+      const validFirstTeam = newGameForm.playersForFirstTeam
+        .map(playerFromStorage =>
+          players.find(p => p?.playerId === playerFromStorage.playerId)
+        )
+        .filter(Boolean) as Player[];
       this.form.controls.playersForFirstTeam.setValue(validFirstTeam);
-
-      const arr = this.detailsOfEachPlayerOfFirstTeam;
-      arr.clear();
-      if (newGameForm.detailsOfEachPlayerOfFirstTeam) {
-        newGameForm.detailsOfEachPlayerOfFirstTeam
-          .filter((member: any) => players.some(p => p?.playerId === member.player.playerId))
-          .forEach((member: any) => {
-            arr.push(
-              this.formBuilder.group({
-                player: [member.player, [Validators.required]],
-                goalsScored: [member.goalsScored ?? 0, [Validators.required]],
-                ownGoals: [member.ownGoals ?? 0, [Validators.required]],
-              })
-            );
-          });
-      }
     }
 
     if (newGameForm?.playersForSecondTeam) {
-      const validSecondTeam = newGameForm.playersForSecondTeam.filter(player =>
-        players.some(p => p?.playerId === player.playerId)
-      );
+      const validSecondTeam = newGameForm.playersForSecondTeam
+        .map(playerFromStorage =>
+          players.find(p => p?.playerId === playerFromStorage.playerId)
+        )
+        .filter(Boolean) as Player[];
       this.form.controls.playersForSecondTeam.setValue(validSecondTeam);
-
-      const arr = this.detailsOfEachPlayerOfSecondTeam;
-      arr.clear();
-      if (newGameForm.detailsOfEachPlayerOfSecondTeam) {
-        newGameForm.detailsOfEachPlayerOfSecondTeam
-          .filter((member: any) => players.some(p => p?.playerId === member.player.playerId))
-          .forEach((member: any) => {
-            arr.push(
-              this.formBuilder.group({
-                player: [member.player, [Validators.required]],
-                goalsScored: [member.goalsScored ?? 0, [Validators.required]],
-                ownGoals: [member.ownGoals ?? 0, [Validators.required]],
-              })
-            );
-          });
-      }
     }
   });
 

@@ -104,10 +104,14 @@
                 </mat-select-trigger>
                 @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
                 @for (player of page?.content; track player.playerId) {
-                <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)" class="option" [value]="player">{{
-                  player.name
-                  }}</mat-option>
+                <mat-option style="display: flex; align-items: center;"
+                  (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
+                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)" class="option" [value]="player">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <img [src]="player.imageURL" width="24" height="24" />
+                    {{player.name}}
+                  </div>
+                </mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No players available</mat-option>
                 }
@@ -167,8 +171,11 @@
                 @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
                 @for (player of page?.content; track player.playerId) {
                 <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)" [value]="player" class="option">{{
-                  player.name }}
+                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)" [value]="player" class="option">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <img [src]="player.imageURL" width="24" height="24" />
+                    {{player.name}}
+                  </div>
                 </mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No players available</mat-option>
