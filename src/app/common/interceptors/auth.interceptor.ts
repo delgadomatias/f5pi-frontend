@@ -22,6 +22,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private shouldExcludeBearerRoute(url: string): boolean {
-    return this._EXCLUDED_BEARER_ROUTES.some((route) => url.includes(route));
+    return this._EXCLUDED_BEARER_ROUTES.some((route) => url.startsWith(route));
   }
 }
