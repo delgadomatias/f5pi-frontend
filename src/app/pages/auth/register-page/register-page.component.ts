@@ -33,10 +33,10 @@ export class RegisterPageComponent {
 
   hidePassword = signal<boolean>(true);
   form = this.formBuilder.group({
-    email: ['mmatidelga2@gmail.com', [Validators.required, Validators.email]],
-    fullName: ['Matías Delgado', [Validators.required]],
-    password: ['123456', [Validators.required, Validators.minLength(3)]],
-    username: ['matias', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    fullName: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(3)]],
+    username: ['', [Validators.required]],
   })
 
   constructor() {
