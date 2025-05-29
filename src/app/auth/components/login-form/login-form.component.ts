@@ -54,7 +54,6 @@ export class LoginFormComponent implements OnInit {
 
   private checkRecentlyCreatedAccount() {
     const cookie = this.cookieService.get(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME);
-    console.log(cookie)
     if (!cookie) return;
 
     this.cookieService.delete(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME);
