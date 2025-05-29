@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { ErrorStateMatcher, provideNativeDateAdapter, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
@@ -10,7 +10,6 @@ import { keepPreviousData, provideTanStackQuery, QueryClient } from '@tanstack/a
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { LocalStorageService } from '@common/services/local-storage.service';
 import { routes } from './app.routes';
-import { AuthInterceptor } from '@common/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,10 +35,5 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', subscriptSizing: 'dynamic' } },
     { provide: ClientStorageService, useClass: LocalStorageService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
   ],
 };

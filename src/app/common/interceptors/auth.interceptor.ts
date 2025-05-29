@@ -1,17 +1,17 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { Observable } from 'rxjs';
-import { AuthService } from '@auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private readonly _EXCLUDED_BEARER_ROUTES = ['/auth'];
-  private readonly _authService = inject(AuthService);
+  private readonly _clientStorageService = inject(ClientStorageService);
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.shouldExcludeBearerRoute(req.url)) return next.handle(req);
 
-    const accessToken = this._authService.accessToken();
+    const accessToken = this._clientStorageService.get<string>('accessToken');
     if (!accessToken) return next.handle(req);
 
     const authReq = req.clone({
