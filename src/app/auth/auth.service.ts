@@ -50,7 +50,7 @@ export class AuthService {
   registerMutation = injectMutation(() => ({
     mutationFn: (credentials: CreateUserRequest) => lastValueFrom(this.register(credentials)),
     mutationKey: ['register'],
-  }))
+  }));
 
   checkStatus(): Observable<User | null> {
     const accessToken = this.storage.get<string>('accessToken');
@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   register(credentials: CreateUserRequest) {
-    return this.http.post<void>(`${environment.apiUrl}/auth/register`, credentials);
+    return this.http.post<void>(`${environment.apiUrl}/auth/sign-up`, credentials);
   }
 
   private clearTokens(): void {

@@ -12,7 +12,7 @@ export const redirectIfNotAuthenticatedGuard: CanActivateFn = (route) => {
     skipWhile((status) => status === AuthStatus.PENDING),
     map((status) => {
       if (status === AuthStatus.AUTHENTICATED) return true;
-      return createUrlTreeFromSnapshot(route, ['/auth/login']);
+      return createUrlTreeFromSnapshot(route, ['/auth/sign-in']);
     })
   );
 };
