@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ChangeDetectionStrategy, Component, inject, DOCUMENT } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';

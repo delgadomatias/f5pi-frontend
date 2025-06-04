@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { computed, inject, Injectable, signal } from '@angular/core';
+
+import { computed, inject, Injectable, signal, DOCUMENT } from '@angular/core';
 
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 
