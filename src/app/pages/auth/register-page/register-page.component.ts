@@ -12,11 +12,20 @@ import { Router, RouterLink } from '@angular/router';
 import { RECENTLY_CREATED_ACCOUNT_COOKIE_NAME } from '@auth/auth.constants';
 import { AuthService } from '@auth/auth.service';
 import { injectRegisterMutation } from '@auth/queries/inject-register-mutation';
-import { AlertComponent } from "@common/components/alert/alert.component";
+import { AlertComponent } from '@common/components/alert/alert.component';
 import { CookieService } from '@common/services/cookie.service';
 
 @Component({
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatProgressSpinnerModule, AlertComponent],
+  imports: [
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    AlertComponent,
+  ],
   providers: [CookieService],
   selector: 'f5pi-register-page',
   styleUrl: './register-page.component.css',
@@ -28,7 +37,7 @@ export class RegisterPageComponent {
   readonly formBuilder = inject(NonNullableFormBuilder);
   readonly router = inject(Router);
   readonly snackBar = inject(MatSnackBar);
-  readonly titleService = inject(Title)
+  readonly titleService = inject(Title);
   readonly registerMutation = injectRegisterMutation();
 
   hidePassword = signal<boolean>(true);
@@ -37,7 +46,7 @@ export class RegisterPageComponent {
     fullName: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(3)]],
     username: ['', [Validators.required]],
-  })
+  });
 
   constructor() {
     this.titleService.setTitle('Step Into The Stats | f5pi');
@@ -50,9 +59,9 @@ export class RegisterPageComponent {
     this.registerMutation.mutate(credentials, {
       onSuccess: () => {
         this.cookieService.set(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME, 'true');
-        this.router.navigateByUrl('/auth/login', { replaceUrl: true })
+        this.router.navigateByUrl('/auth/sign-in', { replaceUrl: true });
       },
-    })
+    });
   }
 
   handleTogglePasswordVisibility() {

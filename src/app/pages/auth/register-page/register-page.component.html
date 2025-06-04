@@ -1,5 +1,4 @@
-@let isPending = registerMutation.isPending();
-@let isError = registerMutation.isError();
+@let isPending = registerMutation.isPending(); @let isError = registerMutation.isError();
 
 <div class="register-content">
   <header>
@@ -23,7 +22,6 @@
         @if (form.controls.fullName.getError('required')) {
         <mat-error> Full name is required </mat-error>
         }
-
       </mat-form-field>
 
       <mat-form-field>
@@ -33,13 +31,9 @@
 
         @if (form.controls.email.getError('email')) {
         <mat-error> Invalid email address </mat-error>
-        }
-
-        @if (form.controls.email.getError('required')) {
+        } @if (form.controls.email.getError('required')) {
         <mat-error> Email is required </mat-error>
         }
-
-
       </mat-form-field>
 
       <mat-form-field>
@@ -58,14 +52,18 @@
 
         @if (form.controls.password.getError('minlength')) {
         <mat-error> Password must be at least 3 characters long </mat-error>
-        }
-
-        @if (form.controls.password.getError('required')) {
+        } @if (form.controls.password.getError('required')) {
         <mat-error> Password is required </mat-error>
         }
 
-        <button (click)="handleTogglePasswordVisibility()" [attr.aria-pressed]="hidePassword()"
-          aria-label="Hide password" mat-icon-button matSuffix type="button">
+        <button
+          (click)="handleTogglePasswordVisibility()"
+          [attr.aria-pressed]="hidePassword()"
+          aria-label="Hide password"
+          mat-icon-button
+          matSuffix
+          type="button"
+        >
           <mat-icon>{{ hidePassword() ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
@@ -74,16 +72,14 @@
     <button mat-flat-button [disabled]="isPending">
       @if (isPending) {
       <mat-spinner diameter="24"></mat-spinner>
-      } @else {
-      Sign Up
-      }
+      } @else { Sign Up }
     </button>
   </form>
 
   <footer>
     <p>
       Already have an account? <br />
-      <a routerLink="/auth/login">Sign in here</a>
+      <a routerLink="/auth/sign-in">Sign in here</a>
     </p>
   </footer>
 </div>
