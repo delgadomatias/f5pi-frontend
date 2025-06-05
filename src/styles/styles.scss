@@ -2,6 +2,7 @@
 
 @use "@styles/material-overrides.scss" as overrides;
 @use "@styles/variables.scss" as *;
+@use "@styles/fonts.scss" as *;
 
 :root {
   --spacing: 8px;
@@ -31,9 +32,12 @@
 }
 
 html {
-  @include mat.theme((typography: Poppins,
+  @include mat.theme(
+    (
+      typography: Poppins,
       density: -3,
-    ));
+    )
+  );
 }
 
 body {
