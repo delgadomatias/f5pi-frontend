@@ -1,15 +1,11 @@
-@let isPending = loginMutation.isPending();
-@let isError = loginMutation.isError();
+@let isPending = loginMutation.isPending(); @let isError = loginMutation.isError();
 
 <form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
   @if (isError) {
   <f5pi-alert [message]="loginMutation.getErrorMessage()"></f5pi-alert>
-  }
-  @if (recentlyCreatedAccount()) {
+  } @if (recentlyCreatedAccount()) {
   <div class="account-created">
-    <span>
-      Your account has been created.
-    </span>
+    <span> Your account has been created. </span>
   </div>
   }
   <div class="login-form__fields">
@@ -19,9 +15,7 @@
 
       @if (loginForm.controls.username.getError('required')) {
       <mat-error>Username is required </mat-error>
-      }
-
-      @if (loginForm.controls.username.getError('max-length')) {
+      } @if (loginForm.controls.username.getError('max-length')) {
       <mat-error>Username must be less than 30 characters</mat-error>
       }
 
@@ -36,14 +30,20 @@
       <mat-error> Password is required </mat-error>
       }
 
-      <button (click)="handleTogglePasswordVisibility()" [attr.aria-pressed]="hidePassword()" aria-label="Hide password"
-        mat-icon-button matSuffix type="button">
+      <button
+        (click)="handleTogglePasswordVisibility()"
+        [attr.aria-pressed]="hidePassword()"
+        aria-label="Hide password"
+        mat-icon-button
+        matSuffix
+        type="button"
+      >
         <mat-icon>{{ hidePassword() ? "visibility_off" : "visibility" }}</mat-icon>
       </button>
     </mat-form-field>
   </div>
 
-  <button mat-flat-button [disabled]="isPending">
+  <button data-cy="sign-in-btn" mat-flat-button [disabled]="isPending">
     @if (isPending) {
     <mat-spinner [diameter]="24"></mat-spinner>
     } @else { Sign In }
