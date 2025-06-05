@@ -22,12 +22,13 @@ export const routes: Routes = [
         loadComponent: () => import('@pages/home/home-page/home-page.component').then((m) => m.HomePageComponent),
       },
       {
-        path: "games",
+        path: 'games',
         loadComponent: () => import('@pages/home/games-page/games-page.component').then((m) => m.GamesPageComponent),
       },
       {
-        path: "seasons",
-        loadComponent: () => import('@pages/home/seasons-page/seasons-page.component').then((m) => m.SeasonsPageComponent),
+        path: 'seasons',
+        loadComponent: () =>
+          import('@pages/home/seasons-page/seasons-page.component').then((m) => m.SeasonsPageComponent),
       },
       {
         path: 'players',
@@ -35,6 +36,7 @@ export const routes: Routes = [
           import('@pages/home/players-page/players-page.component').then((m) => m.PlayersPageComponent),
       },
       {
+        canActivate: [redirectIfNotAuthenticatedGuard],
         path: 'fields',
         loadComponent: () => import('@pages/home/fields-page/fields-page.component').then((m) => m.FieldsPageComponent),
       },

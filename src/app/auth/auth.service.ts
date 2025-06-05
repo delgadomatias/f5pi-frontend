@@ -1,24 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { injectMutation } from '@tanstack/angular-query-experimental';
-import { lastValueFrom, Observable, of, tap, timeout } from 'rxjs';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
+import { Observable, tap, throwError, timeout } from 'rxjs';
 
+import { AUTH_CONSTANTS } from '@auth/auth.constants';
 import { AuthState } from '@auth/interfaces/auth-state.interface';
 import { AuthStatus } from '@auth/interfaces/auth-status.enum';
+import { CreateUserRequest } from '@auth/interfaces/create-user-request.interface';
+import { LoginRequest } from '@auth/interfaces/login-request.interface';
 import { LoginResponse } from '@auth/interfaces/login-response.interface';
 import { User } from '@auth/interfaces/user.interface';
-import { ClientStorageService } from '@common/services/client-storage.service.abstract';
-import { environment } from '@environments/environment';
-import { CreateUserRequest } from './interfaces/create-user-request.interface';
-import { LoginRequest } from './interfaces/login-request.interface';
+import { ROUTES_PATHS } from '@common/common.constants';
+
+const INITIAL_STATE: AuthState = {
+  accessToken: null,
+  refreshToken: null,
+  user: null,
+  status: AuthStatus.PENDING,
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private storage = inject(ClientStorageService);
-  private http = inject(HttpClient);
-  private state = signal<AuthState>({ accessToken: null, refreshToken: null, user: null, status: AuthStatus.PENDING });
+  private readonly http = inject(HttpClient);
+  private readonly state = signal<AuthState>(INITIAL_STATE);
+  private readonly cookieService = inject(SsrCookieService);
+
   accessToken = computed(() => this.state().accessToken);
   refreshToken = computed(() => this.state().refreshToken);
   status = computed(() => this.state().status);
@@ -27,18 +35,17 @@ export class AuthService {
   constructor() {
     this.checkStatus().subscribe({
       next: (user) => {
-        const status = user ? AuthStatus.AUTHENTICATED : AuthStatus.UNAUTHENTICATED;
         const { accessToken, refreshToken } = this.getTokens();
-        this.state.set({ accessToken, refreshToken, user, status });
+        this.state.set({ accessToken, refreshToken, user, status: AuthStatus.AUTHENTICATED });
       },
       error: () => {
-        this.logout();
+        this.state.set({ ...INITIAL_STATE, status: AuthStatus.UNAUTHENTICATED });
       },
     });
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post<LoginResponse>(ROUTES_PATHS.LOGIN, credentials).pipe(
       tap((response) => {
         const { accessToken, refreshToken, user } = response;
         this.state.set({ accessToken, refreshToken, user, status: AuthStatus.AUTHENTICATED });
@@ -47,46 +54,41 @@ export class AuthService {
     );
   }
 
-  registerMutation = injectMutation(() => ({
-    mutationFn: (credentials: CreateUserRequest) => lastValueFrom(this.register(credentials)),
-    mutationKey: ['register'],
-  }));
-
-  checkStatus(): Observable<User | null> {
-    const accessToken = this.storage.get<string>('accessToken');
-    if (!accessToken) return of(null);
-    return this.http.post<User>(`${environment.apiUrl}/auth/check-token`, { accessToken }).pipe(timeout(5000));
+  register(credentials: CreateUserRequest) {
+    return this.http.post<void>(ROUTES_PATHS.REGISTER, credentials);
   }
 
   logout(): void {
     this.clearTokens();
-    window.location.reload();
   }
 
   getUserId(): string {
     const userId = this.user()?.id;
-    if (!userId) throw new Error('User is not authenticated');
+    if (!userId) throw new Error(AUTH_CONSTANTS.UNAUTHENTICATED_USER_ERROR_MESSAGE);
     return userId;
   }
 
-  register(credentials: CreateUserRequest) {
-    return this.http.post<void>(`${environment.apiUrl}/auth/sign-up`, credentials);
+  private checkStatus(): Observable<User> {
+    const accessToken = this.cookieService.get(AUTH_CONSTANTS.ACCESS_TOKEN_STORAGE_NAME);
+    if (!accessToken) return throwError(() => new Error(AUTH_CONSTANTS.UNAUTHENTICATED_USER_ERROR_MESSAGE));
+
+    return this.http.post<User>(ROUTES_PATHS.CHECK_TOKEN, { accessToken }).pipe(timeout(5000));
   }
 
   private clearTokens(): void {
-    this.storage.remove('accessToken');
-    this.storage.remove('refreshToken');
+    this.cookieService.delete(AUTH_CONSTANTS.ACCESS_TOKEN_STORAGE_NAME);
+    this.cookieService.delete(AUTH_CONSTANTS.REFRESH_TOKEN_STORAGE_NAME);
   }
 
   private setTokens(accessToken: string, refreshToken: string): void {
-    this.storage.set('accessToken', accessToken);
-    this.storage.set('refreshToken', refreshToken);
+    this.cookieService.set(AUTH_CONSTANTS.ACCESS_TOKEN_STORAGE_NAME, accessToken, { path: '/' });
+    this.cookieService.set(AUTH_CONSTANTS.REFRESH_TOKEN_STORAGE_NAME, refreshToken, { path: '/' });
   }
 
-  private getTokens(): { accessToken: string | null; refreshToken: string | null } {
+  private getTokens() {
     return {
-      accessToken: this.storage.get<string>('accessToken'),
-      refreshToken: this.storage.get<string>('refreshToken'),
+      accessToken: this.cookieService.get(AUTH_CONSTANTS.ACCESS_TOKEN_STORAGE_NAME),
+      refreshToken: this.cookieService.get(AUTH_CONSTANTS.REFRESH_TOKEN_STORAGE_NAME),
     };
   }
 }

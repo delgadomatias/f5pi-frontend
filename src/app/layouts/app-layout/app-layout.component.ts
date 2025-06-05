@@ -3,7 +3,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 
 import { SidenavComponent } from '@common/components/sidenav/sidenav.component';
-import { ToolbarComponent } from "@common/components/toolbar/toolbar.component";
+import { ToolbarComponent } from '@common/components/toolbar/toolbar.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,4 +11,4 @@ import { ToolbarComponent } from "@common/components/toolbar/toolbar.component";
   selector: 'f5pi-app-layout',
   templateUrl: './app-layout.component.html',
 })
-export class AppLayoutComponent { }
+export class AppLayoutComponent {}

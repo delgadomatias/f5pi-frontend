@@ -5,39 +5,36 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
-import { RECENTLY_CREATED_ACCOUNT_COOKIE_NAME } from '@auth/auth.constants';
-import { AuthService } from '@auth/auth.service';
+import { AUTH_CONSTANTS } from '@auth/auth.constants';
 import { injectRegisterMutation } from '@auth/queries/inject-register-mutation';
 import { AlertComponent } from '@common/components/alert/alert.component';
-import { CookieService } from '@common/services/cookie.service';
+import { HideElementOnServerDirective } from '@common/directives/pause-animation-on-server.directive';
 
 @Component({
   imports: [
-    RouterLink,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatProgressSpinnerModule,
     AlertComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    RouterLink,
+    HideElementOnServerDirective,
   ],
-  providers: [CookieService],
   selector: 'f5pi-register-page',
   styleUrl: './register-page.component.css',
   templateUrl: './register-page.component.html',
 })
 export class RegisterPageComponent {
-  readonly authService = inject(AuthService);
-  readonly cookieService = inject(CookieService);
-  readonly formBuilder = inject(NonNullableFormBuilder);
-  readonly router = inject(Router);
-  readonly snackBar = inject(MatSnackBar);
-  readonly titleService = inject(Title);
+  private readonly cookieService = inject(SsrCookieService);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+  private readonly titleService = inject(Title);
   readonly registerMutation = injectRegisterMutation();
 
   hidePassword = signal<boolean>(true);
@@ -49,7 +46,7 @@ export class RegisterPageComponent {
   });
 
   constructor() {
-    this.titleService.setTitle('Step Into The Stats | f5pi');
+    this.titleService.setTitle('Sign Up — F5pi');
   }
 
   handleSubmit() {
@@ -58,7 +55,7 @@ export class RegisterPageComponent {
     const credentials = this.form.getRawValue();
     this.registerMutation.mutate(credentials, {
       onSuccess: () => {
-        this.cookieService.set(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME, 'true');
+        this.cookieService.set(AUTH_CONSTANTS.RECENTLY_CREATED_ACCOUNT_STORAGE_NAME, 'true', { expires: 1 });
         this.router.navigateByUrl('/auth/sign-in', { replaceUrl: true });
       },
     });

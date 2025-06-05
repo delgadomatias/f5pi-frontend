@@ -1,18 +1,22 @@
+import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
+import { DEFAULT_THEME, THEME_STORAGE_NAME } from '@common/common.constants';
 
-import { computed, inject, Injectable, signal, DOCUMENT } from '@angular/core';
-
-import { ClientStorageService } from '@common/services/client-storage.service.abstract';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private document = inject(DOCUMENT);
-  private clientStorage = inject(ClientStorageService);
-  private _currentTheme = signal<'light' | 'dark'>(this.clientStorage.get('theme') || 'light');
+  private readonly document = inject(DOCUMENT);
+  private readonly cookieService = inject(SsrCookieService);
+  private readonly _currentTheme = signal<'light' | 'dark'>(DEFAULT_THEME);
   currentTheme = computed(() => this._currentTheme());
+
+  constructor() {
+    this._currentTheme.set((this.cookieService.get(THEME_STORAGE_NAME) as 'light' | 'dark') || 'light');
+  }
 
   setTheme(theme: 'light' | 'dark') {
     this.document.body.setAttribute('data-theme', theme);
-    this.clientStorage.set('theme', theme);
+    this.cookieService.set(THEME_STORAGE_NAME, theme, { path: '/' });
     this._currentTheme.set(theme);
   }
 

@@ -5,22 +5,28 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
-import { RECENTLY_CREATED_ACCOUNT_COOKIE_NAME } from '@auth/auth.constants';
+import { AUTH_CONSTANTS } from '@auth/auth.constants';
 import { injectLoginMutation } from '@auth/queries/inject-login-mutation';
-import { AlertComponent } from "@common/components/alert/alert.component";
-import { CookieService } from '@common/services/cookie.service';
+import { AlertComponent } from '@common/components/alert/alert.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButtonModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, AlertComponent],
-  providers: [CookieService],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    AlertComponent,
+  ],
   selector: 'f5pi-login-form',
   styleUrl: './login-form.component.css',
   templateUrl: './login-form.component.html',
 })
 export class LoginFormComponent implements OnInit {
-  cookieService = inject(CookieService);
+  cookieService = inject(SsrCookieService);
   formBuilder = inject(NonNullableFormBuilder);
   router = inject(Router);
   loginMutation = injectLoginMutation();
@@ -41,11 +47,9 @@ export class LoginFormComponent implements OnInit {
 
     const credentials = this.loginForm.getRawValue();
     this.loginMutation.mutate(credentials, {
-      onSuccess: () => {
-        this.router.navigateByUrl('/', { replaceUrl: true });
-      },
+      onSuccess: () => this.router.navigateByUrl('/', { replaceUrl: true }),
       onSettled: () => this.recentlyCreatedAccount.set(false),
-    })
+    });
   }
 
   handleTogglePasswordVisibility() {
@@ -53,10 +57,10 @@ export class LoginFormComponent implements OnInit {
   }
 
   private checkRecentlyCreatedAccount() {
-    const cookie = this.cookieService.get(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME);
+    const cookie = this.cookieService.get(AUTH_CONSTANTS.RECENTLY_CREATED_ACCOUNT_STORAGE_NAME);
     if (!cookie) return;
 
-    this.cookieService.delete(RECENTLY_CREATED_ACCOUNT_COOKIE_NAME);
+    this.cookieService.delete(AUTH_CONSTANTS.RECENTLY_CREATED_ACCOUNT_STORAGE_NAME);
     this.recentlyCreatedAccount.set(true);
   }
 }

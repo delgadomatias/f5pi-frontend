@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { GamesWidgetComponent } from "@games/components/games-widget/games-widget.component";
+import { GamesWidgetComponent } from '@games/components/games-widget/games-widget.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,9 +11,9 @@ import { GamesWidgetComponent } from "@games/components/games-widget/games-widge
   templateUrl: './games-page.component.html',
 })
 export class GamesPageComponent {
-  titleService = inject(Title)
+  titleService = inject(Title);
 
   constructor() {
-    this.titleService.setTitle('Games | f5pi');
+    this.titleService.setTitle('Games — F5pi');
   }
 }
