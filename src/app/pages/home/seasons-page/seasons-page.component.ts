@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { SeasonsWidgetComponent } from "@seasons/components/seasons-widget/seasons-widget.component";
+import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seasons-widget.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,9 +11,9 @@ import { SeasonsWidgetComponent } from "@seasons/components/seasons-widget/seaso
   templateUrl: './seasons-page.component.html',
 })
 export class SeasonsPageComponent {
-  titleService = inject(Title)
+  titleService = inject(Title);
 
   constructor() {
-    this.titleService.setTitle('Seasons | f5pi');
+    this.titleService.setTitle('Seasons — F5pi');
   }
 }

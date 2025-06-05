@@ -1,12 +1,10 @@
-
-import { ChangeDetectionStrategy, Component, inject, signal, DOCUMENT } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DOCUMENT, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AuthService } from '@auth/auth.service';
 
 import { SidenavItemComponent } from '@common/components/sidenav-item/sidenav-item.component';
-import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { ThemeService } from '@common/services/theme.service';
 
 @Component({
@@ -18,7 +16,6 @@ import { ThemeService } from '@common/services/theme.service';
 })
 export class SidenavComponent {
   document = inject(DOCUMENT);
-  clientStorage = inject(ClientStorageService);
   authService = inject(AuthService);
   themeService = inject(ThemeService);
   sidebarItems = signal([
@@ -28,7 +25,7 @@ export class SidenavComponent {
       label: 'Dashboard',
     },
     {
-      path: "/games",
+      path: '/games',
       icon: 'sports_soccer',
       label: 'Games',
     },
@@ -55,5 +52,6 @@ export class SidenavComponent {
 
   logout() {
     this.authService.logout();
+    window.location.reload();
   }
 }

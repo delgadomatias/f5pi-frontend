@@ -1,10 +1,18 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 
 @Injectable()
 export class LocalStorageService implements ClientStorageService {
-  private storage = localStorage;
+  private readonly isRunningOnServer = isPlatformServer(inject(PLATFORM_ID));
+  private storage = this.isRunningOnServer
+    ? {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      }
+    : window.localStorage;
 
   get<T>(key: string): T | null {
     const value = this.storage.getItem(key);

@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Title } from '@angular/platform-browser';
 
 import { QueryParamsService } from '@common/services/query-params.service';
-import { PlayersWidgetComponent } from "@players/components/players-widget/players-widget.component";
+import { PlayersWidgetComponent } from '@players/components/players-widget/players-widget.component';
 import { Player } from '@players/interfaces/player.interface';
 import { Statistics } from '@players/interfaces/statistics.interface';
 import { injectGetPlayerStatisticsQuery } from '@players/queries/inject-get-player-statistics-query';
@@ -19,7 +19,14 @@ interface StatisticBlock {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatPaginatorModule, NgClass, PlayersWidgetComponent, CurrencyPipe, MatProgressSpinnerModule, MatProgressBarModule],
+  imports: [
+    MatPaginatorModule,
+    NgClass,
+    PlayersWidgetComponent,
+    CurrencyPipe,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+  ],
   selector: 'f5pi-players-page',
   styleUrl: './players-page.component.scss',
   templateUrl: './players-page.component.html',
@@ -43,7 +50,7 @@ export class PlayersPageComponent implements OnInit {
   ];
 
   constructor() {
-    this.titleService.setTitle('Players | f5pi');
+    this.titleService.setTitle('Players — F5pi');
   }
 
   ngOnInit(): void {

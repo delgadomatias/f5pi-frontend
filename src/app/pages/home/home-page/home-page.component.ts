@@ -8,20 +8,15 @@ import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seaso
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    FieldsWidgetComponent,
-    GamesWidgetComponent,
-    PlayersWidgetComponent,
-    SeasonsWidgetComponent,
-  ],
+  imports: [FieldsWidgetComponent, GamesWidgetComponent, PlayersWidgetComponent, SeasonsWidgetComponent],
   selector: 'f5pi-home-page',
   styleUrl: './home-page.component.scss',
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent {
-  titleService = inject(Title)
+  titleService = inject(Title);
 
   constructor() {
-    this.titleService.setTitle('Dashboard | f5pi');
+    this.titleService.setTitle('Dashboard — F5pi');
   }
 }

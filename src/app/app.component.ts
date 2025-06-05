@@ -1,8 +1,10 @@
-
-import { ChangeDetectionStrategy, Component, inject, DOCUMENT } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DOCUMENT, inject, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
-import { ClientStorageService } from '@common/services/client-storage.service.abstract';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
+
+import { DEFAULT_THEME, THEME_STORAGE_NAME } from '@common/common.constants';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,25 +13,24 @@ import { ClientStorageService } from '@common/services/client-storage.service.ab
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  document = inject(DOCUMENT);
-  clientStorage = inject(ClientStorageService);
-  matIconRegistry = inject(MatIconRegistry);
+  private readonly document = inject(DOCUMENT);
+  private readonly cookieService = inject(SsrCookieService);
+  private readonly matIconRegistry = inject(MatIconRegistry);
+  private readonly isRunningOnServer = isPlatformServer(inject(PLATFORM_ID));
 
   constructor() {
     this.matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
-    const savedTheme = this.clientStorage.get<string>('theme');
-    const preferredTheme = this.getPreferredTheme();
-    const themeToApply = savedTheme || preferredTheme;
+    const themeToApply = this.cookieService.get(THEME_STORAGE_NAME) || DEFAULT_THEME;
     this.document.body.setAttribute('data-theme', themeToApply);
-    this.clientStorage.set('theme', themeToApply);
-    this.clientStorage.remove('new-field-form');
-    this.clientStorage.remove('new-game-form');
-    this.clientStorage.remove('new-player-form');
-    this.clientStorage.remove('new-season-form');
+    this.cookieService.set(THEME_STORAGE_NAME, themeToApply, { path: '/' });
+    this.resetLocalStorage();
   }
 
-  private getPreferredTheme(): string {
-    const darkModeMediaQuery = this.document.defaultView?.matchMedia('(prefers-color-scheme: dark)');
-    return darkModeMediaQuery?.matches ? 'dark' : 'light';
+  private resetLocalStorage(): void {
+    if (this.isRunningOnServer) return;
+    localStorage.removeItem('new-field-form');
+    localStorage.removeItem('new-game-form');
+    localStorage.removeItem('new-player-form');
+    localStorage.removeItem('new-season-form');
   }
 }
