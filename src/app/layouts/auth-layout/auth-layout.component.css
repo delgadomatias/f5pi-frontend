@@ -33,12 +33,3 @@
     display: none;
   }
 }
-
-@media (width > 1024px) {
-  ::ng-deep .auth-snackbar {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 50%;
-  }
-}
