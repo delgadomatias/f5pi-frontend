@@ -1,5 +1,4 @@
-@let isDeleting = deletePlayerMutation.isPending();
-@let isFetching = getPlayersQuery.query.isFetching();
+@let isDeleting = deletePlayerMutation.isPending(); @let isFetching = getPlayersQuery.query.isFetching();
 
 <f5pi-generic-widget widgetTitle="Players" icon="group">
   <ng-template #headerActions>
@@ -9,22 +8,24 @@
   </ng-template>
 
   <ng-template #content>
-    @if (getPlayersQuery.query.isPending()){
-    <div class="loading"></div>
-    } @else if (getPlayersQuery.query.isError()) {
+    @if (getPlayersQuery.query.isError()) {
     <div class="error">
       <span> Error loading players. Please try again later. </span>
     </div>
-    } @else {
-    <table [dataSource]="getPlayersQuery.query.data()!.content" mat-table [ngClass]="{
+    } @else if (!getPlayersQuery.query.isPending()) {
+    <table
+      [dataSource]="getPlayersQuery.query.data()!.content"
+      mat-table
+      [ngClass]="{
         loading: isDeleting || isFetching
-      }">
+      }"
+    >
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
           <div style="display: flex; gap: 12px; align-items: center">
             <img [src]="element.imageURL" [width]="24" [height]="24" style="object-fit: cover; border-radius: 50%" />
-            <span style="min-width: max-content;">
+            <span style="min-width: max-content">
               {{ element.name }}
             </span>
           </div>
@@ -34,24 +35,31 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
-          <f5pi-table-actions (onDelete)="handleDeletePlayer(element)" (onEdit)="openEditPlayerDialog(element)"
-            [disabled]="isDeleting || isFetching" entityName="player"></f5pi-table-actions>
+          <f5pi-table-actions
+            (onDelete)="handleDeletePlayer(element)"
+            (onEdit)="openEditPlayerDialog(element)"
+            [disabled]="isDeleting || isFetching"
+            entityName="player"
+          ></f5pi-table-actions>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="noRecords">
-        <td mat-footer-cell *matFooterCellDef colspan="5">
-          No players found
-        </td>
+        <td mat-footer-cell *matFooterCellDef colspan="5">No players found</td>
       </ng-container>
 
       <tr mat-footer-row *matFooterRowDef="!getPlayersQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
 
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['name', 'actions']" (click)="handleSelection(row)" [ngClass]="{
-        'table-row-selectable': allowSelection(),
-        'table-row-active': row.playerId === selectedPlayerId()
-      }"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: ['name', 'actions']"
+        (click)="handleSelection(row)"
+        [ngClass]="{
+          'table-row-selectable': allowSelection(),
+          'table-row-active': row.playerId === selectedPlayerId()
+        }"
+      ></tr>
     </table>
     }
   </ng-template>
@@ -60,11 +68,15 @@
     @if (isFetching) {
     <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
     }
-    <mat-paginator (page)="handlePageChange($event)" [hidePageSize]="true"
+    <mat-paginator
+      (page)="handlePageChange($event)"
+      [hidePageSize]="true"
       [length]="getPlayersQuery.query.data()?.totalElements"
       [pageIndex]="getPlayersQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize" aria-label="Select page of players"
-      showFirstLastButtons>
+      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize"
+      aria-label="Select page of players"
+      showFirstLastButtons
+    >
     </mat-paginator>
   </ng-template>
 </f5pi-generic-widget>
