@@ -1,7 +1,14 @@
 @use "@styles/variables.scss" as *;
 
+.players-page {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  height: 100%;
+  gap: 24px;
+}
+
 .list {
-  grid-column: span 5/ span 5;
+  grid-column: span 5 / span 5;
 
   @media (width >=$breakpoint-2xl) {
     grid-column: span 6 / span 6;
@@ -23,6 +30,7 @@
   width: 100%;
   position: relative;
   overflow: hidden;
+  min-height: 300px;
 
   @media (width >=$breakpoint-2xl) {
     grid-column: span 6 / span 6;
@@ -98,7 +106,6 @@
         @media (width <=$breakpoint-lg) {
           grid-column: span 12 / span 12;
         }
-
       }
 
       &.money-spent {
@@ -124,7 +131,6 @@
           grid-column: span 12 / span 12;
         }
       }
-
     }
   }
 }

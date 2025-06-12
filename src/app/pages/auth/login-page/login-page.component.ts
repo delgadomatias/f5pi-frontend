@@ -4,11 +4,10 @@ import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { LoginFormComponent } from '@auth/components/login-form/login-form.component';
-import { HideElementOnServerDirective } from '@common/directives/pause-animation-on-server.directive';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, LoginFormComponent, HideElementOnServerDirective],
+  imports: [RouterLink, LoginFormComponent],
   providers: [MatSnackBar],
   selector: 'f5pi-login-page',
   styleUrl: './login-page.component.css',

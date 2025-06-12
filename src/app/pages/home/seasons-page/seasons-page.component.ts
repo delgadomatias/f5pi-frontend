@@ -7,7 +7,6 @@ import { SeasonsWidgetComponent } from '@seasons/components/seasons-widget/seaso
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SeasonsWidgetComponent],
   selector: 'f5pi-seasons-page',
-  styleUrl: './seasons-page.component.css',
   templateUrl: './seasons-page.component.html',
 })
 export class SeasonsPageComponent {

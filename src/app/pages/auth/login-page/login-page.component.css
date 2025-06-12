@@ -5,7 +5,8 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  animation: fadeInUp 0.2s ease-in-out;
+  opacity: 0;
+  animation: fadeInUp 0.2s ease-in-out 0.3s forwards;
 
   header h1 {
     text-align: center;

@@ -12,7 +12,6 @@ import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { AUTH_CONSTANTS } from '@auth/auth.constants';
 import { injectRegisterMutation } from '@auth/queries/inject-register-mutation';
 import { AlertComponent } from '@common/components/alert/alert.component';
-import { HideElementOnServerDirective } from '@common/directives/pause-animation-on-server.directive';
 
 @Component({
   imports: [
@@ -24,7 +23,6 @@ import { HideElementOnServerDirective } from '@common/directives/pause-animation
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     RouterLink,
-    HideElementOnServerDirective,
   ],
   selector: 'f5pi-register-page',
   styleUrl: './register-page.component.css',
