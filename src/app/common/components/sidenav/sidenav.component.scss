@@ -1,26 +1,19 @@
 @use "variables" as *;
 
-mat-sidenav {
-  align-items: center;
-  background: var(--sidenav-background);
-  border-radius: 0;
-  display: flex;
-  justify-content: center;
-  padding: 3rem 0;
-  position: fixed;
-  width: var(--sidenav-width);
-
-  @media (width < $breakpoint-lg) {
-    display: none;
-  }
-}
-
 .sidebar {
   align-items: center;
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+  position: fixed;
+  display: none;
+  padding: 3rem 0;
+
+  @media (width >= $breakpoint-md) {
+    display: block;
+    width: var(--sidenav-width);
+  }
 }
 
 .sidebar__menu {
@@ -47,9 +40,16 @@ mat-sidenav {
       align-self: center;
       justify-self: center;
       text-align: center;
+      width: 90%;
 
       p {
         font: var(--mat-sys-body-medium);
+        color: var(--sidenav-foreground);
+        font-weight: medium;
+      }
+
+      .full-name {
+        font-weight: 500;
       }
     }
 
@@ -59,6 +59,33 @@ mat-sidenav {
       gap: 10px;
       justify-content: center;
       align-items: center;
+    }
+  }
+}
+
+.main-content {
+  display: flex;
+  margin-left: 0;
+  padding: 1rem;
+
+  @media (width >= $breakpoint-md) {
+    margin-left: var(--sidenav-width);
+    padding: 2rem 2rem 2rem 0;
+  }
+
+  @media (width >= $breakpoint-lg) {
+    height: 100dvh;
+  }
+
+  .main-content__wrapper {
+    background: var(--mat-sys-background);
+    border-radius: var(--mat-sys-corner-large);
+    height: 100%;
+    padding: 1rem;
+    width: 100%;
+
+    @media (width >= $breakpoint-md) {
+      padding: 2rem;
     }
   }
 }
