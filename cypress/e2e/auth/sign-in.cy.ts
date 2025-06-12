@@ -1,9 +1,11 @@
 const BAD_CREDENTIALS_ERROR_MESSAGE = 'Username or password incorrect';
 
 describe('Sign In', () => {
-  it('Should show an alert with error message when credentials are invalid', () => {
-    cy.visit('/auth/sign-in');
+  beforeEach(() => {
+    cy.visit(Cypress.env('SIGN_IN_URL'));
+  });
 
+  it('Should show an alert with error message when credentials are invalid', () => {
     cy.getInputByFormControlName('username').type('username');
     cy.getInputByFormControlName('password').type('wrongpassword');
     cy.dataCy('sign-in-btn').click();
@@ -12,8 +14,9 @@ describe('Sign In', () => {
   });
 
   it('Should redirect to home page when credentials are valid', () => {
-    const { USERNAME, PASSWORD } = Cypress.env();
-    cy.visit('/auth/sign-in');
+    const {
+      USER: { USERNAME, PASSWORD },
+    } = Cypress.env();
 
     cy.getInputByFormControlName('username').type(USERNAME);
     cy.getInputByFormControlName('password').type(PASSWORD);
