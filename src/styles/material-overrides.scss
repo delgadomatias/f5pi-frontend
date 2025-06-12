@@ -188,6 +188,4 @@
       filled-focus-active-indicator-color: var(--mat-sys-on-surface),
     )
   );
-
-  @include mat.menu-overrides(());
 }

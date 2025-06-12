@@ -1,8 +1,9 @@
 @use "@angular/material" as mat;
 
+@use "@styles/animations.scss" as *;
+@use "@styles/fonts.scss" as *;
 @use "@styles/material-overrides.scss" as overrides;
 @use "@styles/variables.scss" as *;
-@use "@styles/fonts.scss" as *;
 
 :root {
   --spacing: 8px;
@@ -134,16 +135,25 @@ body {
 
 @layer components {
   .dialog {
-    margin: 2rem 2rem 2rem calc(var(--sidenav-width) + 2rem);
     animation: fadeInUp 0.2s ease-in-out;
+    margin: 1rem;
+    --mat-dialog-actions-alignment: space-between;
 
-    @media (width < $breakpoint-lg) {
+    @media (width >= $breakpoint-lg) {
       margin: 2rem;
     }
 
-    @media (width < $breakpoint-md) {
-      margin: 1rem;
-      --mat-dialog-actions-alignment: space-between;
+    @media (width >= $breakpoint-md) {
+      margin: 2rem 3.5rem 2rem calc(var(--sidenav-width) + 2rem);
+      --mat-dialog-actions-alignment: initial;
+    }
+  }
+
+  .widget-wrapper {
+    height: calc(100dvh - (4rem + 80px));
+
+    @media (width >= $breakpoint-md) {
+      height: calc(100dvh - 8rem);
     }
   }
 
@@ -158,37 +168,5 @@ body {
   .backdrop {
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
-  }
-
-  .container {
-    background: var(--mat-sys-background);
-    border-radius: 12px;
-    display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: 100%;
-    height: calc(100dvh - 3rem);
-    margin: 1.5rem 1.5rem 1.5rem 0;
-    padding: 2rem;
-
-    @media (width <=$breakpoint-lg) {
-      height: 100%;
-      min-height: calc(100dvh - 2rem);
-      margin: 1rem;
-      padding: 1rem;
-      grid-template-rows: auto;
-    }
-  }
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
