@@ -10,4 +10,8 @@ export const AUTH_ROUTES: Route[] = [
     loadComponent: () =>
       import('@pages/auth/register-page/register-page.component').then((c) => c.RegisterPageComponent),
   },
+  {
+    path: '**',
+    redirectTo: 'sign-in',
+  },
 ];
