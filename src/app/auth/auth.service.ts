@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, makeStateKey, signal, TransferState } from '@angular/core';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { Observable, tap, throwError, timeout } from 'rxjs';
 
@@ -13,11 +13,11 @@ import { User } from '@auth/interfaces/user.interface';
 import { ROUTES_PATHS } from '@common/common.constants';
 
 const INITIAL_STATE: AuthState = {
-  accessToken: null,
-  refreshToken: null,
   user: null,
   status: AuthStatus.PENDING,
 };
+
+const AUTH_STATE_KEY = makeStateKey<AuthState>(AUTH_CONSTANTS.AUTH_STATE_KEY);
 
 @Injectable({
   providedIn: 'root',
@@ -26,17 +26,23 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly state = signal<AuthState>(INITIAL_STATE);
   private readonly cookieService = inject(SsrCookieService);
+  private readonly transferState = inject(TransferState);
 
-  accessToken = computed(() => this.state().accessToken);
-  refreshToken = computed(() => this.state().refreshToken);
   status = computed(() => this.state().status);
   user = computed(() => this.state().user);
 
   constructor() {
+    const hasAuthState = this.transferState.hasKey<AuthState>(AUTH_STATE_KEY);
+    if (hasAuthState) {
+      const initialState = this.transferState.get<AuthState>(AUTH_STATE_KEY, INITIAL_STATE);
+      this.state.set(initialState);
+      return;
+    }
+
     this.checkStatus().subscribe({
       next: (user) => {
-        const { accessToken, refreshToken } = this.getTokens();
-        this.state.set({ accessToken, refreshToken, user, status: AuthStatus.AUTHENTICATED });
+        this.state.set({ user, status: AuthStatus.AUTHENTICATED });
+        this.transferState.set<AuthState>(AUTH_STATE_KEY, this.state());
       },
       error: () => {
         this.state.set({ ...INITIAL_STATE, status: AuthStatus.UNAUTHENTICATED });
@@ -48,7 +54,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(ROUTES_PATHS.LOGIN, credentials).pipe(
       tap((response) => {
         const { accessToken, refreshToken, user } = response;
-        this.state.set({ accessToken, refreshToken, user, status: AuthStatus.AUTHENTICATED });
+        this.state.set({ user, status: AuthStatus.AUTHENTICATED });
         this.setTokens(accessToken, refreshToken);
       })
     );
@@ -69,7 +75,7 @@ export class AuthService {
   }
 
   private checkStatus(): Observable<User> {
-    const accessToken = this.cookieService.get(AUTH_CONSTANTS.ACCESS_TOKEN_STORAGE_NAME);
+    const { accessToken } = this.getTokens();
     if (!accessToken) return throwError(() => new Error(AUTH_CONSTANTS.UNAUTHENTICATED_USER_ERROR_MESSAGE));
 
     return this.http.post<User>(ROUTES_PATHS.CHECK_TOKEN, { accessToken }).pipe(timeout(5000));

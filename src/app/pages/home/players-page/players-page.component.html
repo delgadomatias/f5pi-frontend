@@ -1,13 +1,13 @@
-@let isError = getStatisticsQuery.query.isError();
-@let isLoading = getStatisticsQuery.query.isLoading();
-@let isFetching = getStatisticsQuery.query.isFetching();
-@let playerId = selectedPlayerId();
-@let stats = playerStatistics();
+@let isError = getStatisticsQuery.query.isError(); @let isLoading = getStatisticsQuery.query.isLoading(); @let
+isFetching = getStatisticsQuery.query.isFetching(); @let playerId = selectedPlayerId(); @let stats = playerStatistics();
 
-<section class="container">
+<section class="players-page">
   <article class="list">
-    <f5pi-players-widget [allowSelection]="true" [selectedPlayerId]="selectedPlayerId()"
-      (playerSelected)="handlePlayerSelection($event)"></f5pi-players-widget>
+    <f5pi-players-widget
+      [allowSelection]="true"
+      [selectedPlayerId]="selectedPlayerId()"
+      (playerSelected)="handlePlayerSelection($event)"
+    ></f5pi-players-widget>
   </article>
 
   <article class="stats">
@@ -22,15 +22,12 @@
     </div>
     } @else if (playerId && stats) {
     <div class="stats__grid">
-      <div style="position: absolute; top: 0">
-      </div>
+      <div style="position: absolute; top: 0"></div>
       @if (isFetching) {
       <div class="fetching-state">
-
         <mat-progress-bar mode="query"></mat-progress-bar>
       </div>
-      }
-      @for (block of statisticBlocks; track block.key) {
+      } @for (block of statisticBlocks; track block.key) {
       <div class="stats__grid__card" [ngClass]="block.cssClass">
         <span>{{ block.label }}</span>
         @if (block.key === 'moneySpent') {

@@ -1,23 +1,62 @@
 <mat-toolbar>
-  <span>f5pi</span>
-  <button mat-icon-button>
-    <mat-icon>dashboard</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>sports_soccer</mat-icon>
-  </button>
+  <h1>F5pi</h1>
+  <div>
+    <button
+      (click)="handleMenuClick()"
+      aria-label="Example icon-button with menu icon"
+      class="example-icon"
+      matIconButton
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
 
-  <button mat-icon-button>
-    <mat-icon>group</mat-icon>
-  </button>
+  <div
+    class="menu"
+    [ngClass]="{
+      'menu--open': isMenuOpen(),
+      'menu--closed': !isMenuOpen()
+    }"
+  >
+    <div class="wrapper"></div>
+  </div>
 
-  <button mat-icon-button>
-    <mat-icon>calendar_month</mat-icon>
-  </button>
+  <!-- <div class="links">
+    <div class="link">
+      <button mat-icon-button [routerLink]="['/']">
+        <mat-icon>dashboard</mat-icon>
+      </button>
+      <span style="font: var(--mat-sys-label-small)">Dashboard</span>
+    </div>
 
-  <button mat-icon-button>
-    <mat-icon>ballot</mat-icon>
-  </button>
+    <div class="link">
+      <button mat-icon-button [routerLink]="['/games']">
+        <mat-icon>sports_soccer</mat-icon>
+      </button>
+      <span style="font: var(--mat-sys-label-small)">Games</span>
+    </div>
+
+    <div class="link">
+      <button mat-icon-button [routerLink]="['/players']">
+        <mat-icon>group</mat-icon>
+      </button>
+      <span style="font: var(--mat-sys-label-small)">Players</span>
+    </div>
+
+    <div class="link">
+      <button mat-icon-button [routerLink]="['/seasons']">
+        <mat-icon>calendar_month</mat-icon>
+      </button>
+      <span style="font: var(--mat-sys-label-small)">Seasons</span>
+    </div>
+
+    <div class="link">
+      <button mat-icon-button [routerLink]="['/fields']">
+        <mat-icon>ballot</mat-icon>
+      </button>
+      <span style="font: var(--mat-sys-label-small)">Fields</span>
+    </div>
+  </div> -->
 </mat-toolbar>
 
 <!-- path: '/',

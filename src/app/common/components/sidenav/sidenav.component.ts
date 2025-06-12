@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, DOCUMENT, inject, signal } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { AuthService } from '@auth/auth.service';
 
+import { AuthService } from '@auth/auth.service';
 import { SidenavItemComponent } from '@common/components/sidenav-item/sidenav-item.component';
 import { ThemeService } from '@common/services/theme.service';
 

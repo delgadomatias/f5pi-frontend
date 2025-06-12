@@ -7,7 +7,6 @@ import { FieldsWidgetComponent } from '@fields/components/fields-widget/fields-w
   selector: 'f5pi-fields-page',
   imports: [FieldsWidgetComponent],
   templateUrl: './fields-page.component.html',
-  styleUrl: './fields-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldsPageComponent {

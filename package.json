@@ -7,9 +7,12 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:serve": "ng build && cp dist/f5pi-frontend/browser/index.html dist/f5pi-frontend/browser/404.html && npx http-server dist/f5pi-frontend/browser -p 4200",
     "start:build": "cp dist/f5pi-frontend/browser/index.html dist/f5pi-frontend/browser/404.html && http-server dist/f5pi-frontend/browser -p 4200",
-    "serve:ssr:f5pi-frontend": "node dist/f5pi-frontend/server/server.mjs"
+    "build:serve": "ng build && pnpm serve:ssr:f5pi-frontend",
+    "serve:ssr:f5pi-frontend": "node dist/f5pi-frontend/server/server.mjs",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +38,7 @@
     "@angular/build": "^20.0.1",
     "@angular/cli": "^20.0.1",
     "@angular/compiler-cli": "^20.0.1",
+    "@cypress/schematic": "3.0.0",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
@@ -44,6 +48,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "cypress": "latest"
   }
 }

@@ -1,8 +1,47 @@
-@use "@styles/variables.scss" as *;
+@use "variables.scss" as *;
 
 mat-toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 2.5rem 1.2rem;
 
-  @media (width > $breakpoint-lg) {
+  @media (width >= $breakpoint-md) {
     display: none;
+  }
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+  top: 110px;
+  opacity: 0;
+  background: var(--sidenav-background);
+  padding: 0 1.2rem 1rem 1.2rem;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+
+  &.menu--open {
+    opacity: 100;
+    pointer-events: auto;
+  }
+
+  .wrapper {
+    background-color: var(--mat-sys-background);
+    height: 100%;
+    border-radius: var(--mat-sys-corner-large);
   }
 }

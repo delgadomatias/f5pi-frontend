@@ -1,15 +1,13 @@
-@let isCreating = createGameMutation.isPending();
-@let isError = createGameMutation.isError();
-@let teamsError = form.errors?.['teamsNotSameLength'];
+@let isCreating = createGameMutation.isPending(); @let isError = createGameMutation.isError(); @let teamsError =
+form.errors?.['teamsNotSameLength'];
 
 <form [formGroup]="form" (submit)="handleSubmit()">
   <f5pi-generic-dialog dialogTitle="New game" [isPending]="isCreating">
     <ng-template #content>
       @if (isError) {
       <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
-      }
-      @if (teamsError) {
-      <mat-error style="margin-bottom: 24px;">Both teams must have the same number of players.</mat-error>
+      } @if (teamsError) {
+      <mat-error style="margin-bottom: 24px">Both teams must have the same number of players.</mat-error>
       }
       <div class="form">
         <div class="game">
@@ -29,22 +27,32 @@
             }
           </mat-form-field>
 
-          <div style="display: flex; gap: 8px;">
-            <mat-form-field style="flex: 1;">
+          <div style="display: flex; gap: 8px">
+            <mat-form-field style="flex: 1">
               <mat-label>Season</mat-label>
               <mat-select [disableRipple]="true" name="seasonId" formControlName="seasonId">
-                @for (page of getInfiniteSeasonsQuery.data()?.pages; track $index) {
-                @for (season of page?.content; track season.id) {
+                @for (page of getInfiniteSeasonsQuery.data().pages; track $index) { @for (season of page?.content; track
+                season.id) {
                 <mat-option class="option" [value]="season.id">{{ season.name }}</mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No seasons available</mat-option>
-                }
-                }
-                @if (getInfiniteSeasonsQuery.hasNextPage()) {
+                } } @if (getInfiniteSeasonsQuery.hasNextPage()) {
                 <div
-                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
-                  <button style="width: 100%;" mat-flat-button (click)="getInfiniteSeasonsQuery.fetchNextPage()"
-                    class="option">
+                  style="
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 8px;
+                    padding: 8px;
+                  "
+                >
+                  <button
+                    style="width: 100%"
+                    mat-flat-button
+                    (click)="getInfiniteSeasonsQuery.fetchNextPage()"
+                    class="option"
+                  >
                     Load more
                   </button>
                 </div>
@@ -54,27 +62,37 @@
               <mat-error>You must select a season</mat-error>
               }
             </mat-form-field>
-            <button type="button" mat-mini-fab style="height: 48px;" (click)="openNewSeasonDialog()">
+            <button type="button" mat-mini-fab style="height: 48px" (click)="openNewSeasonDialog()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
 
-          <div style="display: flex; gap: 8px;">
-            <mat-form-field style="flex: 1;">
+          <div style="display: flex; gap: 8px">
+            <mat-form-field style="flex: 1">
               <mat-label>Field</mat-label>
               <mat-select [disableRipple]="true" name="fieldId" formControlName="fieldId">
-                @for (page of getInfiniteFieldsQuery.data()?.pages; track $index) {
-                @for (field of page?.content; track field.fieldId) {
+                @for (page of getInfiniteFieldsQuery.data().pages; track $index) { @for (field of page?.content; track
+                field.fieldId) {
                 <mat-option class="option" [value]="field.fieldId">{{ field.fieldName }}</mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No fields available</mat-option>
-                }
-                }
-                @if (getInfiniteFieldsQuery.hasNextPage()) {
+                } } @if (getInfiniteFieldsQuery.hasNextPage()) {
                 <div
-                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
-                  <button style="width: 100%;" mat-flat-button (click)="getInfiniteFieldsQuery.fetchNextPage()"
-                    class="option">
+                  style="
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 8px;
+                    padding: 8px;
+                  "
+                >
+                  <button
+                    style="width: 100%"
+                    mat-flat-button
+                    (click)="getInfiniteFieldsQuery.fetchNextPage()"
+                    class="option"
+                  >
                     Load more
                   </button>
                 </div>
@@ -84,7 +102,7 @@
               <mat-error>You must select a field</mat-error>
               }
             </mat-form-field>
-            <button type="button" mat-mini-fab style="height: 48px;" (click)="openNewFieldDialog()">
+            <button type="button" mat-mini-fab style="height: 48px" (click)="openNewFieldDialog()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -102,25 +120,39 @@
                     }
                   </div>
                 </mat-select-trigger>
-                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
-                @for (player of page?.content; track player.playerId) {
-                <mat-option style="display: flex; align-items: center;"
+                @for (page of getInfinitePlayersQuery.data().pages; track $index) { @for (player of page?.content; track
+                player.playerId) {
+                <mat-option
+                  style="display: flex; align-items: center"
                   (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)" class="option" [value]="player">
-                  <div style="display: flex; align-items: center; gap: 8px;">
+                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)"
+                  class="option"
+                  [value]="player"
+                >
+                  <div style="display: flex; align-items: center; gap: 8px">
                     <img [src]="player.imageURL" width="24" height="24" />
-                    {{player.name}}
+                    {{ player.name }}
                   </div>
                 </mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No players available</mat-option>
-                }
-                }
-                @if (getInfinitePlayersQuery.hasNextPage()) {
+                } } @if (getInfinitePlayersQuery.hasNextPage()) {
                 <div
-                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
-                  <button style="width: 100%;" mat-flat-button (click)="getInfinitePlayersQuery.fetchNextPage()"
-                    class="option">
+                  style="
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 8px;
+                    padding: 8px;
+                  "
+                >
+                  <button
+                    style="width: 100%"
+                    mat-flat-button
+                    (click)="getInfinitePlayersQuery.fetchNextPage()"
+                    class="option"
+                  >
                     Load more
                   </button>
                 </div>
@@ -168,24 +200,38 @@
                     }
                   </div>
                 </mat-select-trigger>
-                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) {
-                @for (player of page?.content; track player.playerId) {
-                <mat-option (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)" [value]="player" class="option">
-                  <div style="display: flex; align-items: center; gap: 8px;">
+                @for (page of getInfinitePlayersQuery.data().pages; track $index) { @for (player of page?.content; track
+                player.playerId) {
+                <mat-option
+                  (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
+                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)"
+                  [value]="player"
+                  class="option"
+                >
+                  <div style="display: flex; align-items: center; gap: 8px">
                     <img [src]="player.imageURL" width="24" height="24" />
-                    {{player.name}}
+                    {{ player.name }}
                   </div>
                 </mat-option>
                 } @empty {
                 <mat-option class="option" disabled>No players available</mat-option>
-                }
-                }
-                @if (getInfinitePlayersQuery.hasNextPage()) {
+                } } @if (getInfinitePlayersQuery.hasNextPage()) {
                 <div
-                  style="display: flex; width: 100%; justify-content: center;align-items: center; margin-top: 8px; padding: 8px;">
-                  <button style="width: 100%;" mat-flat-button (click)="getInfinitePlayersQuery.fetchNextPage()"
-                    class="option">
+                  style="
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 8px;
+                    padding: 8px;
+                  "
+                >
+                  <button
+                    style="width: 100%"
+                    mat-flat-button
+                    (click)="getInfinitePlayersQuery.fetchNextPage()"
+                    class="option"
+                  >
                     Load more
                   </button>
                 </div>

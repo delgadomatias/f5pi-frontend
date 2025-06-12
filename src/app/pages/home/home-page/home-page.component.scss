@@ -1,80 +1,59 @@
 @use "variables" as *;
 
-:host {
-  --gutter: 1.2rem;
-}
-
 .home-page {
-  display: grid;
-  grid-gap: var(--gutter);
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: calc((100% - var(--gutter)) / 2) calc((100% - var(--gutter)) / 2);
-  height: calc(100vh - 3rem);
-  padding: 2rem;
-  background: var(--mat-sys-background);
-  border-radius: 12px;
-  margin: 1.5rem 1.5rem 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
 
-  @media (width > $breakpoint-2xl) {
-    grid-template-rows: calc((100% - var(--gutter)) * 0.6) calc((100% - var(--gutter)) * 0.4);
+  @media (width >= $breakpoint-sm) {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr 1fr;
   }
 
-  @media (width < $breakpoint-xl) {
-    grid-template-rows: auto;
-    min-height: calc(100vh - 3rem);
+  :is(.games, .players, .seasons, .fields) {
     height: 100%;
-    margin: 1rem;
+    overflow: hidden;
   }
 
-  @media (width < $breakpoint-2xl) {
-    padding: 2rem 1.5rem;
-  }
-}
-
-.games {
-  grid-column: span 9 / span 9;
-
-  @media (width < $breakpoint-2xl) {
-    grid-column: span 8 / span 8;
-  }
-
-  @media (width < $breakpoint-xl) {
+  .games {
     grid-column: span 12 / span 12;
+
+    @media (width >= $breakpoint-lg) {
+      grid-column: span 8 / span 8;
+    }
+
+    @media (width >= $breakpoint-xl) {
+      grid-column: span 9 / span 9;
+    }
   }
-}
 
-.players {
-  grid-column: span 3 / span 3;
-
-  @media (width < $breakpoint-2xl) {
-    grid-column: span 4 / span 4;
-  }
-
-  @media (width < $breakpoint-xl) {
+  .players {
     grid-column: span 12 / span 12;
+
+    @media (width >= $breakpoint-lg) {
+      grid-column: span 4 / span 4;
+    }
+
+    @media (width >= $breakpoint-xl) {
+      grid-column: span 3 / span 3;
+    }
   }
-}
 
-.seasons {
-  grid-column: span 8 / span 8;
-
-  @media (width < $breakpoint-2xl) {
-    grid-column: span 7 / span 7;
-  }
-
-  @media (width < $breakpoint-xl) {
+  .seasons {
     grid-column: span 12 / span 12;
-  }
-}
 
-.fields {
-  grid-column: span 4 / span 4;
-
-  @media (width < $breakpoint-2xl) {
-    grid-column: span 5 / span 5;
+    @media (width >= $breakpoint-lg) {
+      grid-column: span 8 / span 8;
+    }
   }
 
-  @media (width < $breakpoint-xl) {
+  .fields {
     grid-column: span 12 / span 12;
+
+    @media (width >= $breakpoint-lg) {
+      grid-column: span 4 / span 4;
+    }
   }
 }
