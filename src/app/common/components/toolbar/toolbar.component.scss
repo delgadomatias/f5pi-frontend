@@ -1,4 +1,4 @@
-@use "variables.scss" as *;
+@use "variables" as *;
 
 mat-toolbar {
   align-items: center;
@@ -9,6 +9,12 @@ mat-toolbar {
   @media (width >= $breakpoint-md) {
     display: none;
   }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .links {
@@ -27,12 +33,10 @@ mat-toolbar {
   position: absolute;
   inset: 0;
   z-index: 999;
-  top: 110px;
+  top: 80px;
   opacity: 0;
   background: var(--sidenav-background);
-  padding: 0 1.2rem 1rem 1.2rem;
   pointer-events: none;
-  transition: opacity 0.3s ease-in-out;
 
   &.menu--open {
     opacity: 100;
@@ -40,8 +44,56 @@ mat-toolbar {
   }
 
   .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: var(--mat-sys-background);
     height: 100%;
-    border-radius: var(--mat-sys-corner-large);
+    padding: 1rem;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+
+      li {
+        padding: 0.8rem 1rem;
+        border-radius: var(--mat-sys-corner-large);
+
+        &.active {
+          background: var(--mat-sys-primary);
+          color: var(--mat-sys-on-primary);
+        }
+
+        a {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .user-info {
+    p {
+      font: var(--mat-sys-body-medium);
+      color: var(--sidenav-foreground);
+      font-weight: medium;
+    }
+
+    .full-name {
+      font-weight: 500;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
   }
 }

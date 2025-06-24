@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'f5pi-table-actions',
   styleUrl: './table-actions.component.css',
   templateUrl: './table-actions.component.html',
+  host: { ngSkipHydration: 'true' },
 })
 export class TableActionsComponent {
   entityName = input<string>('');

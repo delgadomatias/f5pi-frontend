@@ -1,5 +1,8 @@
 <mat-toolbar>
-  <h1>F5pi</h1>
+  <header>
+    <f5pi-soccer-ball [width]="40" [height]="40" />
+    <h1>F5pi</h1>
+  </header>
   <div>
     <button
       (click)="handleMenuClick()"
@@ -18,68 +21,43 @@
       'menu--closed': !isMenuOpen()
     }"
   >
-    <div class="wrapper"></div>
+    <div class="wrapper">
+      <ul>
+        @for (item of TOOLBAR_ITEMS; track item.label) {
+        <li
+          [ngClass]="{
+          active: isActivePath(item.path),
+        }"
+        >
+          <a [routerLink]="item.path" (click)="handleLinkClick()">
+            <mat-icon
+              [className]="
+                isActivePath(item.path)
+                  ? 'material-symbols-outlined material-symbols-outlined--filled'
+                  : 'material-symbols-outlined'
+              "
+              >{{ item.icon }}</mat-icon
+            >
+            {{ item.label }}
+          </a>
+        </li>
+        }
+      </ul>
+
+      <div class="footer">
+        <div class="user-info">
+          <p>Hello,</p>
+          <p class="full-name">Matías Delgado</p>
+        </div>
+        <div class="actions">
+          <button mat-icon-button (click)="themeService.toggleTheme()">
+            <mat-icon> @if (themeService.currentTheme() === 'dark') { light_mode } @else { dark_mode}</mat-icon>
+          </button>
+          <button mat-icon-button (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- <div class="links">
-    <div class="link">
-      <button mat-icon-button [routerLink]="['/']">
-        <mat-icon>dashboard</mat-icon>
-      </button>
-      <span style="font: var(--mat-sys-label-small)">Dashboard</span>
-    </div>
-
-    <div class="link">
-      <button mat-icon-button [routerLink]="['/games']">
-        <mat-icon>sports_soccer</mat-icon>
-      </button>
-      <span style="font: var(--mat-sys-label-small)">Games</span>
-    </div>
-
-    <div class="link">
-      <button mat-icon-button [routerLink]="['/players']">
-        <mat-icon>group</mat-icon>
-      </button>
-      <span style="font: var(--mat-sys-label-small)">Players</span>
-    </div>
-
-    <div class="link">
-      <button mat-icon-button [routerLink]="['/seasons']">
-        <mat-icon>calendar_month</mat-icon>
-      </button>
-      <span style="font: var(--mat-sys-label-small)">Seasons</span>
-    </div>
-
-    <div class="link">
-      <button mat-icon-button [routerLink]="['/fields']">
-        <mat-icon>ballot</mat-icon>
-      </button>
-      <span style="font: var(--mat-sys-label-small)">Fields</span>
-    </div>
-  </div> -->
 </mat-toolbar>
-
-<!-- path: '/',
-icon: 'dashboard',
-label: 'Dashboard',
-},
-{
-path: "/games",
-icon: 'sports_soccer',
-label: 'Games',
-},
-{
-path: '/players',
-icon: 'group',
-label: 'Players',
-},
-{
-path: '/seasons',
-icon: 'calendar_month',
-label: 'Seasons',
-},
-{
-path: '/fields',
-icon: 'ballot',
-label: 'Fields',
-}, -->
