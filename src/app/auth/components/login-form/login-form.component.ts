@@ -8,28 +8,29 @@ import { Router } from '@angular/router';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
 import { AUTH_CONSTANTS } from '@auth/auth.constants';
-import { injectLoginMutation } from '@auth/queries/inject-login-mutation';
+import { LoginService } from '@auth/services/login.service';
 import { AlertComponent } from '@common/components/alert/alert.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AlertComponent,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    AlertComponent,
   ],
   selector: 'f5pi-login-form',
   styleUrl: './login-form.component.css',
   templateUrl: './login-form.component.html',
+  providers: [LoginService],
 })
 export class LoginFormComponent implements OnInit {
-  cookieService = inject(SsrCookieService);
-  formBuilder = inject(NonNullableFormBuilder);
-  router = inject(Router);
-  loginMutation = injectLoginMutation();
+  private readonly cookieService = inject(SsrCookieService);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+  readonly loginService = inject(LoginService);
 
   recentlyCreatedAccount = signal<boolean>(false);
   hidePassword = signal<boolean>(true);
@@ -46,9 +47,13 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.invalid) return this.loginForm.markAllAsTouched();
 
     const credentials = this.loginForm.getRawValue();
-    this.loginMutation.mutate(credentials, {
-      onSuccess: () => this.router.navigateByUrl('/', { replaceUrl: true }),
-      onSettled: () => this.recentlyCreatedAccount.set(false),
+    this.loginService.execute(credentials).subscribe({
+      next: () => {
+        const navigateTo = this.cookieService.get(AUTH_CONSTANTS.PREVIOUS_ROUTE_STORAGE_NAME) || '/';
+        this.cookieService.delete(AUTH_CONSTANTS.PREVIOUS_ROUTE_STORAGE_NAME);
+        this.router.navigateByUrl(navigateTo, { replaceUrl: true });
+      },
+      complete: () => this.recentlyCreatedAccount.set(false),
     });
   }
 

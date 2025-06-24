@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
 import { AUTH_CONSTANTS } from '@auth/auth.constants';
-import { injectRegisterMutation } from '@auth/queries/inject-register-mutation';
+import { RegisterService } from '@auth/services/register.service';
 import { AlertComponent } from '@common/components/alert/alert.component';
 
 @Component({
@@ -27,13 +27,14 @@ import { AlertComponent } from '@common/components/alert/alert.component';
   selector: 'f5pi-register-page',
   styleUrl: './register-page.component.css',
   templateUrl: './register-page.component.html',
+  providers: [RegisterService],
 })
 export class RegisterPageComponent {
   private readonly cookieService = inject(SsrCookieService);
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
   private readonly titleService = inject(Title);
-  readonly registerMutation = injectRegisterMutation();
+  readonly registerService = inject(RegisterService);
 
   hidePassword = signal<boolean>(true);
   form = this.formBuilder.group({
@@ -51,8 +52,8 @@ export class RegisterPageComponent {
     if (this.form.invalid) return this.form.markAllAsTouched();
 
     const credentials = this.form.getRawValue();
-    this.registerMutation.mutate(credentials, {
-      onSuccess: () => {
+    this.registerService.execute(credentials).subscribe({
+      next: () => {
         this.cookieService.set(AUTH_CONSTANTS.RECENTLY_CREATED_ACCOUNT_STORAGE_NAME, 'true', { expires: 1 });
         this.router.navigateByUrl('/auth/sign-in', { replaceUrl: true });
       },

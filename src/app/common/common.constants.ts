@@ -1,9 +1,12 @@
 import { environment } from '@environments/environment';
 import { PaginatedRequest } from './interfaces/paginated-request.interface';
 
-export const DEFAULT_PAGINATION_PARAMS: PaginatedRequest = {
+export const BASE_USERS_URL = `${environment.apiUrl}/api/v1/users`;
+
+export const DEFAULT_PAGINATION_PARAMS = {
   pageNumber: 0,
-};
+  pageSize: 20,
+} satisfies PaginatedRequest;
 
 export const THEME_STORAGE_NAME = 'theme';
 export const DEFAULT_THEME = 'dark';
@@ -13,3 +16,5 @@ export const ROUTES_PATHS = {
   LOGIN: `${environment.apiUrl}/auth/login`,
   REGISTER: `${environment.apiUrl}/auth/register`,
 };
+
+export const DEFAULT_ERROR_MESSAGE = 'An unexpected error occurred';

@@ -1,5 +1,3 @@
-@let isPending = registerMutation.isPending(); @let isError = registerMutation.isError();
-
 <div class="register-content">
   <header>
     <h1>
@@ -10,8 +8,8 @@
   </header>
 
   <form class="form" [formGroup]="form" (submit)="handleSubmit()">
-    @if (isError) {
-    <f5pi-alert [message]="registerMutation.getErrorMessage()"></f5pi-alert>
+    @if (registerService.error()) {
+    <f5pi-alert [message]="registerService.error()!"></f5pi-alert>
     }
     <div class="form__fields">
       <mat-form-field>
@@ -69,8 +67,8 @@
       </mat-form-field>
     </div>
 
-    <button mat-flat-button [disabled]="isPending">
-      @if (isPending) {
+    <button mat-flat-button [disabled]="registerService.isPending()">
+      @if (registerService.isPending()) {
       <mat-spinner diameter="24"></mat-spinner>
       } @else { Sign Up }
     </button>
