@@ -28,7 +28,7 @@ jobs:
       - name: Configure pnpm for Cypress
         run: |
           pnpm config set side-effects-cache false --location project
-          pnpm config set dedupe-peer-dependents false --location project
+          pnpm --allow-build=cypress add --save-dev cypress
 
       - name: Install dependencies
         run: pnpm install
