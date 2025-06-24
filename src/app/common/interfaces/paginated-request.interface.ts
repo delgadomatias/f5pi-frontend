@@ -1,3 +1,4 @@
 export interface PaginatedRequest {
-  pageNumber: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
