@@ -1,4 +1,4 @@
-import { Player } from '@players/interfaces/player.interface';
+import { Player } from '@players/interfaces/responses/player.interface';
 
 export interface Member {
   playerId: Player['playerId'];

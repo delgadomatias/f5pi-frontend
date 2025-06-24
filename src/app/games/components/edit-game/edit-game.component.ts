@@ -9,31 +9,41 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { GamesService } from '@games/games.service';
 import { Game } from '@games/interfaces/game.interface';
 import { UpdateGameRequest } from '@games/interfaces/update-game-request.interface';
-import { injectUpdateGameMutation } from '@games/queries/inject-update-game-mutation';
+import { UpdateGameService } from '@games/services/update-game.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [GenericDialogComponent, AlertComponent, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatIconModule, MatDatepickerModule],
+  imports: [
+    AlertComponent,
+    GenericDialogComponent,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+  ],
   selector: 'f5pi-edit-game',
   styleUrl: './edit-game.component.css',
   templateUrl: './edit-game.component.html',
-  providers: [CurrencyPipe],
+  providers: [CurrencyPipe, UpdateGameService],
 })
 export class EditGameComponent implements OnInit {
   dialogRef = inject(MatDialogRef);
   formBuilder = inject(NonNullableFormBuilder);
   game = inject(MAT_DIALOG_DATA).game as Game;
-  gamesService = inject(GamesService)
+  gamesService = inject(GamesService);
   currencyPipe = inject(CurrencyPipe);
-  updateGameMutation = injectUpdateGameMutation();
+  updateGameService = inject(UpdateGameService);
 
   form = this.formBuilder.group({
     date: [this.parseLocalDate(this.game.date), [Validators.required]],
-    individualPrice: [this.formatCurrency(this.game.individualPrice.toString()), [Validators.required, Validators.min(0)]],
+    individualPrice: [
+      this.formatCurrency(this.game.individualPrice.toString()),
+      [Validators.required, Validators.min(0)],
+    ],
   });
 
   ngOnInit(): void {
@@ -54,16 +64,11 @@ export class EditGameComponent implements OnInit {
       ...rawValues,
       date: formattedDate,
       individualPrice: Number(formattedPrice),
-    }
+    };
 
-    this.updateGameMutation.mutate({
-      gameId: this.game.gameId,
-      request: updateGameRequest,
-    }, { onSuccess: () => this.dialogRef.close() });
-  }
-
-  getErrorMessage() {
-    return getMutationErrorMessage(this.updateGameMutation);
+    this.updateGameService.execute(this.game.gameId, updateGameRequest).subscribe({
+      next: () => this.dialogRef.close(),
+    });
   }
 
   private parseLocalDate(dateString: string): Date {
@@ -72,11 +77,6 @@ export class EditGameComponent implements OnInit {
   }
 
   private formatCurrency(value: string) {
-    return this.currencyPipe.transform(
-      value.replace(/\D/g, '').replace(/^0+/, ''),
-      'USD',
-      'symbol',
-      '1.0-0'
-    );
+    return this.currencyPipe.transform(value.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0');
   }
 }

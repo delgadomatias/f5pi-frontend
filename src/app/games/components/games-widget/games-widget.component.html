@@ -1,8 +1,3 @@
-@let isPending = getGamesQuery.query.isPending();
-@let isError = getGamesQuery.query.isError();
-@let isFetching = getGamesQuery.query.isFetching();
-@let isDeleting = deleteGameMutation.isPending();
-
 <f5pi-generic-widget widgetTitle="Games" icon="sports_soccer">
   <ng-template #headerActions>
     <button mat-mini-fab (mousedown)="openNewGameDialog()" matTooltip="Add a new game">
@@ -10,14 +5,12 @@
     </button>
   </ng-template>
   <ng-template #content>
-    @if (isPending){
-    <div class="loading"></div>
-    } @else if (isError) {
+    @if (getGamesService.error()) {
     <div class="error">
       <span> Error loading games. Please try again later. </span>
     </div>
     } @else {
-    <table mat-table [dataSource]="getGamesQuery.query.data()!.content">
+    <table mat-table [dataSource]="getGamesService.games()">
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Date</th>
         <td mat-cell *matCellDef="let element">
@@ -49,8 +42,12 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
-          <f5pi-table-actions entityName="game" [disabled]="isPending || isDeleting"
-            (onDelete)="handleDeleteGame(element.gameId)" (onEdit)="openEditGameDialog(element)">
+          <f5pi-table-actions
+            entityName="game"
+            [disabled]="getGamesService.isLoading() || deleteGameService.isPending()"
+            (onDelete)="handleDeleteGame(element.gameId)"
+            (onEdit)="openEditGameDialog(element)"
+          >
             <button (click)="openGameDetailDialog(element.gameId)" mat-menu-item>
               <span>Details</span>
             </button>
@@ -62,25 +59,27 @@
       <tr mat-row *matRowDef="let row; columns: ['date', 'individualPrice', 'field', 'season', 'actions']"></tr>
 
       <ng-container matColumnDef="noRecords">
-        <td mat-footer-cell *matFooterCellDef colspan="5">
-          No games found
-        </td>
+        <td mat-footer-cell *matFooterCellDef colspan="5">No games found</td>
       </ng-container>
 
-      <tr mat-footer-row *matFooterRowDef="!getGamesQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
+      <tr mat-footer-row *matFooterRowDef="!getGamesService.games().length ? ['noRecords'] : []"></tr>
     </table>
     }
   </ng-template>
 
   <ng-template #footer>
-    @if (isFetching) {
+    @if (getGamesService.isLoading()) {
     <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
     }
-    <mat-paginator (page)="onPageChangeEvent($event)" [hidePageSize]="true"
-      [length]="getGamesQuery.query.data()?.totalElements"
-      [pageIndex]="getGamesQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getGamesQuery.query.data()?.pageable?.pageSize" aria-label="Select page of games"
-      showFirstLastButtons>
+    <mat-paginator
+      (page)="onPageChangeEvent($event)"
+      [hidePageSize]="true"
+      [length]="getGamesService.totalElements()"
+      [pageIndex]="getGamesService.pageNumber()"
+      [pageSize]="getGamesService.pageSize()"
+      aria-label="Select page of games"
+      showFirstLastButtons
+    >
     </mat-paginator>
   </ng-template>
 </f5pi-generic-widget>

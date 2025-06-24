@@ -11,7 +11,7 @@
   flex-wrap: wrap;
   width: 100%;
 
-  &>* {
+  & > * {
     flex: 1 1 min(200px, 100%);
   }
 }
@@ -98,4 +98,5 @@ mat-select {
 img {
   object-fit: cover;
   border-radius: 50%;
+  border: 1px solid var(--mat-sys-outline);
 }

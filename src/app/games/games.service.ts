@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { QueryClient } from '@tanstack/angular-query-experimental';
 import { switchMap } from 'rxjs';
 
-import { AuthService } from '@auth/auth.service';
+import { AuthService } from '@auth/services/auth.service';
 import { DEFAULT_PAGINATION_PARAMS } from '@common/common.constants';
 import { PaginatedRequest } from '@common/interfaces/paginated-request.interface';
 import { GET_GAMES_KEY } from '@games/games.constants';
@@ -50,11 +50,11 @@ export class GamesService {
   }
 
   createGameDetail(gameId: Game['gameId'], request: CreateGameDetailRequest) {
-    return this.http.post(`http://localhost:8080/api/v1/games/${gameId}/detail`, request);
+    return this.http.post<GameDetailResponse>(`http://localhost:8080/api/v1/games/${gameId}/detail`, request);
   }
 
   deleteGame(gameId: Game['gameId']) {
-    return this.http.delete(`http://localhost:8080/api/v1/games/${gameId}`);
+    return this.http.delete<void>(`http://localhost:8080/api/v1/games/${gameId}`);
   }
 
   updateGame(gameId: Game['gameId'], request: UpdateGameRequest) {
@@ -64,7 +64,7 @@ export class GamesService {
   async handleOnSuccessMutation() {
     await Promise.all([
       this.queryClient.invalidateQueries({ queryKey: [GET_GAMES_KEY] }),
-      this.queryClient.invalidateQueries({ queryKey: [GET_PLAYER_STATISTICS_KEY] })
-    ])
+      this.queryClient.invalidateQueries({ queryKey: [GET_PLAYER_STATISTICS_KEY] }),
+    ]);
   }
 }

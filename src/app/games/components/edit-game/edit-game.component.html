@@ -1,12 +1,9 @@
-@let isError = updateGameMutation.isError();
-@let isPending = updateGameMutation.isPending();
-
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="Edit game" [isPending]="isPending">
+  <f5pi-generic-dialog dialogTitle="Edit game" [isPending]="updateGameService.isPending()">
     <ng-template #content>
       <div class="form">
-        @if (isError) {
-        <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+        @if (updateGameService.error()) {
+        <f5pi-alert [message]="updateGameService.error()!"></f5pi-alert>
         }
 
         <mat-form-field>

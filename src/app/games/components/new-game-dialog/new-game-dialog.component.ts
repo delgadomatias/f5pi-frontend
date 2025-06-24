@@ -1,8 +1,17 @@
 import { CurrencyPipe, formatDate } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatOptionSelectionChange, provideNativeDateAdapter } from '@angular/material/core';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,14 +23,13 @@ import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
 import { EntityDialogService } from '@common/services/entity-dialog.service';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
-import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields-query';
+import { injectGetInfiniteFieldsQuery } from '@fields/queries/inject-get-infinite-fields';
 import { CreateGameDetailRequest } from '@games/interfaces/create-game-detail-request.interface';
 import { CreateGameRequest } from '@games/interfaces/create-game-request.interface';
-import { injectCreateGameMutation } from '@games/queries/inject-create-game-mutation';
+import { CreateGameService } from '@games/services/create-game.service';
 import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
-import { Player } from '@players/interfaces/player.interface';
+import { Player } from '@players/interfaces/responses/player.interface';
 import { injectGetInfinitePlayersQuery } from '@players/queries/inject-get-infinite-players-query';
 import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
 import { injectGetInfiniteSeasonsQuery } from '@seasons/queries/inject-get-infinite-seasons-query';
@@ -63,9 +71,9 @@ interface GameForm {
     ReactiveFormsModule,
   ],
   selector: 'f5pi-new-game-dialog',
-  styleUrl: './new-game-dialog.component.css',
+  styleUrl: './new-game-dialog.component.scss',
   templateUrl: './new-game-dialog.component.html',
-  providers: [provideNativeDateAdapter(), CurrencyPipe],
+  providers: [CurrencyPipe, CreateGameService],
 })
 export class NewGameDialogComponent implements OnInit {
   clientStorage = inject(ClientStorageService);
@@ -73,55 +81,54 @@ export class NewGameDialogComponent implements OnInit {
   dialogRef = inject(MatDialogRef);
   entityDialogService = inject(EntityDialogService);
   formBuilder = inject(NonNullableFormBuilder);
-  createGameMutation = injectCreateGameMutation();
+  createGameService = inject(CreateGameService);
   getInfiniteFieldsQuery = injectGetInfiniteFieldsQuery();
   getInfinitePlayersQuery = injectGetInfinitePlayersQuery();
   getInfiniteSeasonsQuery = injectGetInfiniteSeasonsQuery();
 
-  form = this.formBuilder.group({
-    date: [new Date(), [Validators.required]],
-    individualPrice: ['', [Validators.required]],
-    fieldId: ['', [Validators.required]],
-    seasonId: ['', [Validators.required]],
-    playersForFirstTeam: [[] as Player[], [Validators.required]],
-    detailsOfEachPlayerOfFirstTeam: this.formBuilder.array<MemberControl>([]),
-    playersForSecondTeam: [[] as Player[], [Validators.required]],
-    detailsOfEachPlayerOfSecondTeam: this.formBuilder.array<MemberControl>([]),
-  }, {
-    validators: [teamsHaveSameLengthValidator()],
-  });
+  form = this.formBuilder.group(
+    {
+      date: [new Date(), [Validators.required]],
+      individualPrice: ['', [Validators.required]],
+      fieldId: ['', [Validators.required]],
+      seasonId: ['', [Validators.required]],
+      playersForFirstTeam: [[] as Player[], [Validators.required]],
+      detailsOfEachPlayerOfFirstTeam: this.formBuilder.array<MemberControl>([]),
+      playersForSecondTeam: [[] as Player[], [Validators.required]],
+      detailsOfEachPlayerOfSecondTeam: this.formBuilder.array<MemberControl>([]),
+    },
+    {
+      validators: [teamsHaveSameLengthValidator()],
+    }
+  );
 
   syncState = effect(() => {
-    const fields = this.getInfiniteFieldsQuery.data()?.pages.flatMap(page => page?.content) || [];
-    const players = this.getInfinitePlayersQuery.data()?.pages.flatMap(page => page?.content) || [];
-    const seasons = this.getInfiniteSeasonsQuery.data()?.pages.flatMap(page => page?.content) || [];
+    const fields = this.getInfiniteFieldsQuery.data()?.pages.flatMap((page) => page?.content) || [];
+    const players = this.getInfinitePlayersQuery.data()?.pages.flatMap((page) => page?.content) || [];
+    const seasons = this.getInfiniteSeasonsQuery.data()?.pages.flatMap((page) => page?.content) || [];
 
     const newGameForm = this.clientStorage.get<GameForm>('new-game-form');
     if (!newGameForm) return;
     this.form.patchValue(newGameForm);
 
-    if (newGameForm?.fieldId && !fields.some(field => field?.fieldId === newGameForm.fieldId)) {
+    if (newGameForm?.fieldId && !fields.some((field) => field?.fieldId === newGameForm.fieldId)) {
       this.form.patchValue({ fieldId: '' });
     }
 
-    if (newGameForm?.seasonId && !seasons.some(season => season?.id === newGameForm.seasonId)) {
+    if (newGameForm?.seasonId && !seasons.some((season) => season?.id === newGameForm.seasonId)) {
       this.form.patchValue({ seasonId: '' });
     }
 
     if (newGameForm?.playersForFirstTeam) {
       const validFirstTeam = newGameForm.playersForFirstTeam
-        .map(playerFromStorage =>
-          players.find(p => p?.playerId === playerFromStorage.playerId)
-        )
+        .map((playerFromStorage) => players.find((p) => p?.playerId === playerFromStorage.playerId))
         .filter(Boolean) as Player[];
       this.form.controls.playersForFirstTeam.setValue(validFirstTeam);
     }
 
     if (newGameForm?.playersForSecondTeam) {
       const validSecondTeam = newGameForm.playersForSecondTeam
-        .map(playerFromStorage =>
-          players.find(p => p?.playerId === playerFromStorage.playerId)
-        )
+        .map((playerFromStorage) => players.find((p) => p?.playerId === playerFromStorage.playerId))
         .filter(Boolean) as Player[];
       this.form.controls.playersForSecondTeam.setValue(validSecondTeam);
     }
@@ -164,11 +171,12 @@ export class NewGameDialogComponent implements OnInit {
       ],
     };
 
-    this.createGameMutation.mutate({ game, detail }, {
-      onSuccess: () => {
+    this.createGameService.execute({ game, detail }).subscribe({
+      next: () => {
         this.clientStorage.remove('new-game-form');
         this.dialogRef.close();
-      }
+      },
+      error: () => (this.dialogRef.disableClose = false),
     });
   }
 
@@ -181,23 +189,19 @@ export class NewGameDialogComponent implements OnInit {
           goalsScored: [0, [Validators.required]],
           ownGoals: [0, [Validators.required]],
         })
-      )
+      );
     } else {
       detailsArray.controls.forEach((control, index) => {
         if (control.get('player')?.value.playerId === player.playerId) {
           detailsArray.removeAt(index);
         }
-      })
+      });
     }
   }
 
   isPlayerAvailableFor(team: Team, player: Player): boolean {
     const control = this.getTeamControl(team);
     return !control.value.includes(player);
-  }
-
-  getErrorMessage() {
-    return getMutationErrorMessage(this.createGameMutation);
   }
 
   openNewSeasonDialog() {
@@ -213,15 +217,11 @@ export class NewGameDialogComponent implements OnInit {
   }
 
   private getTeamControl(team: Team) {
-    return team === Team.FIRST
-      ? this.form.controls.playersForFirstTeam
-      : this.form.controls.playersForSecondTeam;
+    return team === Team.FIRST ? this.form.controls.playersForFirstTeam : this.form.controls.playersForSecondTeam;
   }
 
   private getDetailsArray(team: Team) {
-    return team === Team.FIRST
-      ? this.detailsOfEachPlayerOfFirstTeam
-      : this.detailsOfEachPlayerOfSecondTeam
+    return team === Team.FIRST ? this.detailsOfEachPlayerOfFirstTeam : this.detailsOfEachPlayerOfSecondTeam;
   }
 
   private persistFormStateToStorage() {

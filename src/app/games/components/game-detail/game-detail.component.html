@@ -1,12 +1,12 @@
-@let isPending = getGameDetailQuery.isPending();
-
-<f5pi-generic-dialog dialogTitle="Game detail" [isPending]="isPending" [showSaveButton]="false">
+<f5pi-generic-dialog dialogTitle="Game detail" [isPending]="getGameDetailService.isLoading()" [showSaveButton]="false">
   <ng-template #content>
-    @if (isPending) {
-    <div>
-      Loading...
+    @if (getGameDetailService.error()) {
+    <div class="error">
+      <p>Error loading game detail. Please try again later.</p>
     </div>
-    } @else {
+    } @else if (getGameDetailService.isLoading()) {
+    <div>Loading...</div>
+    } @else if (getGameDetailService.gameDetail()?.teams?.length) {
     <div class="grid">
       <div class="team">
         <div class="team-header">
@@ -23,9 +23,12 @@
             <div class="player-goals">
               <div class="goal">
                 <span>Goals scored</span>
-                <span [ngClass]="{
+                <span
+                  [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
-                }">{{ player.goalsScored }}</span>
+                }"
+                  >{{ player.goalsScored }}</span
+                >
               </div>
               <div class="goal">
                 <span>Own goals</span> <span>{{ player.ownGoals }}</span>
@@ -50,9 +53,12 @@
             <div class="player-goals">
               <div class="goal">
                 <span>Goals scored</span>
-                <span [ngClass]="{
+                <span
+                  [ngClass]="{
                   'goal--scored': player.goalsScored > 0,
-                }">{{ player.goalsScored }}</span>
+                }"
+                  >{{ player.goalsScored }}</span
+                >
               </div>
               <div class="goal">
                 <span>Own goals</span> <span>{{ player.ownGoals }}</span>
@@ -62,6 +68,10 @@
           }
         </div>
       </div>
+    </div>
+    } @else {
+    <div class="no-data">
+      <p>No game detail available.</p>
     </div>
     }
   </ng-template>

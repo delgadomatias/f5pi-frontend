@@ -15,8 +15,8 @@ import { EditGameComponent } from '@games/components/edit-game/edit-game.compone
 import { GameDetailComponent } from '@games/components/game-detail/game-detail.component';
 import { NewGameDialogComponent } from '@games/components/new-game-dialog/new-game-dialog.component';
 import { Game } from '@games/interfaces/game.interface';
-import { injectDeleteGameMutation } from '@games/queries/inject-delete-game-mutation';
-import { injectGetGamesQuery } from '@games/queries/inject-get-games-query';
+import { DeleteGameService } from '@games/services/delete-game.service';
+import { GetGamesService } from '@games/services/get-games.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,10 +36,11 @@ import { injectGetGamesQuery } from '@games/queries/inject-get-games-query';
   selector: 'f5pi-games-widget',
   styleUrl: './games-widget.component.scss',
   templateUrl: './games-widget.component.html',
+  providers: [DeleteGameService],
 })
 export class GamesWidgetComponent {
-  deleteGameMutation = injectDeleteGameMutation();
-  getGamesQuery = injectGetGamesQuery();
+  deleteGameService = inject(DeleteGameService);
+  getGamesService = inject(GetGamesService);
   dialog = inject(MatDialog);
 
   openNewGameDialog() {
@@ -59,11 +60,11 @@ export class GamesWidgetComponent {
   }
 
   handleDeleteGame(gameId: Game['gameId']) {
-    this.deleteGameMutation.mutate(gameId);
+    this.deleteGameService.execute(gameId).subscribe();
   }
 
   onPageChangeEvent(event: PageEvent) {
     const { pageIndex } = event;
-    this.getGamesQuery.setPageNumber(pageIndex);
+    this.getGamesService.setPageNumber(pageIndex);
   }
 }
