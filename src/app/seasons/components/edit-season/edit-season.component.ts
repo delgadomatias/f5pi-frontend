@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,13 +9,13 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { Season } from '@seasons/interfaces/season.interface';
-import { injectUpdateSeasonMutation } from '@seasons/queries/inject-update-season-mutation';
+import { Season } from '@seasons/interfaces/responses/season.interface';
+import { UpdateSeasonService } from '@seasons/services/update-season.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    AlertComponent,
     GenericDialogComponent,
     MatButtonModule,
     MatDatepickerModule,
@@ -24,18 +23,17 @@ import { injectUpdateSeasonMutation } from '@seasons/queries/inject-update-seaso
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
-    AlertComponent,
   ],
-  providers: [provideNativeDateAdapter()],
   selector: 'f5pi-edit-season',
-  styleUrl: './edit-season.component.css',
+  styleUrl: './edit-season.component.scss',
   templateUrl: './edit-season.component.html',
+  providers: [UpdateSeasonService],
 })
 export class EditSeasonComponent {
-  dialogRef = inject(MatDialogRef);
-  formBuilder = inject(FormBuilder);
-  season = inject(MAT_DIALOG_DATA) as Season;
-  updateSeasonMutation = injectUpdateSeasonMutation();
+  private readonly dialogRef = inject(MatDialogRef);
+  private readonly formBuilder = inject(FormBuilder);
+  readonly season = inject<Season>(MAT_DIALOG_DATA);
+  readonly updateSeasonService = inject(UpdateSeasonService);
 
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>(this.season.name, [Validators.required]),
@@ -55,19 +53,16 @@ export class EditSeasonComponent {
     const initialDate = this.form.getRawValue().initialDate?.toISOString().split('T')[0] as string;
     const finalDate = this.form.getRawValue().finalDate?.toISOString().split('T')[0] as string;
 
-    this.updateSeasonMutation.mutate(
-      {
+    this.updateSeasonService
+      .execute({
         seasonId: this.season.id,
         name,
         initialDate,
         finalDate,
-      },
-      { onSuccess: () => this.dialogRef.close(true) }
-    );
-  }
-
-  getErrorMessage() {
-    return getMutationErrorMessage(this.updateSeasonMutation);
+      })
+      .subscribe({
+        next: () => this.dialogRef.close(true),
+      });
   }
 
   private hasSeasonChanged() {

@@ -1,11 +1,8 @@
-@let isPending = createSeasonMutation.isPending();
-@let isError = createSeasonMutation.isError();
-
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="Create a new season" [isPending]="isPending">
+  <f5pi-generic-dialog dialogTitle="Create a new season" [isPending]="createSeasonService.isPending()">
     <ng-template #content>
-      @if (isError) {
-      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      @if (createSeasonService.error()) {
+      <f5pi-alert [message]="createSeasonService.error()!"></f5pi-alert>
       }
       <div class="form">
         <mat-form-field>

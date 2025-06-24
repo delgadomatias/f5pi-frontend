@@ -1,11 +1,8 @@
-@let isPending = updateSeasonMutation.isPending();
-@let isError = updateSeasonMutation.isError();
-
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="Edit season" [isPending]="isPending">
+  <f5pi-generic-dialog dialogTitle="Edit season" [isPending]="updateSeasonService.isPending()">
     <ng-template #content>
-      @if (isError) {
-      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      @if (updateSeasonService.error()) {
+      <f5pi-alert [message]="updateSeasonService.error()!"></f5pi-alert>
       }
 
       <div class="form">
@@ -18,8 +15,12 @@
         </mat-form-field>
 
         <mat-form-field>
-          <input (focus)="startDatePicker.open()" [matDatepicker]="startDatePicker" formControlName="initialDate"
-            matInput />
+          <input
+            (focus)="startDatePicker.open()"
+            [matDatepicker]="startDatePicker"
+            formControlName="initialDate"
+            matInput
+          />
           <mat-label>Initial date</mat-label>
           <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>

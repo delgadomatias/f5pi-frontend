@@ -13,9 +13,9 @@ import { EntityDialogService } from '@common/services/entity-dialog.service';
 import { QueryParamsService } from '@common/services/query-params.service';
 import { EditSeasonComponent } from '@seasons/components/edit-season/edit-season.component';
 import { NewSeasonDialogComponent } from '@seasons/components/new-season-dialog/new-season-dialog.component';
-import { Season } from '@seasons/interfaces/season.interface';
-import { injectDeleteSeasonMutation } from '@seasons/queries/inject-delete-season-mutation';
-import { injectGetSeasonsQuery } from '@seasons/queries/inject-get-seasons-query';
+import { Season } from '@seasons/interfaces/responses/season.interface';
+import { DeleteSeasonService } from '@seasons/services/delete-season.service';
+import { GetSeasonsService } from '@seasons/services/get-seasons.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,12 +33,13 @@ import { injectGetSeasonsQuery } from '@seasons/queries/inject-get-seasons-query
   selector: 'f5pi-seasons-widget',
   styleUrl: './seasons-widget.component.scss',
   templateUrl: './seasons-widget.component.html',
+  providers: [DeleteSeasonService],
 })
 export class SeasonsWidgetComponent implements OnInit {
-  entityDialogService = inject(EntityDialogService);
-  queryParamsService = inject(QueryParamsService);
-  getSeasonsQuery = injectGetSeasonsQuery();
-  deleteSeasonMutation = injectDeleteSeasonMutation()
+  private readonly entityDialogService = inject(EntityDialogService);
+  private readonly queryParamsService = inject(QueryParamsService);
+  readonly deleteSeasonService = inject(DeleteSeasonService);
+  readonly getSeasonsService = inject(GetSeasonsService);
 
   ngOnInit() {
     this.checkQueryParams();
@@ -53,12 +54,12 @@ export class SeasonsWidgetComponent implements OnInit {
   }
 
   handleDeleteSeason(season: Season) {
-    this.deleteSeasonMutation.mutate(season.id);
+    this.deleteSeasonService.execute(season.id).subscribe();
   }
 
   handlePageChange(event: PageEvent) {
     const { pageIndex } = event;
-    this.getSeasonsQuery.setPageNumber(pageIndex);
+    this.getSeasonsService.setPageNumber(pageIndex);
   }
 
   private checkQueryParams() {

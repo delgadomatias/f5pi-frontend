@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,9 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { CreateSeasonRequest } from '@seasons/interfaces/create-season-request.interface';
-import { injectCreateSeasonMutation } from '@seasons/queries/inject-create-season-mutation';
+import { CreateSeasonRequest } from '@seasons/interfaces/requests/create-season-request.interface';
+import { CreateSeasonService } from '@seasons/services/create-season.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,16 +25,16 @@ import { injectCreateSeasonMutation } from '@seasons/queries/inject-create-seaso
     MatInputModule,
     ReactiveFormsModule,
   ],
-  providers: [provideNativeDateAdapter()],
   selector: 'f5pi-new-season-dialog',
   styleUrl: './new-season-dialog.component.scss',
   templateUrl: './new-season-dialog.component.html',
+  providers: [CreateSeasonService],
 })
 export class NewSeasonDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef);
   private readonly formBuilder = inject(FormBuilder);
   private readonly clientStorage = inject(ClientStorageService);
-  createSeasonMutation = injectCreateSeasonMutation();
+  readonly createSeasonService = inject(CreateSeasonService);
 
   form = this.formBuilder.group({
     name: this.formBuilder.control<string>('', [Validators.required]),
@@ -45,7 +43,9 @@ export class NewSeasonDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const saved = this.clientStorage.get<{ name: string; initialDate: Date | null; finalDate: Date | null }>('new-season-form');
+    const saved = this.clientStorage.get<{ name: string; initialDate: Date | null; finalDate: Date | null }>(
+      'new-season-form'
+    );
     if (saved) this.form.patchValue(saved);
 
     this.form.valueChanges.subscribe((values) => {
@@ -71,13 +71,9 @@ export class NewSeasonDialogComponent implements OnInit {
       finalDate: finalDate.toISOString().split('T')[0],
     };
 
-    this.createSeasonMutation.mutate(createSeasonRequest, {
-      onSuccess: () => this.dialogRef.close(),
-      onSettled: () => this.dialogRef.disableClose = false,
+    this.createSeasonService.execute(createSeasonRequest).subscribe({
+      next: () => this.dialogRef.close(),
+      error: () => (this.dialogRef.disableClose = false),
     });
-  }
-
-  getErrorMessage() {
-    return getMutationErrorMessage(this.createSeasonMutation);
   }
 }
