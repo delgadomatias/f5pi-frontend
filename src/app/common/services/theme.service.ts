@@ -1,7 +1,7 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
-import { DEFAULT_THEME, THEME_STORAGE_NAME } from '@common/common.constants';
-
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
+
+import { DEFAULT_THEME, THEME_STORAGE_NAME } from '@common/common.constants';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
