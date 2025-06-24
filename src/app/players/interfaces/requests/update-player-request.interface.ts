@@ -1,4 +1,4 @@
-import { Player } from './player.interface';
+import { Player } from '@players/interfaces/responses/player.interface';
 
 export interface UpdatePlayerRequest {
   playerId: Player['playerId'];

@@ -1,5 +1,3 @@
-@let isDeleting = deletePlayerMutation.isPending(); @let isFetching = getPlayersQuery.query.isFetching();
-
 <f5pi-generic-widget widgetTitle="Players" icon="group">
   <ng-template #headerActions>
     <button (click)="openNewPlayerDialog()" mat-mini-fab matTooltip="Add a new player" aria-label="Add a new player">
@@ -8,16 +6,16 @@
   </ng-template>
 
   <ng-template #content>
-    @if (getPlayersQuery.query.isError()) {
+    @if (getPlayersService.error()) {
     <div class="error">
       <span> Error loading players. Please try again later. </span>
     </div>
-    } @else if (!getPlayersQuery.query.isPending()) {
+    } @else {
     <table
-      [dataSource]="getPlayersQuery.query.data()!.content"
+      [dataSource]="getPlayersService.players()"
       mat-table
       [ngClass]="{
-        loading: isDeleting || isFetching
+        loading: deletePlayerService.isPending() || getPlayersService.isLoading(),
       }"
     >
       <ng-container matColumnDef="name">
@@ -38,7 +36,7 @@
           <f5pi-table-actions
             (onDelete)="handleDeletePlayer(element)"
             (onEdit)="openEditPlayerDialog(element)"
-            [disabled]="isDeleting || isFetching"
+            [disabled]="deletePlayerService.isPending() || getPlayersService.isLoading()"
             entityName="player"
           ></f5pi-table-actions>
         </td>
@@ -48,7 +46,7 @@
         <td mat-footer-cell *matFooterCellDef colspan="5">No players found</td>
       </ng-container>
 
-      <tr mat-footer-row *matFooterRowDef="!getPlayersQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
+      <tr mat-footer-row *matFooterRowDef="!getPlayersService.players().length ? ['noRecords'] : []"></tr>
 
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
       <tr
@@ -65,15 +63,15 @@
   </ng-template>
 
   <ng-template #footer>
-    @if (isFetching) {
+    @if (getPlayersService.isLoading()) {
     <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
     }
     <mat-paginator
       (page)="handlePageChange($event)"
       [hidePageSize]="true"
-      [length]="getPlayersQuery.query.data()?.totalElements"
-      [pageIndex]="getPlayersQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize"
+      [length]="getPlayersService.totalElements()"
+      [pageIndex]="getPlayersService.pageNumber()"
+      [pageSize]="getPlayersService.pageSize()"
       aria-label="Select page of players"
       showFirstLastButtons
     >

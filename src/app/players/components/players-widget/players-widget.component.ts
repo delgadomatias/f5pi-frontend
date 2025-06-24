@@ -14,11 +14,10 @@ import { QueryParamsService } from '@common/services/query-params.service';
 import { ThemeService } from '@common/services/theme.service';
 import { EditPlayerComponent } from '@players/components/edit-player/edit-player.component';
 import { NewPlayerDialogComponent } from '@players/components/new-player-dialog/new-player-dialog.component';
-import { Player } from '@players/interfaces/player.interface';
+import { Player } from '@players/interfaces/responses/player.interface';
 import { DEFAULT_AVATAR_URLS } from '@players/players.constants';
-import { PlayersService } from '@players/players.service';
-import { injectDeletePlayerMutation } from '@players/queries/inject-delete-player-mutation';
-import { injectGetPlayersQuery } from '@players/queries/inject-get-players-query';
+import { DeletePlayerService } from '@players/services/delete-player.service';
+import { GetPlayersService } from '@players/services/get-players.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,17 +35,17 @@ import { injectGetPlayersQuery } from '@players/queries/inject-get-players-query
   selector: 'f5pi-players-widget',
   styleUrl: './players-widget.component.scss',
   templateUrl: './players-widget.component.html',
+  providers: [DeletePlayerService],
 })
 export class PlayersWidgetComponent implements OnInit {
   entityDialogService = inject(EntityDialogService);
-  playersService = inject(PlayersService);
   queryParamsService = inject(QueryParamsService);
   themeService = inject(ThemeService);
   allowSelection = input<boolean>(false);
   selectedPlayerId = input<string | null>();
   playerSelected = output<Player>();
-  deletePlayerMutation = injectDeletePlayerMutation();
-  getPlayersQuery = injectGetPlayersQuery();
+  deletePlayerService = inject(DeletePlayerService);
+  getPlayersService = inject(GetPlayersService);
 
   ngOnInit() {
     this.checkQueryParams();
@@ -61,12 +60,12 @@ export class PlayersWidgetComponent implements OnInit {
   }
 
   handleDeletePlayer(player: Player) {
-    this.deletePlayerMutation.mutate(player.playerId);
+    this.deletePlayerService.execute(player.playerId).subscribe();
   }
 
   handlePageChange(event: PageEvent) {
     const { pageIndex } = event;
-    this.getPlayersQuery.setPageNumber(pageIndex);
+    this.getPlayersService.setPageNumber(pageIndex);
   }
 
   handleSelection(row: Player) {

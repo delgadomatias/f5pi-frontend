@@ -1,20 +1,23 @@
-@let isError = getPlayersQuery.query.isError();
-@let isFetching = getPlayersQuery.query.isFetching();
-@let isPending = getPlayersQuery.query.isPending();
+@let players = getPlayersService.players();
+@let error = getPlayersService.error();
+@let isLoading = getPlayersService.isLoading();
+@let pageNumber = getPlayersService.pageNumber();
+@let pageSize = getPlayersService.pageSize();
+@let totalElements = getPlayersService.totalElements();
 
-@if (isError) {
+@if (error) {
 <div class="error">
   <span> Error loading players. Please try again later. </span>
 </div>
-} @else if (isPending) {
-<div class="loading">
-  <mat-spinner diameter="32"></mat-spinner>
-</div>
 } @else {
 <div class="players-table">
-  <table [dataSource]="getPlayersQuery.query.data()!.content" mat-table [ngClass]="{
-    'disabled': isFetching,
-  }">
+  <table
+    [dataSource]="players"
+    mat-table
+    [ngClass]="{
+    'disabled': isLoading,
+  }"
+  >
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element">
@@ -35,21 +38,31 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'actions']" (click)="playerSelected.emit(row)" [ngClass]="{
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['name', 'actions']"
+      (click)="playerSelected.emit(row)"
+      [ngClass]="{
           'table-row': true,
           'table-row-active': row.playerId === selectedPlayer()?.playerId,
-        }"></tr>
+        }"
+    ></tr>
   </table>
 
   <div class="paginator">
-    @if (isFetching) {
+    @if (isLoading) {
     <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
     }
-    <mat-paginator [disabled]="isFetching" (page)="handlePageChange($event)" [hidePageSize]="true"
-      [length]="getPlayersQuery.query.data()?.totalElements"
-      [pageIndex]="getPlayersQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getPlayersQuery.query.data()?.pageable?.pageSize" aria-label="Select page of players"
-      showFirstLastButtons>
+    <mat-paginator
+      (page)="handlePageChange($event)"
+      [disabled]="isLoading"
+      [hidePageSize]="true"
+      [length]="totalElements"
+      [pageIndex]="pageNumber"
+      [pageSize]="pageSize"
+      aria-label="Select page of players"
+      showFirstLastButtons
+    >
     </mat-paginator>
   </div>
 </div>

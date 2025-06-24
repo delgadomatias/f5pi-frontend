@@ -1,44 +1,47 @@
-@let isError = getStatisticsQuery.query.isError(); @let isLoading = getStatisticsQuery.query.isLoading(); @let
-isFetching = getStatisticsQuery.query.isFetching(); @let playerId = selectedPlayerId(); @let stats = playerStatistics();
-
 <section class="players-page">
   <article class="list">
     <f5pi-players-widget
+      (playerSelected)="handlePlayerSelection($event)"
       [allowSelection]="true"
       [selectedPlayerId]="selectedPlayerId()"
-      (playerSelected)="handlePlayerSelection($event)"
     ></f5pi-players-widget>
   </article>
 
   <article class="stats">
-    @if (isLoading) {
-    <div class="loading-state">
+    @if (getPlayerStatisticsService.isLoading()) {
+    <div class="fetching-state">
       <mat-progress-bar mode="query"></mat-progress-bar>
     </div>
-    } @else if (isError) {
+    }
+    
+    @if (getPlayerStatisticsService.error()) {
     <div class="error-state">
       <h3>Error loading statistics</h3>
       <p>Try refreshing the page or selecting a different player.</p>
     </div>
-    } @else if (playerId && stats) {
+    } @else if (selectedPlayerId() && getPlayerStatisticsService.playerStatistics()) {
     <div class="stats__grid">
       <div style="position: absolute; top: 0"></div>
-      @if (isFetching) {
+      @if (getPlayerStatisticsService.isLoading()) {
       <div class="fetching-state">
         <mat-progress-bar mode="query"></mat-progress-bar>
       </div>
-      } @for (block of statisticBlocks; track block.key) {
+      }
+      
+      @for (block of getStatisticBlocks(); track block.key) {
       <div class="stats__grid__card" [ngClass]="block.cssClass">
         <span>{{ block.label }}</span>
         @if (block.key === 'moneySpent') {
-        <span>{{ stats![block.key] | currency }}</span>
+        <span>{{ getPlayerStatisticsService.playerStatistics()![block.key] | currency }}</span>
         } @else {
-        <span>{{ stats![block.key] }}</span>
+        <span>{{ getPlayerStatisticsService.playerStatistics()![block.key] }}</span>
         }
       </div>
       }
     </div>
-    } @else {
+    }
+    
+    @if (!selectedPlayerId()) {
     <div class="empty-state">
       <h3>Select a player to see their statistics</h3>
     </div>

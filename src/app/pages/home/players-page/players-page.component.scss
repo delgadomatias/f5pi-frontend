@@ -164,6 +164,10 @@
     font: var(--mat-sys-headline-small);
     opacity: 0.8;
   }
+
+  p {
+    color: var(--muted-foreground);
+  }
 }
 
 .loading-state {

@@ -10,9 +10,7 @@ import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ImagePickerComponent } from '@common/components/image-picker/image-picker.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { PlayersService } from '@players/players.service';
-import { injectCreatePlayerMutation } from '@players/queries/inject-create-player-mutation';
+import { CreatePlayerService } from '@players/services/create-player.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,15 +26,15 @@ import { injectCreatePlayerMutation } from '@players/queries/inject-create-playe
     ReactiveFormsModule,
   ],
   selector: 'f5pi-new-player-dialog',
-  styleUrl: './new-player-dialog.component.css',
+  styleUrl: './new-player-dialog.component.scss',
   templateUrl: './new-player-dialog.component.html',
+  providers: [CreatePlayerService],
 })
 export class NewPlayerDialogComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef);
-  readonly formBuilder = inject(NonNullableFormBuilder);
-  readonly playersService = inject(PlayersService);
-  readonly clientStorage = inject(ClientStorageService);
-  createPlayerMutation = injectCreatePlayerMutation();
+  private readonly dialogRef = inject(MatDialogRef);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly clientStorage = inject(ClientStorageService);
+  readonly createPlayerService = inject(CreatePlayerService);
 
   form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -63,18 +61,14 @@ export class NewPlayerDialogComponent implements OnInit {
     const { name, image } = this.form.getRawValue();
 
     this.dialogRef.disableClose = true;
-    this.createPlayerMutation.mutate(
-      { name, image },
-      { onSuccess: () => this.dialogRef.close(true), onSettled: () => (this.dialogRef.disableClose = false) }
-    );
+    this.createPlayerService.execute({ name, image }).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => (this.dialogRef.disableClose = false),
+    });
   }
 
   onImageSelected(image: File | null): void {
     this.form.patchValue({ image });
     this.form.controls.image.markAsDirty();
-  }
-
-  getErrorMessage() {
-    return getMutationErrorMessage(this.createPlayerMutation);
   }
 }

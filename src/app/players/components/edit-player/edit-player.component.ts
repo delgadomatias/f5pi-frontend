@@ -9,11 +9,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ImagePickerComponent } from '@common/components/image-picker/image-picker.component';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { Player } from '@players/interfaces/player.interface';
-import { PlayersService } from '@players/players.service';
-import { injectUpdatePlayerMutation } from '@players/queries/inject-update-player-mutation';
-import { injectUploadPlayerImageMutation } from '@players/queries/inject-upload-player-image-mutation';
+import { Player } from '@players/interfaces/responses/player.interface';
+import { UpdatePlayerService } from '@players/services/update-player.service';
+import { UploadPlayerImageService } from '@players/services/upload-player-image.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,16 +26,16 @@ import { injectUploadPlayerImageMutation } from '@players/queries/inject-upload-
     ReactiveFormsModule,
   ],
   selector: 'f5pi-edit-player',
-  styleUrl: './edit-player.component.css',
+  styleUrl: './edit-player.component.scss',
   templateUrl: './edit-player.component.html',
+  providers: [UpdatePlayerService, UploadPlayerImageService],
 })
 export class EditPlayerComponent {
   dialogRef = inject(MatDialogRef);
   formBuilder = inject(NonNullableFormBuilder);
-  player = inject(MAT_DIALOG_DATA) as Player;
-  playersService = inject(PlayersService);
-  updatePlayerMutation = injectUpdatePlayerMutation();
-  uploadPlayerImageMutation = injectUploadPlayerImageMutation();
+  player = inject<Player>(MAT_DIALOG_DATA);
+  updatePlayerService = inject(UpdatePlayerService);
+  uploadPlayerImageService = inject(UploadPlayerImageService);
 
   form = this.formBuilder.group({
     name: [this.player.name, [Validators.required]],
@@ -63,31 +61,22 @@ export class EditPlayerComponent {
     this.dialogRef.disableClose = true;
     if (hasImageChanged && !hasNameChanged) {
       const { image } = this.form.getRawValue();
-      this.uploadPlayerImageMutation.mutate(
-        { playerId: this.player.playerId, image: image as File },
-        { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
-      );
+      this.uploadPlayerImageService.execute({ playerId: this.player.playerId, image: image as File }).subscribe({
+        next: () => this.dialogRef.close(),
+        complete: () => (this.dialogRef.disableClose = false),
+        error: () => (this.dialogRef.disableClose = false),
+      });
     } else {
       const { name } = this.form.getRawValue();
-      this.updatePlayerMutation.mutate(
-        { playerId: this.player.playerId, name },
-        { onSuccess: () => this.dialogRef.close(), onSettled: () => (this.dialogRef.disableClose = false) }
-      );
+      this.updatePlayerService.execute({ playerId: this.player.playerId, name }).subscribe({
+        next: () => this.dialogRef.close(),
+        complete: () => (this.dialogRef.disableClose = false),
+        error: () => (this.dialogRef.disableClose = false),
+      });
     }
   }
 
   onImageSelected(image: File | null) {
     this.form.patchValue({ image });
-  }
-
-  getErrorMessage() {
-    if (this.updatePlayerMutation.isError()) {
-      return getMutationErrorMessage(this.updatePlayerMutation);
-    }
-    if (this.uploadPlayerImageMutation.isError()) {
-      return getMutationErrorMessage(this.uploadPlayerImageMutation);
-    }
-
-    return "";
   }
 }
