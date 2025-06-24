@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { redirectIfAuthenticatedGuard } from '@auth/guards/non-required-auth.guard';
 import { redirectIfNotAuthenticatedGuard } from '@auth/guards/required-auth.guard';
-import { AppLayoutComponent } from '@layouts/app-layout/app-layout.component';
 
 export const routes: Routes = [
   {
@@ -14,7 +13,7 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [redirectIfNotAuthenticatedGuard],
-    component: AppLayoutComponent,
+    loadComponent: () => import('@layouts/app-layout/app-layout.component').then((m) => m.AppLayoutComponent),
     children: [
       {
         path: '',
@@ -36,7 +35,6 @@ export const routes: Routes = [
           import('@pages/home/players-page/players-page.component').then((m) => m.PlayersPageComponent),
       },
       {
-        canActivate: [redirectIfNotAuthenticatedGuard],
         path: 'fields',
         loadComponent: () => import('@pages/home/fields-page/fields-page.component').then((m) => m.FieldsPageComponent),
       },

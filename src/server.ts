@@ -7,6 +7,7 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 
+import compression from 'compression';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
@@ -27,6 +28,7 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
+app.use(compression());
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
