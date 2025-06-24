@@ -1,13 +1,10 @@
-@let isError = createFieldMutation.isError();
-@let isPending = createFieldMutation.isPending();
-
 <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="New field" [isPending]="isPending">
+  <f5pi-generic-dialog dialogTitle="New field" [isPending]="createFieldService.isPending()">
     <ng-template #content>
-      @if (isError) {
+      @if (createFieldService.error()) {
       <div class="alert" role="alert">
         <mat-icon class="material-symbols-outlined material-symbols-outlined--filled">info</mat-icon>
-        <span>{{ getErrorMessage() }}</span>
+        <span>{{ createFieldService.error() }}</span>
       </div>
       }
       <mat-form-field>

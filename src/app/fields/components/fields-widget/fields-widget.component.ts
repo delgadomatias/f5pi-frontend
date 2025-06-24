@@ -12,10 +12,10 @@ import { EntityDialogService } from '@common/services/entity-dialog.service';
 import { QueryParamsService } from '@common/services/query-params.service';
 import { EditFieldDialogComponent } from '@fields/components/edit-field-dialog/edit-field-dialog.component';
 import { NewFieldDialogComponent } from '@fields/components/new-field-dialog/new-field-dialog.component';
-import { FieldsService } from '@fields/fields.service';
-import { Field } from '@fields/interfaces/field.interface';
-import { injectDeleteFieldMutation } from '@fields/queries/inject-delete-field-mutation';
-import { injectGetFieldsQuery } from '@fields/queries/inject-get-fields-query';
+import { Field } from '@fields/interfaces/responses/field.interface';
+import { DeleteFieldService } from '@fields/services/delete-field.service';
+import { FieldsService } from '@fields/services/fields.service';
+import { GetFieldsService } from '@fields/services/get-fields.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,15 +30,16 @@ import { injectGetFieldsQuery } from '@fields/queries/inject-get-fields-query';
     TableActionsComponent,
   ],
   selector: 'f5pi-fields-widget',
-  styleUrl: './fields-widget.component.css',
+  styleUrl: './fields-widget.component.scss',
   templateUrl: './fields-widget.component.html',
+  providers: [DeleteFieldService],
 })
 export class FieldsWidgetComponent implements OnInit {
   entityDialogService = inject(EntityDialogService);
   fieldsService = inject(FieldsService);
   queryParamsService = inject(QueryParamsService);
-  deleteFieldMutation = injectDeleteFieldMutation();
-  getFieldsQuery = injectGetFieldsQuery();
+  deleteFieldService = inject(DeleteFieldService);
+  getFieldsService = inject(GetFieldsService);
 
   ngOnInit() {
     this.checkQueryParams();
@@ -53,12 +54,12 @@ export class FieldsWidgetComponent implements OnInit {
   }
 
   handleDeleteField(field: Field) {
-    this.deleteFieldMutation.mutate(field.fieldId);
+    this.deleteFieldService.execute(field.fieldId).subscribe();
   }
 
   onPageChangeEvent(event: PageEvent) {
     const { pageIndex } = event;
-    this.getFieldsQuery.setPageNumber(pageIndex);
+    this.getFieldsService.setPageNumber(pageIndex);
   }
 
   private checkQueryParams() {

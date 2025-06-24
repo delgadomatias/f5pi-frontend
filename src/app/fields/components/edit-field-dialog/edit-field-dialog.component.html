@@ -1,11 +1,8 @@
-@let isError = updateField.isError();
-@let isPending = updateField.isPending();
-
 <form [formGroup]="form" (submit)="handleSubmit()">
-  <f5pi-generic-dialog dialogTitle="Edit field" [isPending]="isPending">
+  <f5pi-generic-dialog dialogTitle="Edit field" [isPending]="updateFieldService.isPending()">
     <ng-template #content>
-      @if (isError) {
-      <f5pi-alert [message]="getErrorMessage()"></f5pi-alert>
+      @if (updateFieldService.error()) {
+      <f5pi-alert [message]="updateFieldService.error()!"></f5pi-alert>
       }
 
       <mat-form-field>

@@ -1,5 +1,3 @@
-@let isDeleting = deleteFieldMutation.isPending();
-
 <f5pi-generic-widget widgetTitle="Fields" icon="ballot">
   <ng-template #headerActions>
     <button mat-mini-fab (click)="openNewFieldDialog()" matTooltip="Add a new field" aria-label="Add a new field">
@@ -8,12 +6,12 @@
   </ng-template>
 
   <ng-template #content>
-    @if (getFieldsQuery.query.isError()) {
+    @if (getFieldsService.error()) {
     <div class="error">
       <p>Error loading fields. Please try again later.</p>
     </div>
-    } @else if (!getFieldsQuery.query.isPending()) {
-    <table [dataSource]="getFieldsQuery.query.data()!.content" mat-table>
+    } @else {
+    <table [dataSource]="getFieldsService.fields()" mat-table>
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
@@ -24,12 +22,14 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
+          @defer (hydrate on hover) {
           <f5pi-table-actions
             (onDelete)="handleDeleteField(element)"
             (onEdit)="openEditFieldDialog(element)"
-            [disabled]="isDeleting"
+            [disabled]="deleteFieldService.isPending()"
             entityName="field"
           ></f5pi-table-actions>
+          }
         </td>
       </ng-container>
 
@@ -37,7 +37,7 @@
         <td mat-footer-cell *matFooterCellDef colspan="5">No fields found</td>
       </ng-container>
 
-      <tr mat-footer-row *matFooterRowDef="!getFieldsQuery.query.data()!.content.length ? ['noRecords'] : []"></tr>
+      <tr mat-footer-row *matFooterRowDef="!getFieldsService.fields().length ? ['noRecords'] : []"></tr>
 
       <tr mat-header-row *matHeaderRowDef="['name', 'actions']"></tr>
       <tr mat-row *matRowDef="let row; columns: ['name', 'actions']"></tr>
@@ -46,15 +46,15 @@
   </ng-template>
 
   <ng-template #footer>
-    @if (getFieldsQuery.query.isFetching()) {
-    <mat-spinner diameter="22" style="margin-right: 8px"></mat-spinner>
+    @if (getFieldsService.isLoading()) {
+    <mat-spinner diameter="26" style="margin-right: 8px"></mat-spinner>
     }
     <mat-paginator
       (page)="onPageChangeEvent($event)"
       [hidePageSize]="true"
-      [length]="getFieldsQuery.query.data()?.totalElements"
-      [pageIndex]="getFieldsQuery.query.data()?.pageable?.pageNumber"
-      [pageSize]="getFieldsQuery.query.data()?.pageable?.pageSize"
+      [length]="getFieldsService.totalElements()"
+      [pageIndex]="getFieldsService.pageNumber()"
+      [pageSize]="getFieldsService.pageSize()"
       aria-label="Select page of fields"
       showFirstLastButtons
     >

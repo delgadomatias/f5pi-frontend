@@ -7,10 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AlertComponent } from '@common/components/alert/alert.component';
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { FieldsService } from '@fields/fields.service';
-import { Field } from '@fields/interfaces/field.interface';
-import { injectUpdateFieldMutation } from '@fields/queries/inject-update-field-mutation';
+import { Field } from '@fields/interfaces/responses/field.interface';
+import { FieldsService } from '@fields/services/fields.service';
+import { UpdateFieldService } from '@fields/services/update-field.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,14 +22,15 @@ import { injectUpdateFieldMutation } from '@fields/queries/inject-update-field-m
     ReactiveFormsModule,
   ],
   selector: 'f5pi-edit-field',
-  styleUrl: './edit-field-dialog.component.css',
+  styleUrl: './edit-field-dialog.component.scss',
   templateUrl: './edit-field-dialog.component.html',
+  providers: [UpdateFieldService],
 })
 export class EditFieldDialogComponent {
   dialogRef = inject(MatDialogRef);
   field = inject(MAT_DIALOG_DATA) as Field;
   fieldsService = inject(FieldsService);
-  updateField = injectUpdateFieldMutation();
+  updateFieldService = inject(UpdateFieldService);
   formBuilder = inject(NonNullableFormBuilder);
 
   form = this.formBuilder.group({
@@ -39,15 +39,12 @@ export class EditFieldDialogComponent {
 
   handleSubmit() {
     if (this.form.invalid) return this.form.markAllAsTouched();
+
     const updatedName = this.form.getRawValue().name;
     if (updatedName === this.field.fieldName) return this.dialogRef.close(false);
-    this.updateField.mutate(
-      { fieldId: this.field.fieldId, name: updatedName },
-      { onSuccess: () => this.dialogRef.close() }
-    );
-  }
 
-  getErrorMessage() {
-    return getMutationErrorMessage(this.updateField);
+    this.updateFieldService.execute({ fieldId: this.field.fieldId, name: updatedName }).subscribe({
+      next: () => this.dialogRef.close(),
+    });
   }
 }

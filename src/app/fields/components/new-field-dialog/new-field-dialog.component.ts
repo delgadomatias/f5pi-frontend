@@ -7,24 +7,26 @@ import { MatInputModule } from '@angular/material/input';
 
 import { GenericDialogComponent } from '@common/components/generic-dialog/generic-dialog.component';
 import { ClientStorageService } from '@common/services/client-storage.service.abstract';
-import { getMutationErrorMessage } from '@common/utils/get-mutation-error-message';
-import { FieldsService } from '@fields/fields.service';
-import { CreateFieldRequest } from '@fields/interfaces/create-field-request.interface';
-import { injectCreateFieldMutation } from '@fields/queries/inject-create-field-mutation';
+import { CreateFieldRequest } from '@fields/interfaces/requests/create-field-request.interface';
+import { CreateFieldService } from '@fields/services/create-field.service';
+import { FieldsService } from '@fields/services/fields.service';
+import { GetFieldsService } from '@fields/services/get-fields.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [GenericDialogComponent, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule],
   selector: 'f5pi-new-field-dialog',
-  styleUrl: './new-field-dialog.component.css',
+  styleUrl: './new-field-dialog.component.scss',
   templateUrl: './new-field-dialog.component.html',
+  providers: [CreateFieldService],
 })
 export class NewFieldDialogComponent implements OnInit {
-  clientStorage = inject(ClientStorageService)
+  clientStorage = inject(ClientStorageService);
   dialogRef = inject(MatDialogRef);
   fieldsService = inject(FieldsService);
   formBuilder = inject(NonNullableFormBuilder);
-  createFieldMutation = injectCreateFieldMutation();
+  createFieldService = inject(CreateFieldService);
+  getFieldsService = inject(GetFieldsService);
 
   form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(20)]],
@@ -38,11 +40,11 @@ export class NewFieldDialogComponent implements OnInit {
     if (this.form.invalid) return;
     this.clientStorage.remove('new-field-form');
     this.dialogRef.disableClose = true;
-    this.createFieldMutation.mutate(this.form.getRawValue(), { onSuccess: () => this.dialogRef.close(), onSettled: () => this.dialogRef.disableClose = false });
-  }
 
-  getErrorMessage() {
-    return getMutationErrorMessage(this.createFieldMutation);
+    this.createFieldService.execute(this.form.getRawValue()).subscribe({
+      next: () => this.dialogRef.close(),
+      error: () => (this.dialogRef.disableClose = false),
+    });
   }
 
   private syncStateFromStorage() {
