@@ -43,5 +43,5 @@ jobs:
         with:
           start: npm start
           browser: chrome
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
