@@ -46,6 +46,14 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
       - name: Cypress Install
         uses: cypress-io/github-action@v6
         with:
@@ -78,6 +86,14 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
 
       - name: Download the build folder
         uses: actions/download-artifact@v4
