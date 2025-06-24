@@ -10,10 +10,8 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false" [disabled]="isPending()">Close</button>
+  <button mat-button class="close-btn" [mat-dialog-close]="false" [disabled]="isPending()">Close</button>
   @if (showSaveButton()) {
-  <button mat-flat-button type="submit" [disabled]="isPending()">
-    Save
-  </button>
+  <button mat-flat-button type="submit" [disabled]="isPending()">Save</button>
   }
 </mat-dialog-actions>

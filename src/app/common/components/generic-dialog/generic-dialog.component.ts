@@ -8,9 +8,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatDialogModule, CommonModule, CdkTrapFocus, MatButtonModule, MatProgressSpinnerModule, MatProgressBarModule],
+  imports: [
+    CdkTrapFocus,
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+  ],
   selector: 'f5pi-generic-dialog',
-  styleUrl: './generic-dialog.component.css',
+  styleUrl: './generic-dialog.component.scss',
   templateUrl: './generic-dialog.component.html',
 })
 export class GenericDialogComponent {

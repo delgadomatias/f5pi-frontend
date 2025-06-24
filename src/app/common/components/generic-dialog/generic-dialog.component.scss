@@ -1,3 +1,5 @@
+@use "variables.scss" as *;
+
 mat-dialog-content {
   display: flex;
   flex-direction: column;
@@ -30,4 +32,12 @@ footer {
 .overlay * {
   pointer-events: none;
   outline: none !important;
+}
+
+.close-btn {
+  display: block;
+
+  @media (width >= $breakpoint-md) {
+    display: none;
+  }
 }

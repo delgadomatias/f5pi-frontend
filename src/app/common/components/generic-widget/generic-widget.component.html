@@ -14,11 +14,7 @@
 
   <!-- Card content -->
   <mat-card-content style="container-type: inline-size">
-    @defer {
     <ng-container *ngTemplateOutlet="content()"></ng-container>
-    } @placeholder {
-    <div class="widget-loading"></div>
-    }
   </mat-card-content>
 
   <!-- Card footer -->
