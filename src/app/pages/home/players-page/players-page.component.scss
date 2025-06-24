@@ -8,6 +8,7 @@
 }
 
 .list {
+  overflow: hidden;
   grid-column: span 5 / span 5;
 
   @media (width >=$breakpoint-2xl) {
