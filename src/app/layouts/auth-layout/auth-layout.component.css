@@ -5,13 +5,14 @@
 }
 
 .auth-layout {
-  display: flex;
   height: 100%;
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
 }
 
 .auth-layout__hero {
-  flex: 1;
+  grid-column: span 6 / span 6;
   background: var(--mat-sys-primary);
   display: flex;
   align-items: center;
@@ -19,7 +20,7 @@
 }
 
 .auth-layout__content {
-  flex: 1;
+  grid-column: span 6 / span 6;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,5 +32,9 @@
 @media (width < 1024px) {
   .auth-layout__hero {
     display: none;
+  }
+
+  .auth-layout__content {
+    grid-column: span 12 / span 12;
   }
 }
