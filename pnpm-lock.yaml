@@ -28,7 +28,7 @@ importers:
         version: 20.0.4(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/platform-browser@20.0.4(@angular/animations@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(rxjs@7.8.2)
       '@angular/material':
         specifier: 20.0.2
-        version: 20.0.2(ab6c6f1082eef80e0ea874f593515ce1)
+        version: 20.0.2(nspulofaff34shr35w2gr42y74)
       '@angular/platform-browser':
         specifier: ^20.0.1
         version: 20.0.4(@angular/animations@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))
@@ -43,7 +43,10 @@ importers:
         version: 20.0.4(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/platform-browser@20.0.4(@angular/animations@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(rxjs@7.8.2)
       '@angular/ssr':
         specifier: ^20.0.1
-        version: 20.0.3(edd1222607c64278ddc83731338dfb1b)
+        version: 20.0.3(35fdsvttoblbtlrjbfuoqt3gcy)
+      '@netlify/angular-runtime':
+        specifier: ^2.4.0
+        version: 2.4.0
       '@tanstack/angular-query-experimental':
         specifier: ^5.71.10
         version: 5.80.9(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))
@@ -55,7 +58,7 @@ importers:
         version: 5.1.0
       ngx-cookie-service-ssr:
         specifier: ^20.0.1
-        version: 20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/ssr@20.0.3(edd1222607c64278ddc83731338dfb1b))
+        version: 20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/ssr@20.0.3(35fdsvttoblbtlrjbfuoqt3gcy))
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
@@ -65,7 +68,7 @@ importers:
     devDependencies:
       '@angular/build':
         specifier: ^20.0.1
-        version: 20.0.3(00541e476e580f9f0737d64dc13737c8)
+        version: 20.0.3(ruvfuv66jtl7jjxdrepwacdgxa)
       '@angular/cli':
         specifier: ^20.0.1
         version: 20.0.3(@types/node@20.19.1)(chokidar@4.0.3)
@@ -880,6 +883,10 @@ packages:
   '@napi-rs/nice@1.0.1':
     resolution: {integrity: sha512-zM0mVWSXE0a0h9aKACLwKmD6nHcRiKrPpCfvaKqG1CqDEyjEawId0ocXxVzPMCAm6kkWr2P025msfxXEnt8UGQ==}
     engines: {node: '>= 10'}
+
+  '@netlify/angular-runtime@2.4.0':
+    resolution: {integrity: sha512-S/8urhlwZTKIDvgwAMgpwvLdVlIOrPERN5YM9CcKrDu4UYy0k15X5mk5Ki/hJvij4K0dkzUdt+wbHfnENFJzCA==}
+    engines: {node: '>=18.13.0'}
 
   '@npmcli/agent@3.0.0':
     resolution: {integrity: sha512-S79NdEgDQd/NGCay6TCoVzXSj74skRZIKJcpJjC5lOq34SZzyI6MqtiiWoiVWoVrTcGjNeC4ipbh1VIHlpfF5Q==}
@@ -1864,6 +1871,10 @@ packages:
   fresh@2.0.0:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
+
+  fs-extra@11.3.0:
+    resolution: {integrity: sha512-Z4XaCL6dUDHfP/jT25jJKMmtxvuwbkrD1vNSMFlo9lNLY2c5FHYSQgHPRZUjAB26TpDEoW9HCOgplrdbaPV/ew==}
+    engines: {node: '>=14.14'}
 
   fs-extra@8.1.0:
     resolution: {integrity: sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==}
@@ -3317,7 +3328,7 @@ snapshots:
       '@angular/core': 20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)
       tslib: 2.8.1
 
-  '@angular/build@20.0.3(00541e476e580f9f0737d64dc13737c8)':
+  '@angular/build@20.0.3(ruvfuv66jtl7jjxdrepwacdgxa)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2000.3(chokidar@4.0.3)
@@ -3353,7 +3364,7 @@ snapshots:
       '@angular/core': 20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)
       '@angular/platform-browser': 20.0.4(@angular/animations@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))
       '@angular/platform-server': 20.0.4(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/compiler@20.0.4)(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/platform-browser@20.0.4(@angular/animations@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)))(rxjs@7.8.2)
-      '@angular/ssr': 20.0.3(edd1222607c64278ddc83731338dfb1b)
+      '@angular/ssr': 20.0.3(35fdsvttoblbtlrjbfuoqt3gcy)
       karma: 6.4.4
       lmdb: 3.3.0
       postcss: 8.5.6
@@ -3442,7 +3453,7 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@angular/material@20.0.2(ab6c6f1082eef80e0ea874f593515ce1)':
+  '@angular/material@20.0.2(nspulofaff34shr35w2gr42y74)':
     dependencies:
       '@angular/cdk': 20.0.2(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/common': 20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
@@ -3486,7 +3497,7 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@angular/ssr@20.0.3(edd1222607c64278ddc83731338dfb1b)':
+  '@angular/ssr@20.0.3(35fdsvttoblbtlrjbfuoqt3gcy)':
     dependencies:
       '@angular/common': 20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core': 20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)
@@ -4012,6 +4023,11 @@ snapshots:
       '@napi-rs/nice-win32-ia32-msvc': 1.0.1
       '@napi-rs/nice-win32-x64-msvc': 1.0.1
     optional: true
+
+  '@netlify/angular-runtime@2.4.0':
+    dependencies:
+      fs-extra: 11.3.0
+      semver: 7.7.2
 
   '@npmcli/agent@3.0.0':
     dependencies:
@@ -5075,6 +5091,12 @@ snapshots:
 
   fresh@2.0.0: {}
 
+  fs-extra@11.3.0:
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.1.0
+      universalify: 2.0.1
+
   fs-extra@8.1.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -5727,11 +5749,11 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  ngx-cookie-service-ssr@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/ssr@20.0.3(edd1222607c64278ddc83731338dfb1b)):
+  ngx-cookie-service-ssr@20.0.1(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(@angular/ssr@20.0.3(35fdsvttoblbtlrjbfuoqt3gcy)):
     dependencies:
       '@angular/common': 20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core': 20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)
-      '@angular/ssr': 20.0.3(edd1222607c64278ddc83731338dfb1b)
+      '@angular/ssr': 20.0.3(35fdsvttoblbtlrjbfuoqt3gcy)
       tslib: 2.8.1
 
   node-addon-api@6.1.0:
