@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4200;
+  const port = process.env['PORT'] || 4000;
   app.listen(port, (error) => {
     if (error) {
       throw error;
