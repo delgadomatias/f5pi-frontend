@@ -1,12 +1,15 @@
-FROM node:22-alpine AS base
+ARG NODE_VERSION=22-alpine
+
+FROM node:${NODE_VERSION} AS base
+
+WORKDIR /app
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable
+COPY package.json pnpm-lock.yaml ./
 
-WORKDIR /app
-COPY . .
+RUN corepack enable
 
 # Para instalar solo dependencias de producción
 FROM base AS prod-deps
@@ -15,7 +18,18 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 # Instalar todas las dependencias y buildear el proyecto
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+COPY . .
+
 RUN pnpm build
+
+FROM base AS production
+
+COPY --from=prod-deps /app/node_modules ./node_modules
+
+COPY --from=build /app/dist ./dist
+
+COPY package.json ./
 
 EXPOSE 4000
 
