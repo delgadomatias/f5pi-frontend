@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, MatIconModule, MatButtonModule, MatTooltipModule],
   selector: 'f5pi-sidenav-item',
-  styleUrl: './sidenav-item.component.css',
+  styleUrl: './sidenav-item.component.scss',
   templateUrl: './sidenav-item.component.html',
 })
 export class SidenavItemComponent {
@@ -18,9 +18,7 @@ export class SidenavItemComponent {
   item = input.required<{ icon: string; path: string; label: string }>();
 
   constructor() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.currentUrl.set(event.urlAfterRedirects);
     });
   }

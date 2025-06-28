@@ -7,7 +7,7 @@ import { SoccerBallComponent } from '@common/components/soccer-ball/soccer-ball.
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, SoccerBallComponent],
   selector: 'f5pi-auth-layout',
-  styleUrl: './auth-layout.component.css',
+  styleUrl: './auth-layout.component.scss',
   templateUrl: './auth-layout.component.html',
 })
 export class AuthLayoutComponent {}

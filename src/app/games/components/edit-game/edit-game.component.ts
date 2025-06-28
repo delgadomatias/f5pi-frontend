@@ -26,7 +26,7 @@ import { UpdateGameService } from '@games/services/update-game.service';
     ReactiveFormsModule,
   ],
   selector: 'f5pi-edit-game',
-  styleUrl: './edit-game.component.css',
+  styleUrl: './edit-game.component.scss',
   templateUrl: './edit-game.component.html',
   providers: [CurrencyPipe, UpdateGameService],
 })

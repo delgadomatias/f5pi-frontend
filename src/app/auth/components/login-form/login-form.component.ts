@@ -22,7 +22,7 @@ import { AlertComponent } from '@common/components/alert/alert.component';
     ReactiveFormsModule,
   ],
   selector: 'f5pi-login-form',
-  styleUrl: './login-form.component.css',
+  styleUrl: './login-form.component.scss',
   templateUrl: './login-form.component.html',
   providers: [LoginService],
 })

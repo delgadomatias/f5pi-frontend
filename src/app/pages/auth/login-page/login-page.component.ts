@@ -10,7 +10,7 @@ import { LoginFormComponent } from '@auth/components/login-form/login-form.compo
   imports: [RouterLink, LoginFormComponent],
   providers: [MatSnackBar],
   selector: 'f5pi-login-page',
-  styleUrl: './login-page.component.css',
+  styleUrl: './login-page.component.scss',
   templateUrl: './login-page.component.html',
 })
 export class LoginPageComponent {

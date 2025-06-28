@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   imports: [CommonModule, MatCardModule, MatIconModule],
   selector: 'f5pi-generic-widget',
-  styleUrl: './generic-widget.component.css',
+  styleUrl: './generic-widget.component.scss',
   templateUrl: './generic-widget.component.html',
 })
 export class GenericWidgetComponent {

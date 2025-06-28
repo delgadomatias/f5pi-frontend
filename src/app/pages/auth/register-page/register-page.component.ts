@@ -25,7 +25,7 @@ import { AlertComponent } from '@common/components/alert/alert.component';
     RouterLink,
   ],
   selector: 'f5pi-register-page',
-  styleUrl: './register-page.component.css',
+  styleUrl: './register-page.component.scss',
   templateUrl: './register-page.component.html',
   providers: [RegisterService],
 })

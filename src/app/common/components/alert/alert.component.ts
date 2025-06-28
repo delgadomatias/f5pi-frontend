@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIconModule],
   selector: 'f5pi-alert',
-  styleUrl: './alert.component.css',
+  styleUrl: './alert.component.scss',
   templateUrl: './alert.component.html',
 })
 export class AlertComponent {
