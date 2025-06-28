@@ -14,14 +14,14 @@ import { FieldResponse } from '@fields/interfaces/responses/fields-response.inte
 
 @Injectable({ providedIn: 'root' })
 export class FieldsService {
-  private readonly BASE_URL = `${environment.apiUrl}/api/v1/fields`;
+  private readonly BASE_URL = `${environment.API_URL}/api/v1/fields`;
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
 
   getFields(paginationParams: PaginatedRequest): Observable<FieldResponse> {
     const userId = this.authService.getUserId();
     const { pageNumber, pageSize } = paginationParams;
-    return this.http.get<FieldResponse>(`${environment.apiUrl}/api/v1/users/${userId}/fields`, {
+    return this.http.get<FieldResponse>(`${environment.API_URL}/api/v1/users/${userId}/fields`, {
       params: createPaginationParams(
         pageNumber ?? DEFAULT_PAGINATION_PARAMS.pageNumber,
         pageSize ?? DEFAULT_PAGINATION_PARAMS.pageSize

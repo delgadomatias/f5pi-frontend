@@ -14,13 +14,13 @@ import { SeasonsResponse } from '@seasons/interfaces/responses/seasons-response.
 @Injectable({ providedIn: 'root' })
 export class SeasonsService {
   private readonly authService = inject(AuthService);
-  private readonly BASE_URL = `${environment.apiUrl}/api/v1/seasons`;
+  private readonly BASE_URL = `${environment.API_URL}/api/v1/seasons`;
   private readonly http = inject(HttpClient);
 
   getSeasons(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     const { pageNumber, pageSize } = params;
-    return this.http.get<SeasonsResponse>(`${environment.apiUrl}/api/v1/users/${userId}/seasons`, {
+    return this.http.get<SeasonsResponse>(`${environment.API_URL}/api/v1/users/${userId}/seasons`, {
       params: createPaginationParams(
         pageNumber ?? DEFAULT_PAGINATION_PARAMS.pageNumber,
         pageSize ?? DEFAULT_PAGINATION_PARAMS.pageSize

@@ -15,14 +15,14 @@ import { Statistics } from '@players/interfaces/responses/statistics.interface';
 
 @Injectable({ providedIn: 'root' })
 export class PlayersService {
-  private readonly BASE_URL = `${environment.apiUrl}/api/v1/players`;
+  private readonly BASE_URL = `${environment.API_URL}/api/v1/players`;
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
 
   getPlayers(params: PaginatedRequest = DEFAULT_PAGINATION_PARAMS) {
     const userId = this.authService.getUserId();
     const { pageNumber, pageSize } = params;
-    return this.http.get<PlayersResponse>(`${environment.apiUrl}/api/v1/users/${userId}/players`, {
+    return this.http.get<PlayersResponse>(`${environment.API_URL}/api/v1/users/${userId}/players`, {
       params: createPaginationParams(
         pageNumber ?? DEFAULT_PAGINATION_PARAMS.pageNumber,
         pageSize ?? DEFAULT_PAGINATION_PARAMS.pageSize
