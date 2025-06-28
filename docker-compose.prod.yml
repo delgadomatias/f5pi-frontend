@@ -1,0 +1,13 @@
+services:
+  f5pi-frontend:
+    image: delgadomatias/f5pi-frontend:latest
+    container_name: f5pi-frontend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    networks:
+      - f5pi-network
+
+networks:
+  f5pi-network:
+    driver: bridge
