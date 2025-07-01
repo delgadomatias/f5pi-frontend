@@ -9,6 +9,14 @@ mat-dialog-content {
   max-height: 80vh;
 }
 
+.mat-mdc-dialog-title {
+  position: static;
+}
+
+h2 {
+  font: var(--mat-sys-display-small);
+}
+
 footer {
   align-self: flex-end;
   display: flex;
@@ -39,5 +47,11 @@ footer {
 
   @media (width >= $breakpoint-md) {
     display: none;
+  }
+}
+
+.save-btn {
+  @media (width <= $breakpoint-md) {
+    width: 100%;
   }
 }

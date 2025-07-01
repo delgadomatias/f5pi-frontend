@@ -5,13 +5,17 @@
 
 <mat-dialog-content cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <div>
-    <h2 mat-dialog-title>{{ dialogTitle() }}</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center" mat-dialog-title>
+      <h2>{{ dialogTitle() }}</h2>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
     <ng-container *ngTemplateOutlet="content()"></ng-container>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button class="close-btn" [mat-dialog-close]="false" [disabled]="isPending()">Close</button>
   @if (showSaveButton()) {
-  <button mat-flat-button type="submit" [disabled]="isPending()">Save</button>
+  <button mat-flat-button type="submit" [disabled]="isPending()" class="save-btn">Save</button>
   }
 </mat-dialog-actions>

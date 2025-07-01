@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, contentChild, input, TemplateRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -13,8 +14,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     CommonModule,
     MatButtonModule,
     MatDialogModule,
+    MatIconModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatButtonModule,
   ],
   selector: 'f5pi-generic-dialog',
   styleUrl: './generic-dialog.component.scss',
