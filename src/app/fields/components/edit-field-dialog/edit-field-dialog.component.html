@@ -6,7 +6,7 @@
       }
 
       <mat-form-field>
-        <input [maxLength]="20" matInput placeholder="Name" formControlName="name" />
+        <input [maxLength]="20" cdkFocusInitial matInput placeholder="Name" formControlName="name" />
         <mat-label>Name</mat-label>
 
         @if (form.controls.name.getError('required')) {
