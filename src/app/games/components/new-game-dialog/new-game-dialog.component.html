@@ -5,9 +5,10 @@
     <ng-template #content>
       @if (createGameService.error()) {
       <f5pi-alert [message]="createGameService.error()!"></f5pi-alert>
-      } @if (teamsError) {
-      <mat-error style="margin-bottom: 24px">Both teams must have the same number of players.</mat-error>
       }
+      <!-- @if (teamsError && form.dirty) {
+      <mat-error style="margin-bottom: 24px">Both teams must have the same number of players.</mat-error>
+      } -->
       <div class="form">
         <div class="game">
           <mat-form-field>
@@ -109,62 +110,65 @@
 
         <div class="game-details">
           <div class="team">
-            <mat-form-field>
-              <mat-label>Players for first team</mat-label>
-              <mat-select [disableRipple]="true" formControlName="playersForFirstTeam" multiple>
-                <mat-select-trigger>
-                  <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px">
-                    @for (player of playersForFirstTeam; track $index) {
-                    <img width="25" height="25" [src]="player.imageURL" />
-                    }
-                  </div>
-                </mat-select-trigger>
-                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) { @for (player of page?.content;
-                track player.playerId) {
-                <mat-option
-                  style="display: flex; align-items: center"
-                  (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)"
-                  class="option"
-                  [value]="player"
-                >
-                  <div style="display: flex; align-items: center; gap: 8px">
-                    <img [src]="player.imageURL" width="24" height="24" />
-                    {{ player.name }}
-                  </div>
-                </mat-option>
-                } @empty {
-                <mat-option class="option" disabled>No players available</mat-option>
-                } } @if (getInfinitePlayersQuery.hasNextPage()) {
-                <div
-                  style="
-                    display: flex;
-                    width: 100%;
-                    justify-content: center;
-                    align-items: center;
-                    margin-top: 8px;
-                    padding: 8px;
-                  "
-                >
-                  <button
-                    style="width: 100%"
-                    mat-flat-button
-                    (click)="getInfinitePlayersQuery.fetchNextPage()"
+            <header>
+              <h3>First Team</h3>
+              <mat-form-field>
+                <mat-label>Players for first team</mat-label>
+                <mat-select [disableRipple]="true" formControlName="playersForFirstTeam" multiple>
+                  <mat-select-trigger>
+                    <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px">
+                      @for (player of playersForFirstTeam; track $index) {
+                      <img width="25" height="25" [src]="player.imageURL" />
+                      }
+                    </div>
+                  </mat-select-trigger>
+                  @for (page of getInfinitePlayersQuery.data()?.pages; track $index) { @for (player of page?.content;
+                  track player.playerId) {
+                  <mat-option
+                    style="display: flex; align-items: center"
+                    (onSelectionChange)="onPlayerToggle($event, player, TEAM.FIRST)"
+                    [disabled]="!isPlayerAvailableFor(TEAM.SECOND, player)"
                     class="option"
+                    [value]="player"
                   >
-                    Load more
-                  </button>
-                </div>
+                    <div style="display: flex; align-items: center; gap: 8px">
+                      <img [src]="player.imageURL" width="24" height="24" />
+                      {{ player.name }}
+                    </div>
+                  </mat-option>
+                  } @empty {
+                  <mat-option class="option" disabled>No players available</mat-option>
+                  } } @if (getInfinitePlayersQuery.hasNextPage()) {
+                  <div
+                    style="
+                      display: flex;
+                      width: 100%;
+                      justify-content: center;
+                      align-items: center;
+                      margin-top: 8px;
+                      padding: 8px;
+                    "
+                  >
+                    <button
+                      style="width: 100%"
+                      mat-flat-button
+                      (click)="getInfinitePlayersQuery.fetchNextPage()"
+                      class="option"
+                    >
+                      Load more
+                    </button>
+                  </div>
+                  }
+                </mat-select>
+                @if (form.controls.playersForFirstTeam.getError('required')) {
+                <mat-error> You must select players for the first team </mat-error>
+                } @else if (form.controls.playersForFirstTeam.getError('minlength')) {
+                <mat-error> You must select 5 players for the first team </mat-error>
+                } @else if (form.controls.playersForFirstTeam.getError('maxlength')) {
+                <mat-error> You must select a maximum of 5 players for the first team </mat-error>
                 }
-              </mat-select>
-              @if (form.controls.playersForFirstTeam.getError('required')) {
-              <mat-error> You must select players for the first team </mat-error>
-              } @else if (form.controls.playersForFirstTeam.getError('minlength')) {
-              <mat-error> You must select 5 players for the first team </mat-error>
-              } @else if (form.controls.playersForFirstTeam.getError('maxlength')) {
-              <mat-error> You must select a maximum of 5 players for the first team </mat-error>
-              }
-            </mat-form-field>
+              </mat-form-field>
+            </header>
 
             @if (detailsOfEachPlayerOfFirstTeam.length > 0) {
             <div formArrayName="detailsOfEachPlayerOfFirstTeam" class="details-of-each-player">
@@ -189,61 +193,64 @@
           </div>
 
           <div class="team">
-            <mat-form-field>
-              <mat-label>Players for second team</mat-label>
-              <mat-select formControlName="playersForSecondTeam" multiple>
-                <mat-select-trigger>
-                  <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px">
-                    @for (player of playersForSecondTeam; track $index) {
-                    <img width="25" height="25" [src]="player.imageURL" />
-                    }
-                  </div>
-                </mat-select-trigger>
-                @for (page of getInfinitePlayersQuery.data()?.pages; track $index) { @for (player of page?.content;
-                track player.playerId) {
-                <mat-option
-                  (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
-                  [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)"
-                  [value]="player"
-                  class="option"
-                >
-                  <div style="display: flex; align-items: center; gap: 8px">
-                    <img [src]="player.imageURL" width="24" height="24" />
-                    {{ player.name }}
-                  </div>
-                </mat-option>
-                } @empty {
-                <mat-option class="option" disabled>No players available</mat-option>
-                } } @if (getInfinitePlayersQuery.hasNextPage()) {
-                <div
-                  style="
-                    display: flex;
-                    width: 100%;
-                    justify-content: center;
-                    align-items: center;
-                    margin-top: 8px;
-                    padding: 8px;
-                  "
-                >
-                  <button
-                    style="width: 100%"
-                    mat-flat-button
-                    (click)="getInfinitePlayersQuery.fetchNextPage()"
+            <header>
+              <h3>Second Team</h3>
+              <mat-form-field>
+                <mat-label>Players for second team</mat-label>
+                <mat-select formControlName="playersForSecondTeam" multiple>
+                  <mat-select-trigger>
+                    <div style="display: flex; gap: 4px; align-items: center; margin-top: 4px">
+                      @for (player of playersForSecondTeam; track $index) {
+                      <img width="25" height="25" [src]="player.imageURL" />
+                      }
+                    </div>
+                  </mat-select-trigger>
+                  @for (page of getInfinitePlayersQuery.data()?.pages; track $index) { @for (player of page?.content;
+                  track player.playerId) {
+                  <mat-option
+                    (onSelectionChange)="onPlayerToggle($event, player, TEAM.SECOND)"
+                    [disabled]="!isPlayerAvailableFor(TEAM.FIRST, player)"
+                    [value]="player"
                     class="option"
                   >
-                    Load more
-                  </button>
-                </div>
+                    <div style="display: flex; align-items: center; gap: 8px">
+                      <img [src]="player.imageURL" width="24" height="24" />
+                      {{ player.name }}
+                    </div>
+                  </mat-option>
+                  } @empty {
+                  <mat-option class="option" disabled>No players available</mat-option>
+                  } } @if (getInfinitePlayersQuery.hasNextPage()) {
+                  <div
+                    style="
+                      display: flex;
+                      width: 100%;
+                      justify-content: center;
+                      align-items: center;
+                      margin-top: 8px;
+                      padding: 8px;
+                    "
+                  >
+                    <button
+                      style="width: 100%"
+                      mat-flat-button
+                      (click)="getInfinitePlayersQuery.fetchNextPage()"
+                      class="option"
+                    >
+                      Load more
+                    </button>
+                  </div>
+                  }
+                </mat-select>
+                @if (form.controls.playersForSecondTeam.getError('required')) {
+                <mat-error> You must select players for the second team </mat-error>
+                } @else if (form.controls.playersForSecondTeam.getError('minlength')) {
+                <mat-error> You must select 5 players for the second team </mat-error>
+                } @else if (form.controls.playersForSecondTeam.getError('maxlength')) {
+                <mat-error> You must select a maximum of 5 players for the second team </mat-error>
                 }
-              </mat-select>
-              @if (form.controls.playersForSecondTeam.getError('required')) {
-              <mat-error> You must select players for the second team </mat-error>
-              } @else if (form.controls.playersForSecondTeam.getError('minlength')) {
-              <mat-error> You must select 5 players for the second team </mat-error>
-              } @else if (form.controls.playersForSecondTeam.getError('maxlength')) {
-              <mat-error> You must select a maximum of 5 players for the second team </mat-error>
-              }
-            </mat-form-field>
+              </mat-form-field>
+            </header>
 
             @if (detailsOfEachPlayerOfSecondTeam.length > 0) {
             <div formArrayName="detailsOfEachPlayerOfSecondTeam" class="details-of-each-player">

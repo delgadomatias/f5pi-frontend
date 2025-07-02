@@ -37,7 +37,18 @@ mat-select {
   .team {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     gap: 12px;
+    padding: 24px;
+    border-radius: var(--mat-sys-corner-medium);
+    background: var(--transparent);
+
+    header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
 
     .details-of-each-player {
       display: flex;
@@ -49,6 +60,10 @@ mat-select {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 12px;
+
+      &:first-child {
+        margin-top: 12px;
+      }
 
       .player {
         grid-column: span 6 / span 6;
@@ -99,4 +114,14 @@ img {
   object-fit: cover;
   border-radius: 50%;
   border: 1px solid var(--mat-sys-outline);
+}
+
+h3 {
+  font: var(--mat-sys-headline-small);
+  color: var(--mat-sys-on-surface);
+  min-width: fit-content;
+}
+
+p {
+  color: var(--mat-sys-on-surface);
 }

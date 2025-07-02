@@ -9,9 +9,12 @@ img {
 mat-chip {
   padding: 16px 6px;
 
-  @include mat.chips-overrides((container-shape-radius: var(--mat-sys-corner-large),
+  @include mat.chips-overrides(
+    (
+      container-shape-radius: var(--mat-sys-corner-large),
       label-text-font: var(--mat-sys-label-medium-font),
-    ));
+    )
+  );
 }
 
 .grid {
@@ -23,9 +26,12 @@ mat-chip {
     grid-column: span 6 / span 6;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-small);
+    padding: 16px 12px;
 
-    @media(width <=$breakpoint-xl) {
+    @media (width <=$breakpoint-xl) {
       grid-column: span 12 / span 12;
     }
 
@@ -43,16 +49,17 @@ mat-chip {
     .players {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
 
       .player {
         display: flex;
         gap: 8px;
         align-items: center;
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: var(--mat-sys-corner-small);
-        padding: 12px;
         justify-content: space-between;
+
+        img {
+          border: 1px solid var(--mat-sys-outline);
+        }
 
         @media (width <=$breakpoint-md) {
           flex-wrap: wrap;
@@ -115,8 +122,11 @@ mat-chip {
           }
 
           .own-goals {
-            @include mat.chips-overrides((label-text-color: var(--mat-sys-error),
-              ));
+            @include mat.chips-overrides(
+              (
+                label-text-color: var(--mat-sys-error),
+              )
+            );
           }
         }
       }
