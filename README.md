@@ -2,7 +2,7 @@
 
 <img width="1920" height="1440" alt="975shots_so" src="https://github.com/user-attachments/assets/c537d0a0-c1b8-4b0b-98d1-ea31149d5c38" />
 
-
+[![Watch the video](https://i.imgur.com/fBKswYo.png)](https://www.youtube.com/watch?v=E4DPp_5QHJc)
 
 <p align="center">f5pi-frontend is a cool project that lets you manage users, players, fields, seasons, and games. It hooks up with a <a href="https://github.com/EzeSosa/f5pi-backend">backend</a> that handles all the behind-the-scenes stuff.</p>
 
